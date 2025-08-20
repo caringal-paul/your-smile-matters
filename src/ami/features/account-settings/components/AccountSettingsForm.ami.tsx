@@ -34,7 +34,7 @@ const AccountSettingsForm = () => {
 			});
 			setEmail((prev) => {
 				if (prev == "") {
-					return "johndoe@altinvest.com";
+					return "johndoe@yopmail.com";
 				} else {
 					return prev;
 				}

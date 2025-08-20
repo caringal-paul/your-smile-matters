@@ -80,7 +80,8 @@ const ResponsiveSidebar = () => {
 					name: "Roles & Permission",
 					path: "user-management/roles-and-permissions",
 				},
-				{ id: 3, name: "Activity Log", path: "user-management/activity-logs" },
+				// TODO ADD ME AGAIN
+				// { id: 3, name: "Activity Log", path: "user-management/activity-logs" },
 			],
 		},
 		// {

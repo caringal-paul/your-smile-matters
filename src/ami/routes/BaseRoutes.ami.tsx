@@ -86,7 +86,7 @@ const baseRoutes = (
 
 		<Route path="test" element={<TestComponent />} />
 
-		<Route path="dashboard" element={<DashboardLayout />}>
+		<Route path="dashboard" element={<div />}>
 			<Route index element={<DashboardPage />} />
 		</Route>
 
@@ -100,15 +100,16 @@ const baseRoutes = (
 				path="roles-and-permissions"
 				element={
 					<RoleProvider>
-						<RolesAndPermissionsPage />
+						{/* <RolesAndPermissionsPage /> */}
+						<div />
 					</RoleProvider>
 				}
 			/>
-			<Route path="activity-logs" element={<UserActivityLogsPage />} />
+			<Route path="activity-logs" element={<div />} />
 		</Route>
 
 		{/* PORTFOLIO MODULE */}
-		<Route path="portfolio-management" element={<PortfolioLayout />}>
+		<Route path="portfolio-management" element={<div />}>
 			<Route element={<AllPortfolioRouteTabs />}>
 				<Route path="portfolios" element={<AllPortfolioPage />}>
 					<Route index element={<AllPortfolioTable />} />
@@ -170,7 +171,7 @@ const baseRoutes = (
 		</Route>
 
 		{/* CUSTOMER MODULE */}
-		<Route path="customer-management" element={<CustomerLayout />}>
+		<Route path="customer-management" element={<div />}>
 			<Route element={<CustomerRouteTabs />}>
 				<Route path="customers" element={<CustomerPage />}>
 					<Route index element={<CustomerTable />} />
@@ -182,7 +183,7 @@ const baseRoutes = (
 				/>
 			</Route>
 
-			<Route path="activity-logs" element={<CustomerActivityLogsPage />} />
+			<Route path="activity-logs" element={<div />} />
 
 			<Route element={<CustomerBreadcrumbs />}>
 				<Route path="customers/view/customer/:id" element={<CustomerForm />} />
@@ -191,7 +192,7 @@ const baseRoutes = (
 		</Route>
 
 		{/* RISK RATING MODULE */}
-		<Route path="risk-rating-management" element={<RiskRatingLayout />}>
+		<Route path="risk-rating-management" element={<div />}>
 			<Route path="questionnaires" element={<RiskRatingQuestionnairePage />}>
 				<Route element={<RiskRatingQuestionnaireRouteTabs />}>
 					<Route index element={<RiskRatingQuestionnaireTable />} />
@@ -305,7 +306,7 @@ const baseRoutes = (
 		</Route>
 
 		{/* TRANSACTION MODULE */}
-		<Route path="transaction-history" element={<TransactionLayout />}>
+		<Route path="transaction-history" element={<div />}>
 			<Route element={<TransactionPage />}>
 				<Route index element={<TransactionTable />} />
 			</Route>
