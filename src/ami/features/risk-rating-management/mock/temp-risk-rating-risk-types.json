@@ -1,0 +1,29 @@
+[
+	{
+		"portfolio_class": "Class 1",
+		"risk_rating": "Low",
+		"point_range": "12-18 points",
+		"yield_range": "4%-12%",
+		"portfolio_distribution": "Fund Placement, Compliant Bonds",
+		"updated_by": "Aisha Abiola",
+		"updated_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"portfolio_class": "Class 2",
+		"risk_rating": "Moderate",
+		"point_range": "19-26 points",
+		"yield_range": "4%-25%",
+		"portfolio_distribution": "Fund Placement, Compliant Bonds",
+		"updated_by": "Aisha Abiola",
+		"updated_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"portfolio_class": "Class 3",
+		"risk_rating": "High",
+		"point_range": "27-40 points",
+		"yield_range": "4%-50%",
+		"portfolio_distribution": "Fund Placement, Compliant Bonds",
+		"updated_by": "Aisha Abiola",
+		"updated_on": "2025-04-23T06:20:20.000Z"
+	}
+]

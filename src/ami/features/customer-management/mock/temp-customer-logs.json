@@ -1,0 +1,56 @@
+[
+	{
+		"date": "2025-04-23T06:20:20.000Z",
+		"customer_id": "Aisha Abiola",
+		"customer_name": "Ngozi Ketechi",
+		"description_log": "Security Questions Reset"
+	},
+	{
+		"date": "2025-05-02T09:10:00.000Z",
+		"customer_id": "Tunde Akande",
+		"customer_name": "Chukwuemeka Uzo",
+		"description_log": "Email Address Updated"
+	},
+	{
+		"date": "2025-05-05T13:45:30.000Z",
+		"customer_id": "Halima Yusuf",
+		"customer_name": "Zainab Lawal",
+		"description_log": "Password Reset Request"
+	},
+	{
+		"date": "2025-05-09T11:30:00.000Z",
+		"customer_id": "Emeka Nwosu",
+		"customer_name": "Femi Alabi",
+		"description_log": "Account Locked Due to Multiple Failed Logins"
+	},
+	{
+		"date": "2025-05-14T17:00:00.000Z",
+		"customer_id": "Ifeanyi Okoro",
+		"customer_name": "Ruqayyah Suleiman",
+		"description_log": "Changed Primary Contact Number"
+	},
+	{
+		"date": "2025-05-18T10:20:00.000Z",
+		"customer_id": "Chiamaka Obi",
+		"customer_name": "Samuel Obi",
+		"description_log": "Beneficiary Added"
+	},
+	{
+		"date": "2025-05-22T15:40:00.000Z",
+		"customer_id": "Ngozi Umeh",
+		"customer_name": "Aminu Garba",
+		"description_log": "Email Notification Preferences Updated"
+	},
+	{
+		"date": "2025-05-27T08:55:00.000Z",
+		"customer_id": "Bola Ibrahim",
+		"customer_name": "Fatima Sanni",
+		"description_log": "Requested Statement of Account"
+	},
+	{
+		"date": "2025-05-30T19:25:00.000Z",
+		"customer_id": "Femi Akinola",
+		"customer_name": "Ibrahim Musa",
+		"description_log": "Profile Picture Updated"
+	}
+]

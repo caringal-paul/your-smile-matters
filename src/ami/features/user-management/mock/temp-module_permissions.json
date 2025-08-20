@@ -1,0 +1,194 @@
+[
+	{
+		"id": 1,
+		"name": "Dashboard",
+		"permissions": [{ "permission_id": 1, "name": "view", "status": false }]
+	},
+	{
+		"id": 2,
+		"name": "User Management",
+		"submodules": [
+			{
+				"submodule_id": 1,
+				"name": "Users",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			},
+			{
+				"submodule_id": 2,
+				"name": "Roles & Permissions",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			},
+			{
+				"submodule_id": 3,
+				"name": "Activity Log",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 4, "name": "export", "status": false }
+				]
+			}
+		]
+	},
+	{
+		"id": 3,
+		"name": "Portfolio Management",
+		"submodules": [
+			{
+				"submodule_id": 4,
+				"name": "All Portfolio",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			},
+			{
+				"submodule_id": 5,
+				"name": "All Investments",
+				"permissions": [{ "permission_id": 1, "name": "view", "status": false }]
+			},
+			{
+				"submodule_id": 6,
+				"name": "Pending Trades",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 7, "name": "cancel", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			}
+		]
+	},
+	{
+		"id": 5,
+		"name": "Customer Management",
+		"submodules": [
+			{
+				"submodule_id": 7,
+				"name": "Customers",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			},
+			{
+				"submodule_id": 8,
+				"name": "Activity Log",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 4, "name": "export", "status": false }
+				]
+			}
+		]
+	},
+	{
+		"id": 6,
+		"name": "Risk Rating Management",
+		"submodules": [
+			{
+				"submodule_id": 7,
+				"name": "Risk Profile Questionnaire",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 2, "name": "add", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false },
+					{ "permission_id": 8, "name": "delete", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			},
+			{
+				"submodule_id": 8,
+				"name": "Risk Rating",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			}
+		]
+	},
+	{
+		"id": 7,
+		"name": "Investment Offers",
+		"submodules": [
+			{
+				"submodule_id": 9,
+				"name": "Fixed Income",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 2, "name": "add", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			},
+			{
+				"submodule_id": 10,
+				"name": "Equities",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			},
+			{
+				"submodule_id": 11,
+				"name": "Commodities",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 2, "name": "add", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			},
+			{
+				"submodule_id": 12,
+				"name": "For Approval",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 5, "name": "approve", "status": false },
+					{ "permission_id": 6, "name": "reject", "status": false }
+				]
+			},
+			{
+				"submodule_id": 13,
+				"name": "Top Offers",
+				"permissions": [
+					{ "permission_id": 1, "name": "view", "status": false },
+					{ "permission_id": 3, "name": "edit", "status": false }
+				]
+			}
+		]
+	},
+	{
+		"id": 8,
+		"name": "Transaction History",
+		"permissions": [
+			{ "permission_id": 1, "name": "view", "status": false },
+			{ "permission_id": 4, "name": "export", "status": false }
+		]
+	},
+	{
+		"id": 9,
+		"name": "Support Management",
+		"permissions": [
+			{ "permission_id": 1, "name": "view", "status": false },
+			{ "permission_id": 2, "name": "add", "status": false },
+			{ "permission_id": 3, "name": "edit", "status": false },
+			{ "permission_id": 8, "name": "delete", "status": false },
+			{ "permission_id": 5, "name": "approve", "status": false },
+			{ "permission_id": 6, "name": "reject", "status": false }
+		]
+	},
+	{
+		"id": 10,
+		"name": "Account Settings",
+		"permissions": [{ "permission_id": 1, "name": "view", "status": false }]
+	}
+]

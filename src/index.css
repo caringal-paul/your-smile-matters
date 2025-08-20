@@ -1,0 +1,224 @@
+@import "./fonts.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		/** AMI SIDE **/
+		--admin-primary: #846e62;
+		--admin-primary-foreground: #f0f0f0;
+		--admin-primary-hover: #6f5a4d;
+		--admin-secondary: #a7a29c;
+		--admin-secondary-foreground: #f0f0f0;
+		--admin-secondary-hover: #8f8a84;
+		--admin-background: #efeae6;
+		--admin-background-sidebar: #1c1c1c;
+
+		/** General colors **/
+		--primary: #846e62;
+		--foreground: #2d2f2f;
+		--secondary: #a7a29c;
+		--secondary-foreground: #444242;
+		--background: #fcfcfc;
+		--white: #ffffff;
+		--white-foreground: #ececec;
+		--border: #eff1f3;
+		--accent: #eff1f3;
+		--accent-foreground: #f9f9f9;
+
+		/** Background **/
+		--background-avatar: #1e3e62;
+		--background-avatar-placeholder: #eff2f5;
+
+		/** Card **/
+		--card: #fcfcfc;
+		--card-border: #eff1f3;
+		--primary-foreground: #ff6500;
+		--destructive: #cd2028;
+		--disabled: #eff1f3;
+
+		/** Border **/
+		--button-disabled: #dcdcdc;
+		--table-border: #ced2d9;
+
+		/** Text **/
+		--text-primary: #2d2f2f;
+		--text-form-name: #003c81;
+		--text-gray: #b2b2b2;
+		--text-disabled: #fbfbfbfb;
+		--text-name: #0b192c;
+		--text-role: #74889e;
+		--text-avatar-placeholder: #1e3e62;
+		--text-logs-date: #292d32;
+
+		/** Text Area Editor **/
+		--background-toolbar: #f2f4f7;
+		--separator-toolbar: #eaecf0;
+		--toolbar-button-toggled: #ced5e1;
+
+		/** Button **/
+		--button-primary: #f58735;
+		--button-disable: #fbfbfb;
+
+		/** Primary Button **/
+		--bg-primary-button: #f58735;
+		--bg-primary-button-hover: #ff6500;
+		/* --bg-primary-button-disabled: rgba(245, 135, 53, 0.2); */
+		--text-primary-button: #f6f8f9;
+		/* --text-primary-button-disabled: #ffff; */
+
+		/** Secondary Button **/
+		--bg-secondary-button: #2d2f2f;
+		--bg-secondary-button-hover: #444242;
+		--bg-secondary-button-disabled: #eff1f3;
+		--text-secondary-button: #f6f8f9;
+		--text-secondary-button-disabled: #ced2d9;
+
+		/** Dismiss Button **/
+		--bg-primary-dismiss-button: #fbf6ef;
+		--bg-secondary-dismiss-button: #373535;
+		--border-dismiss-button: #2d2f2f;
+
+		/** Reset Password Button **/
+		--bg-reset-password-button: #f6f8f9;
+		--text-reset-password-button: #2d2f2f;
+		--border-reset-password-button: #373535;
+
+		/** Chart **/
+		--chart-1: #ff6500;
+		--chart-2: #f58735;
+		--chart-3: #ffb177;
+
+		/** Radius **/
+		--radius: 0.5rem;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border font-inter focus-visible:ring-primary scrollbar-small;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+@layer utilities {
+	.bg-sidebar {
+		background: linear-gradient(
+			to bottom,
+			#000000 10%,
+			#000000 0%,
+			#041839 30%,
+			#041839 100%
+		);
+		background-size: 100% 200%;
+		animation: gradientShift 20s ease infinite;
+	}
+
+	@keyframes gradientShift {
+		0%,
+		100% {
+			background-position: 0 0;
+		}
+		50% {
+			background-position: 0 1%;
+		}
+	}
+
+	.bg-gradient {
+		/* background: #ff6500; */
+		background: linear-gradient(
+			to left,
+			#fcb16b 5%,
+			#f7944d 45%,
+			#f6832f 70%,
+			#f9781e 100%
+		);
+	}
+
+	.rich-text {
+		@apply [&_ol]:list-decimal [&_ol]:ml-6 [&_ul]:list-disc [&_ul]:ml-6 [&_li]:my-1;
+	}
+}
+
+/* To edit the browser scrollbar */
+.scrollbar-small::-webkit-scrollbar {
+	width: 3px;
+	height: 3px;
+}
+
+.scrollbar-small::-webkit-scrollbar-thumb {
+	background: #f58735;
+	border-radius: 3px;
+}
+
+.scrollbar-small::-webkit-scrollbar-thumb:hover {
+	background: #f58735;
+}
+
+.scrollbar-hidden {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Opera */
+}
+
+/* Hide number input spinners for Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Hide number input spinners for Firefox */
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+/* RICH TEXT EDITOR CSS DONT DELETE */
+.ProseMirror p.is-empty::before {
+	content: attr(data-placeholder);
+	color: #9ca3af; /* gray-400 */
+	font-size: 11px; /* match your .text-[11px] */
+	pointer-events: none;
+	display: block;
+}
+
+.tiptap {
+	outline: none;
+	min-height: 150px;
+	padding: 1rem;
+}
+
+.tiptap p {
+	margin: 0;
+}
+
+.tiptap p.is-empty::before {
+	content: attr(data-placeholder);
+	color: #999;
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
+.tiptap.is-editor-empty p::before {
+	content: attr(data-placeholder);
+	color: #aaa;
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
+.rich-text.is-empty p::before {
+	content: attr(data-placeholder);
+	color: #9ca3af; /* Tailwind gray-400 */
+	font-style: italic;
+	float: left;
+	height: 0;
+	pointer-events: none;
+}

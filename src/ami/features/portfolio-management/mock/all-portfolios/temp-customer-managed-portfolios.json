@@ -1,0 +1,12 @@
+[
+	{
+		"plan_name": "Thousand Sunny 10k",
+		"investment_risk_type": "Moderate Risk",
+		"investment_duration": "7 years",
+		"investment_amount": 150000.0,
+		"target_date": "2026-01-02T06:20:20.000Z",
+		"rollover_enabled": true,
+		"status": "Invested",
+		"funded_date": "2025-04-23T06:20:20.000Z"
+	}
+]

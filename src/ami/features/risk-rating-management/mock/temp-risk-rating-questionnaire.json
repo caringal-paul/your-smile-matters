@@ -1,0 +1,72 @@
+[
+	{
+		"id": "1",
+		"question": "Reason for investing",
+		"answer": "Single Select",
+		"submitted_by": "Aisha Abiolaa",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": "2",
+		"question": "Preferred investment duration",
+		"answer": "Dropdown",
+		"submitted_by": "James Kalu",
+		"created_on": "2025-04-24T10:15:32.000Z"
+	},
+	{
+		"id": "3",
+		"question": "Investment knowledge level",
+		"answer": "Multi Select",
+		"submitted_by": "Ngozi Okafor",
+		"created_on": "2025-04-25T09:05:12.000Z"
+	},
+	{
+		"id": "4",
+		"question": "Sources of investment funds",
+		"answer": "Text",
+		"submitted_by": "Michael Eze",
+		"created_on": "2025-04-26T08:45:55.000Z"
+	},
+	{
+		"id": "5",
+		"question": "Risk tolerance",
+		"answer": "Scale (1-5)",
+		"submitted_by": "Blessing Omotola",
+		"created_on": "2025-04-27T13:25:47.000Z"
+	},
+	{
+		"id": "6",
+		"question": "Frequency of investments",
+		"answer": "Single Select",
+		"submitted_by": "David Musa",
+		"created_on": "2025-04-28T11:18:03.000Z"
+	},
+	{
+		"id": "7",
+		"question": "Expected ROI range",
+		"answer": "Range Slider",
+		"submitted_by": "Chidinma Nwachukwu",
+		"created_on": "2025-04-29T16:40:21.000Z"
+	},
+	{
+		"id": "8",
+		"question": "Past investment experience",
+		"answer": "Text Area",
+		"submitted_by": "Tunde Afolabi",
+		"created_on": "2025-04-30T07:50:10.000Z"
+	},
+	{
+		"id": "9",
+		"question": "Investment goal timeline",
+		"answer": "Date Picker",
+		"submitted_by": "Fatima Bello",
+		"created_on": "2025-05-01T12:30:00.000Z"
+	},
+	{
+		"id": "10",
+		"question": "Ethical investing preferences",
+		"answer": "Checkbox Group",
+		"submitted_by": "Ifeanyi Okoro",
+		"created_on": "2025-05-02T15:00:00.000Z"
+	}
+]

@@ -1,0 +1,12 @@
+[
+	{ "id": 1, "module_id": 2, "name": "Users" },
+	{ "id": 2, "module_id": 2, "name": "Roles & Permissions" },
+	{ "id": 3, "module_id": 2, "name": "Activity Log" },
+	{ "id": 4, "module_id": 3, "name": "All Portfolio" },
+	{ "id": 5, "module_id": 3, "name": "All Investments" },
+	{ "id": 6, "module_id": 3, "name": "For Approval" },
+	{ "id": 7, "module_id": 5, "name": "Customers" },
+	{ "id": 8, "module_id": 5, "name": "Activity Log" },
+	{ "id": 9, "module_id": 6, "name": "Investment Listing" },
+	{ "id": 10, "module_id": 6, "name": "Top Offers" }
+]

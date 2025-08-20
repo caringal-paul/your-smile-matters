@@ -1,0 +1,11 @@
+[
+	{ "id": 1, "name": "Dashboard" },
+	{ "id": 2, "name": "User Management" },
+	{ "id": 3, "name": "Portfolio Management" },
+	{ "id": 4, "name": "Risk Rating Management" },
+	{ "id": 5, "name": "Customer Management" },
+	{ "id": 6, "name": "Investment Offers" },
+	{ "id": 7, "name": "Transaction History" },
+	{ "id": 8, "name": "Support Management" },
+	{ "id": 9, "name": "Account Settings" }
+]

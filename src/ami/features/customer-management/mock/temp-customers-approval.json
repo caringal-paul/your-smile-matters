@@ -1,0 +1,44 @@
+[
+	{
+		"date_requested": "2025-04-23T06:20:20.000Z",
+		"requested_by": "Aisha Abiola",
+		"customer_name": "Ngozi Ketechi",
+		"change_request": "Security Questions Reset",
+		"status": "For Approval"
+	},
+	{
+		"date_requested": "2025-05-01T09:45:00.000Z",
+		"requested_by": "Tunde Akande",
+		"customer_name": "Chukwuemeka Uzo",
+		"change_request": "Email Address Update",
+		"status": "Approved"
+	},
+	{
+		"date_requested": "2025-05-10T11:30:00.000Z",
+		"requested_by": "Halima Yusuf",
+		"customer_name": "Zainab Lawal",
+		"change_request": "Password Reset",
+		"status": "For Approval"
+	},
+	{
+		"date_requested": "2025-05-12T14:20:00.000Z",
+		"requested_by": "Emeka Nwosu",
+		"customer_name": "Femi Alabi",
+		"change_request": "Mobile Number Change",
+		"status": "Rejected"
+	},
+	{
+		"date_requested": "2025-05-15T08:10:00.000Z",
+		"requested_by": "Ifeanyi Okoro",
+		"customer_name": "Ruqayyah Suleiman",
+		"change_request": "Account Reactivation",
+		"status": "For Approval"
+	},
+	{
+		"date_requested": "2025-05-20T16:50:00.000Z",
+		"requested_by": "Chiamaka Obi",
+		"customer_name": "Samuel Obi",
+		"change_request": "Beneficiary Update",
+		"status": "Approved"
+	}
+]

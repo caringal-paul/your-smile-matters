@@ -1,0 +1,62 @@
+[
+	{
+		"id": 1,
+		"customer_id": "023003",
+		"surname": "Flores",
+		"first_name": "Lori",
+		"no_of_investments": 9,
+		"fixed_income": 7,
+		"equity": 2,
+		"commodity": 0,
+		"portfolio_balance": 8361565.0,
+		"last_investment_date": "2025-03-28T07:52:02"
+	},
+	{
+		"id": 2,
+		"customer_id": "023004",
+		"surname": "Baxter",
+		"first_name": "Dylan",
+		"no_of_investments": 4,
+		"fixed_income": 0,
+		"equity": 3,
+		"commodity": 1,
+		"portfolio_balance": 38855987.0,
+		"last_investment_date": "2024-06-19T05:36:58"
+	},
+	{
+		"id": 3,
+		"customer_id": "023005",
+		"surname": "Johnson",
+		"first_name": "Jose",
+		"no_of_investments": 7,
+		"fixed_income": 0,
+		"equity": 2,
+		"commodity": 5,
+		"portfolio_balance": 81537257.0,
+		"last_investment_date": "2025-01-25T18:23:43"
+	},
+	{
+		"id": 4,
+		"customer_id": "023006",
+		"surname": "Schneider",
+		"first_name": "Matthew",
+		"no_of_investments": 1,
+		"fixed_income": 1,
+		"equity": 0,
+		"commodity": 0,
+		"portfolio_balance": 48370727.0,
+		"last_investment_date": "2024-07-13T07:05:06"
+	},
+	{
+		"id": 5,
+		"customer_id": "023007",
+		"surname": "White",
+		"first_name": "Kara",
+		"no_of_investments": 10,
+		"fixed_income": 3,
+		"equity": 0,
+		"commodity": 7,
+		"portfolio_balance": 5437064.0,
+		"last_investment_date": "2025-01-23T15:08:15"
+	}
+]

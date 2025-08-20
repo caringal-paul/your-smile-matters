@@ -1,0 +1,41 @@
+[
+	{
+		"id": "1",
+		"investment_offer": "10-Year Treasury Bond",
+		"description": "Looking for a safe and stable investment with guaranteed returns",
+		"return_of_investment": "0.67% ",
+		"asset_class": "Fixed Income",
+		"return_of_investment_frequency": "anually",
+		"investment_tenor": "10 years",
+		"min_investment_amount": "1685480",
+		"max_investment_amount": " 10000000",
+		"created_on": "2023-09-10, 1:06:30",
+		"is_archived": false
+	},
+	{
+		"id": "2",
+		"investment_offer": "Nigeria Sovereign Sukuk",
+		"description": "A Sharia-compliant investment opportunity",
+		"return_of_investment": "3%",
+		"asset_class": "Fixed Income",
+		"return_of_investment_frequency": "anually",
+		"investment_tenor": "10 months, 1 year",
+		"min_investment_amount": "1685548",
+		"max_investment_amount": " 10000000",
+		"created_on": "2023-09-10, 1:06:30",
+		"is_archived": false
+	},
+	{
+		"id": "3",
+		"investment_offer": "Treasury Bills",
+		"description": "Short-term government securities with competitive returns",
+		"return_of_investment": "0.67%",
+		"asset_class": "Fixed Income",
+		"return_of_investment_frequency": "anually",
+		"investment_tenor": "10 years",
+		"min_investment_amount": "1685480",
+		"max_investment_amount": " 10000000",
+		"created_on": "2023-09-10, 1:06:30",
+		"is_archived": false
+	}
+]

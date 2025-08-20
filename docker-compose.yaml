@@ -1,0 +1,9 @@
+version: '3'
+services:
+  altinvest-ami:
+    build:
+      context: .
+    restart: always
+    ports:
+      - '5002:5002'
+

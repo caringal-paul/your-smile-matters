@@ -1,0 +1,27 @@
+[
+	{
+		"order": 1,
+		"id": 1,
+		"investment_offer": "10-Year Treasury Bond"
+	},
+	{
+		"order": 2,
+		"id": 2,
+		"investment_offer": "Africa Oil Fund"
+	},
+	{
+		"order": 3,
+		"id": 3,
+		"investment_offer": "Apple Inc. (AAPL) Stock"
+	},
+	{
+		"order": 4,
+		"id": 4,
+		"investment_offer": "Dangote Cement"
+	},
+	{
+		"order": 5,
+		"id": 5,
+		"investment_offer": "LMN Nigeria"
+	}
+]

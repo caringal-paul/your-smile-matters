@@ -1,0 +1,50 @@
+[
+	{
+		"id": 1,
+		"investment_offer": "10-Year Treasury Bond"
+	},
+	{
+		"id": 2,
+		"investment_offer": "Africa Oil Fund"
+	},
+	{
+		"id": 3,
+		"investment_offer": "Apple Inc. (AAPL) Stock"
+	},
+	{
+		"id": 4,
+		"investment_offer": "Dangote Cement"
+	},
+	{
+		"id": 5,
+		"investment_offer": "LMN Nigeria"
+	},
+	{
+		"id": 6,
+		"investment_offer": "MTN Nigeria"
+	},
+	{
+		"id": 7,
+		"investment_offer": "QRS Nigeria"
+	},
+	{
+		"id": 8,
+		"investment_offer": "Sukuk Bond"
+	},
+	{
+		"id": 9,
+		"investment_offer": "Tesla INC. (TSLA) Stock"
+	},
+	{
+		"id": 10,
+		"investment_offer": "United Bank of Africa"
+	},
+	{
+		"id": 11,
+		"investment_offer": "Unity Gold Africa"
+	},
+	{
+		"id": 12,
+		"investment_offer": "Vanguard Total Stock Market ETF (VTI)"
+	}
+]

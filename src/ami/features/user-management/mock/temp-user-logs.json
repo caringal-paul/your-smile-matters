@@ -1,0 +1,34 @@
+[
+	{
+		"id": 1,
+		"name": "John Doe",
+		"role": "Super Admin",
+		"status": true,
+		"date": "2025-04-23T06:20:20.000Z",
+		"description_log": "Added a new user: Dennis Trilon"
+	},
+	{
+		"id": 2,
+		"name": "Aisha Abiola",
+		"role": "Admin",
+		"status": true,
+		"date": "2025-04-18T06:20:20.000Z",
+		"description_log": "Denied risk profile of Ifeanyi Oluwaseun"
+	},
+	{
+		"id": 3,
+		"name": "James Red",
+		"role": "Customer Experience",
+		"status": false,
+		"date": "2025-04-19T06:20:20.000Z",
+		"description_log": "Edited a user profile for John Smith"
+	},
+	{
+		"id": 4,
+		"name": "Aisha Abiol",
+		"role": "Audit",
+		"status": true,
+		"date": "2025-03-29T06:20:20.000Z",
+		"description_log": "Created a new investment plan for Ngozi Kelechi"
+	}
+]

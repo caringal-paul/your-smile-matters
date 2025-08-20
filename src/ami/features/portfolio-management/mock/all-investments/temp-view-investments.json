@@ -1,0 +1,92 @@
+[
+	{
+		"customer_id": "00089001",
+		"first_name": "Funke",
+		"surname": "Adebayo",
+		"tenor": "10 years",
+		"principal_amount": "10500000.00",
+		"status": "Settled",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00023002",
+		"first_name": "Ifeanyi",
+		"surname": "Nwanko",
+		"tenor": "10 years",
+		"principal_amount": "50000000",
+		"status": "Settled",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00220003",
+		"first_name": "Jamir",
+		"surname": "Jamir Esteseun",
+		"tenor": "10 years",
+		"principal_amount": "128989000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "62000004",
+		"first_name": "Adeyemi",
+		"surname": "Oluwaseun",
+		"tenor": "10 years",
+		"principal_amount": "80000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "06600003",
+		"first_name": "Ngozi",
+		"surname": "Kelechi",
+		"tenor": "10 years",
+		"principal_amount": "1685480",
+		"status": "Settled",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00000004",
+		"first_name": "Adeli",
+		"surname": "Oli",
+		"tenor": "10 years",
+		"principal_amount": "80000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00350003",
+		"first_name": "Jini",
+		"surname": "Borin",
+		"tenor": "10 years",
+		"principal_amount": "125000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00250004",
+		"first_name": "Konta",
+		"surname": "Polis",
+		"tenor": "10 years",
+		"principal_amount": "80000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00680005",
+		"first_name": "Mika",
+		"surname": "Alupichi",
+		"tenor": "10 years",
+		"principal_amount": "128989000000",
+		"status": "Invested Rollover",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"customer_id": "00860004",
+		"first_name": "Balogun",
+		"surname": "Kehinde",
+		"tenor": "10 years",
+		"principal_amount": "80000000",
+		"status": "Terminated",
+		"investment_date": "2025-04-23T06:20:20.000Z"
+	}
+]

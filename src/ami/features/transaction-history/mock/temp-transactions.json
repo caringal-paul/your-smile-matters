@@ -1,0 +1,57 @@
+[
+	{
+		"id": 1,
+		"reference_no": "AID5417990080",
+		"customer_name": "Olfuwaseun Adeyemi",
+		"investment_offer": "Sukuk Bond",
+		"asset_class": "Fixed Income",
+		"alt_bank_used": "Oluwaseun AltBank 0006790611",
+		"principal_amount": 10000000.0,
+		"status": "Invested Rollover",
+		"transaction_date": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 2,
+		"reference_no": "AID5417990143",
+		"customer_name": "Ngozi Okafor",
+		"investment_offer": "Real Estate Fund",
+		"asset_class": "Commodity",
+		"alt_bank_used": "Okafor AltBank 0023458921",
+		"principal_amount": 5000000.0,
+		"status": "Settled",
+		"transaction_date": "2025-05-10T11:15:00.000Z"
+	},
+	{
+		"id": 3,
+		"reference_no": "AID5417990285",
+		"customer_name": "Samuel Ibeh",
+		"investment_offer": "Equity Growth Fund",
+		"asset_class": "Equity",
+		"alt_bank_used": "Ibeh AltBank 0039081120",
+		"principal_amount": 7500000.0,
+		"status": "Bought",
+		"transaction_date": "2025-06-01T09:30:00.000Z"
+	},
+	{
+		"id": 4,
+		"reference_no": "AID5417990429",
+		"customer_name": "Fatima Yusuf",
+		"investment_offer": "Treasury Bills",
+		"asset_class": "Fixed Income",
+		"alt_bank_used": "Yusuf AltBank 0011122233",
+		"principal_amount": 3000000.0,
+		"status": "Terminated",
+		"transaction_date": "2025-06-15T14:45:00.000Z"
+	},
+	{
+		"id": 5,
+		"reference_no": "AID5417990567",
+		"customer_name": "Chinedu Nwachukwu",
+		"investment_offer": "Eurobond Fund",
+		"asset_class": "Fixed Income",
+		"alt_bank_used": "Nwachukwu AltBank 0098765432",
+		"principal_amount": 20000000.0,
+		"status": "Sold",
+		"transaction_date": "2025-06-10T08:00:00.000Z"
+	}
+]

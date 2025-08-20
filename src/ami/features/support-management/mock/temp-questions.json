@@ -1,0 +1,72 @@
+[
+	{
+		"id": 1,
+		"question": "Is there a minimum investment amount?",
+		"answer": "<p><strong>PAUL</strong></p><p></p><ul><li><p><u>DANIEL</u></p></li></ul><p></p><p><em>PUNSALANG</em></p><p></p><ol><li><p><s>CARINGAL</s></p></li></ol>",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 2,
+		"question": "Is there a minimum investment amount?",
+		"answer": "We take security seriously. Your personal information matters.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 3,
+		"question": "What types of investments can I make?",
+		"answer": "Alt invest offers a variety of investment options, including.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 4,
+		"question": "How can I track my investments?",
+		"answer": "You can easily monitor your portfolio through the app.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 5,
+		"question": "How do I withdraw my earnings?",
+		"answer": "Withdrawals can be requested anytime through your account dashboard.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 6,
+		"question": "Are there any fees involved?",
+		"answer": "Alt invest charges minimal management fees which are clearly disclosed.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 7,
+		"question": "Is my money safe with Alt invest?",
+		"answer": "We use industry-standard encryption and partner with regulated custodians.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 8,
+		"question": "Can I invest from outside the country?",
+		"answer": "Currently, investments are limited to residents of supported countries.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 9,
+		"question": "How do I contact support?",
+		"answer": "You can reach our support team via email or live chat in the app.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	},
+	{
+		"id": 10,
+		"question": "Can I have multiple investment accounts?",
+		"answer": "Each user is allowed only one verified account to ensure security.",
+		"created_by": "Aisha Abiola",
+		"created_on": "2025-04-23T06:20:20.000Z"
+	}
+]
