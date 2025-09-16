@@ -145,8 +145,8 @@
 
 /* To edit the browser scrollbar */
 .scrollbar-small::-webkit-scrollbar {
-	width: 3px;
-	height: 3px;
+	width: 1.75px;
+	height: 1.75px;
 }
 
 .scrollbar-small::-webkit-scrollbar-thumb {
@@ -183,7 +183,7 @@ input[type="number"] {
 .ProseMirror p.is-empty::before {
 	content: attr(data-placeholder);
 	color: #9ca3af; /* gray-400 */
-	font-size: 11px; /* match your .text-[11px] */
+	font-size: 11px; /* match your .text-2xs */
 	pointer-events: none;
 	display: block;
 }

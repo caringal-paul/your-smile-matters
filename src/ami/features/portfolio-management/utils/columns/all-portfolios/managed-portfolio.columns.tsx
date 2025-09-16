@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/core/components/base/button";
@@ -52,7 +52,7 @@ export const useManagedPortfolioColumns = ({
 			label: "Investment Amount",
 			sortable: true,
 			render: (value) => (
-				<DataTableRow value={formatToNaira(value)} className="text-center" />
+				<DataTableRow value={formatToPeso(value)} className="text-center" />
 			),
 		},
 		{

@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { Button } from "@/core/components/base/button";
 import { FixedIncomeInvestmentTableType } from "../../types/all-portfolios/portfolio-fixed-income.types";
@@ -42,7 +42,7 @@ export const usePortfolioFixedIncomeColumns = ({
 			key: "principal_amount",
 			label: "Principal Amout",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "alt_bank_used",

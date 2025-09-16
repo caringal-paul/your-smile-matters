@@ -2,7 +2,7 @@ import { Button } from "@/core/components/base/button";
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { Column } from "@/ami/shared/types/column.types";
 
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
@@ -37,7 +37,7 @@ export const useInvestmentListingEquityColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={formatToNaira(value)}
+						value={formatToPeso(value)}
 						className="whitespace-nowrap"
 					/>
 				),
@@ -47,7 +47,7 @@ export const useInvestmentListingEquityColumns =
 				label: "Price Change",
 				sortable: true,
 				render: (value: PriceChange) => (
-					<div className="text-[11px] flex items-center gap-1">
+					<div className="text-2xs flex items-center gap-1">
 						<SelectArrowIcon
 							className={`${value.direction == "up" && "rotate-180"} h-3 w-3`}
 							fill={value.direction == "up" ? "#22c55e" : "#ef4444"}
@@ -64,7 +64,7 @@ export const useInvestmentListingEquityColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={formatToNaira(value)}
+						value={formatToPeso(value)}
 						className="whitespace-nowrap"
 					/>
 				),

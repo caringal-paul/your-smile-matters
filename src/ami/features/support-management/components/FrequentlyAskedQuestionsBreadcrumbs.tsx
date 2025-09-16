@@ -20,7 +20,7 @@ const FrequentlyAskedQuestionsBreadcrumbs = () => {
 						Questions
 					</Button>
 					<ChevronRight className="h-4 w-4" />{" "}
-					<span className="text-text-blue">Detail Page</span>
+					<span className="text-admin-secondary">Detail Page</span>
 				</div>
 			</SectionHeader>
 

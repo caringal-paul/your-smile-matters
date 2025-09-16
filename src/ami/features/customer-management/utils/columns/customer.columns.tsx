@@ -7,7 +7,7 @@ import { Column } from "@/ami/shared/types/column.types";
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
 import { CustomerTableType } from "../types/customer-table.types";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
@@ -18,21 +18,21 @@ export const useCustomerColumns = (): Column<CustomerTableType>[] => {
 
 	const columns: Column<CustomerTableType>[] = [
 		{
-			key: "id",
-			label: "Customer ID",
+			key: "customer_no",
+			label: "Customer No",
 			sortable: true,
 			priority: 1,
 			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "surname",
-			label: "Surname",
+			key: "first_name",
+			label: "First Name",
 			sortable: true,
 			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "first_name",
-			label: "First Name",
+			label: "Last Name",
+			key: "last_name",
 			sortable: true,
 			render: (value) => <DataTableRow value={value} />,
 		},
@@ -43,29 +43,41 @@ export const useCustomerColumns = (): Column<CustomerTableType>[] => {
 			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "portfolio_balance",
-			label: "Portfolio Balance",
+			key: "address",
+			label: "Address",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "created_on",
-			label: "Created on",
+			key: "gender",
+			label: "Gender",
 			sortable: true,
-			render: (value) => (
-				<DataTableRow value={formatToTableDate(String(value))} />
-			),
+			render: (value) => <DataTableRow value={value} />,
+		},
+		{
+			key: "mobile_number",
+			label: "Mobile Number",
+			sortable: true,
+			render: (value) => <DataTableRow value={value} />,
+		},
+		{
+			key: "total_spent",
+			label: "Total Spent",
+			sortable: true,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "status",
 			label: "Status",
 			sortable: true,
-			render: (value) => (
-				<StatusWithIndicator
-					value={value as AvailabilityStatus}
-					colorMap={AVAILABILITY_STATUS_COLORS}
-				/>
-			),
+			render: (value) => {
+				return (
+					<StatusWithIndicator
+						value={value as AvailabilityStatus}
+						colorMap={AVAILABILITY_STATUS_COLORS}
+					/>
+				);
+			},
 		},
 		{
 			key: "action",

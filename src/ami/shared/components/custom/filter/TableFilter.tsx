@@ -61,7 +61,7 @@ const TableFilter = <T extends Record<string, string[]>>({
 					variant="ghost"
 					className="hover:bg-none hover:text-foreground disabled:bg-red-500"
 				>
-					<FilterIcon fill="#2D2F2F" className="h-4 w-4" />
+					<FilterIcon fill="#2D2F2F" className="w-4 h-4" />
 					<span className="hidden sm:inline">Filter</span>
 				</Button>
 			</PopoverTrigger>
@@ -144,7 +144,7 @@ const TableFilter = <T extends Record<string, string[]>>({
 										return (
 											<div
 												key={option}
-												className="flex justify-between items-center"
+												className="flex items-center justify-between"
 											>
 												<Label className="text-xs font-normal">{option}</Label>
 												<RadioGroupItem
@@ -165,7 +165,7 @@ const TableFilter = <T extends Record<string, string[]>>({
 								)}
 							</RadioGroup>
 
-							<div className="flex gap-2 w-full max-w-full justify-between">
+							<div className="flex justify-between w-full max-w-full gap-2">
 								<DateInput
 									onChange={(date) => {
 										setStartDate(date);

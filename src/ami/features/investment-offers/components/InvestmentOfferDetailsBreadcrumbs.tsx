@@ -34,7 +34,7 @@ const InvestmentOfferDetailsBreadcrumbs = () => {
 						<BackIcon fill="#1C1B1F" className="h-4 w-4" /> {formattedTitle}
 					</Button>
 					<ChevronRight className="h-4 w-4" />
-					<span className="text-text-blue">Investment Offer Details</span>
+					<span className="text-admin-secondary">Investment Offer Details</span>
 				</div>
 			</SectionHeader>
 

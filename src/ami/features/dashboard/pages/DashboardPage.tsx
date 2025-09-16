@@ -1,7 +1,7 @@
 import CalendarIcon from "@/ami/shared/assets/icons/CalendarIcon";
 import InfoIcon from "@/ami/shared/assets/icons/InfoIcon";
 import { Button } from "@/core/components/base/button";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { Suspense, useState } from "react";
 import { AssetClassPieChart } from "../components/AssetClassPieChart";
@@ -115,7 +115,7 @@ const DashboardPage = () => {
 						className="row-span-1 col-span-6 sm:col-span-3 lg:col-span-3 2xl:col-span-2"
 						description="Total investment of all customers"
 						title="Total Investment Value"
-						value={`${formatToNaira("250000000")}`}
+						value={`${formatToPeso("250000000")}`}
 					/>
 					<BasicCard
 						className="row-span-1 col-span-6 sm:col-span-3 lg:col-span-3 2xl:col-span-2"
@@ -158,13 +158,13 @@ const DashboardPage = () => {
 										index % 2 === 0 ? "bg-accent" : "bg-transparent"
 									}`}
 								>
-									<div className="flex gap-4 text-[11px] items-center w-full font-semibold">
+									<div className="flex gap-4 text-2xs items-center w-full font-semibold">
 										<div>{index + 1}</div>
 
 										<div className="flex flex-col gap-1 w-full">
 											<div className="flex w-full justify-between">
 												Apple (50%)
-												<span>{formatToNaira("500000")}</span>
+												<span>{formatToPeso("500000")}</span>
 											</div>
 											<div
 												className={`h-[10px] w-[50%] bg-gradient rounded-xs`}
@@ -192,12 +192,12 @@ const DashboardPage = () => {
 										index % 2 === 0 ? "bg-accent" : "bg-transparent"
 									}`}
 								>
-									<div className="flex gap-4 text-[11px] items-center w-full font-semibold">
+									<div className="flex gap-4 text-2xs items-center w-full font-semibold">
 										<div className="">{index + 1}</div>
 
 										<div className="flex w-full justify-between">
 											Jamir Esteseun
-											<span>{formatToNaira("500000")}</span>
+											<span>{formatToPeso("500000")}</span>
 										</div>
 									</div>
 								</div>

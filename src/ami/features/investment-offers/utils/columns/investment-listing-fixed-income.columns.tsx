@@ -2,7 +2,7 @@ import { Button } from "@/core/components/base/button";
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { Column } from "@/ami/shared/types/column.types";
 
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
@@ -53,7 +53,7 @@ export const useInvestmentListingFixedIncomeColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={formatToNaira(value)}
+						value={formatToPeso(value)}
 						className="whitespace-nowrap"
 					/>
 				),
@@ -66,7 +66,7 @@ export const useInvestmentListingFixedIncomeColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={formatToNaira(value)}
+						value={formatToPeso(value)}
 						className="whitespace-nowrap"
 					/>
 				),

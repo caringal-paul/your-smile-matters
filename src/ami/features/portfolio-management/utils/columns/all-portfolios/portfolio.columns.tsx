@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { PortfolioTableType } from "../../types/all-portfolios/portfolio.types";
 import { useNavigate } from "react-router-dom";
@@ -70,7 +70,7 @@ export const usePortfolioColumns = () => {
 			label: "Portfolio Balance",
 			priority: 1,
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "last_investment_date",

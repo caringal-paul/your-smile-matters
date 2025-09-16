@@ -1,614 +1,104 @@
 [
 	{
-		"id": 1,
-		"name": "Super Admin",
-		"description": "Full access to all system settings, user management, and business configurations. Responsible for overseeing and managing all platform operations.",
-		"role_permissions": {
-			"role_id": 1,
-			"permissions": [
-				{
-					"module_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 3,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 6,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 8,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 7,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 3,
-					"status": true
-				}
-			]
-		}
-	},
-	{
-		"id": 2,
+		"_id": "68a004a613451d2e9d4cb516",
 		"name": "Admin",
-		"description": "Manages users, content, and operational tasks. Has access to key system modules but with limited permissions compared to the Super Admin.",
-		"role_permissions": {
-			"role_id": 2,
-			"permissions": [
-				{
-					"module_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 3,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 6,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 4,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 8,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 7,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 8,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 9,
-					"permission_id": 3,
-					"status": true
-				}
-			]
-		}
+		"description": "Full access to all modules",
+		"permissions": [
+			"user:create",
+			"user:read",
+			"user:update",
+			"user:delete",
+			"user:approve",
+			"customer:create",
+			"customer:read",
+			"customer:update",
+			"customer:delete",
+			"customer:approve",
+			"product:create",
+			"product:read",
+			"product:update",
+			"product:delete",
+			"product:approve",
+			"order:create",
+			"order:read",
+			"order:update",
+			"order:delete",
+			"order:approve",
+			"report:create",
+			"report:read",
+			"report:update",
+			"report:delete"
+		]
 	},
 	{
-		"id": 3,
-		"name": "Customer Experience",
-		"description": "Handles customer support inquiries and manages FAQs and support resources. Ensures seamless customer interactions and satisfaction.",
-		"role_permissions": {
-			"role_id": 3,
-			"permissions": [
-				{
-					"module_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 1,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 3,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 2,
-					"permission_id": 4,
-					"status": true
-				},
-				{
-					"module_id": 2,
-					"submodule_id": 3,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 4,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 7,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 8,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 9,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 6,
-					"submodule_id": 10,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 7,
-					"permission_id": 1,
-					"status": true
-				}
-			]
-		}
+		"_id": "68a004a613451d2e9d4cb517",
+		"name": "Manager",
+		"description": "Management level access with approval rights",
+		"permissions": [
+			"user:read",
+			"user:update",
+			"customer:create",
+			"customer:read",
+			"customer:update",
+			"customer:approve",
+			"product:create",
+			"product:read",
+			"product:update",
+			"product:approve",
+			"order:read",
+			"order:update",
+			"order:approve",
+			"report:read"
+		]
 	},
 	{
-		"id": 4,
-		"name": "Audit",
-		"description": "Reviews and monitors system activity, logs, and reports to ensure compliance and identify irregularities or security concerns.",
-		"role_permissions": {
-			"role_id": 4,
-			"permissions": [
-				{
-					"module_id": 1,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 5,
-					"permission_id": 2,
-					"status": true
-				},
-				{
-					"module_id": 3,
-					"submodule_id": 6,
-					"permission_id": 1,
-					"status": true
-				},
-				{
-					"module_id": 5,
-					"submodule_id": 8,
-					"permission_id": 1,
-					"status": true
-				}
-			]
-		}
+		"_id": "68a004a613451d2e9d4cb518",
+		"name": "Employee",
+		"description": "Standard employee access",
+		"permissions": [
+			"customer:create",
+			"customer:read",
+			"customer:update",
+			"product:read",
+			"order:create",
+			"order:read",
+			"order:update"
+		]
+	},
+	{
+		"_id": "68a004a613451d2e9d4cb519",
+		"name": "Customer Service",
+		"description": "Customer support focused role",
+		"permissions": [
+			"customer:read",
+			"customer:update",
+			"order:read",
+			"order:update"
+		]
+	},
+	{
+		"_id": "68a004a613451d2e9d4cb520",
+		"name": "Sales",
+		"description": "Sales team access",
+		"permissions": [
+			"customer:create",
+			"customer:read",
+			"customer:update",
+			"product:read",
+			"order:create",
+			"order:read"
+		]
+	},
+	{
+		"_id": "68a004a613451d2e9d4cb521",
+		"name": "Viewer",
+		"description": "Read-only access",
+		"permissions": [
+			"user:read",
+			"customer:read",
+			"product:read",
+			"order:read",
+			"report:read"
+		]
 	}
 ]

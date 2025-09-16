@@ -24,7 +24,7 @@ const TableSearch = ({
 			/>
 			<Input
 				className={cn(
-					"w-full sm:w-64 md:w-80 md:text-xs md:placeholder:text-xs h-9 rounded-full border-2 border-border- pl-10 2xl:pl-11 text-[11px] placeholder:text-[11px] leading-none shadow-none tracking-tight pr-8",
+					"w-full sm:w-64 md:w-80 md:text-xs md:placeholder:text-xs h-9 rounded-full border-2 border-border- pl-10 2xl:pl-11 text-2xs placeholder:text-2xs leading-none shadow-none tracking-tight pr-8",
 					className
 				)}
 				placeholder={placeholder}

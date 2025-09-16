@@ -79,7 +79,7 @@ const FrequentlyAskedQuestionsForm = ({
 									<Input
 										placeholder="Question"
 										disabled={isViewForm}
-										className="text-[11px]"
+										className="text-2xs"
 										{...field}
 									/>
 								</FormCard.Field>
@@ -97,7 +97,7 @@ const FrequentlyAskedQuestionsForm = ({
 									</FormCard.Label>
 									<div className="flex flex-row overflow-hidden w-full">
 										{isViewForm ? (
-											<div className="rich-text text-[11px] font-normal">
+											<div className="rich-text text-2xs font-normal">
 												{parse(String(field.value))}
 											</div>
 										) : (

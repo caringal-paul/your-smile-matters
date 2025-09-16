@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { PortfolioPendingTradeTableType } from "../../types/pending-trades/portfolio-pending-trades.types";
 import { Button } from "@/core/components/base/button";
@@ -61,7 +61,7 @@ export const usePortfolioPendingTradeColumns = (
 			key: "amount_per_unit",
 			label: "Amount per Unit",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(String(value))} />,
+			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
 		},
 		{
 			key: "quantity",
@@ -73,7 +73,7 @@ export const usePortfolioPendingTradeColumns = (
 			key: "total_price",
 			label: "Total Price",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(String(value))} />,
+			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
 		},
 		{
 			key: "action",

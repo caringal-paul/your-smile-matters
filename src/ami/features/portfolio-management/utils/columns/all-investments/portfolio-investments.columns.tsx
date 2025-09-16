@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { PortfolioInvestmentsTableType } from "../../types/all-investments/portfolio-investments.types";
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ export const usePortfolioAllInvestmentsColumns = () => {
 			key: "total_investment_amount",
 			label: "Total Investment Amount",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "action",

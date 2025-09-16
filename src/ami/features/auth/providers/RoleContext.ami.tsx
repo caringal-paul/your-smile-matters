@@ -11,7 +11,7 @@ type RolePermission = {
 	permissions: ModulePermissionAccess[];
 };
 
-export type Role = {
+export type OldRole = {
 	id: number;
 	name: string;
 	description: string;
@@ -19,8 +19,8 @@ export type Role = {
 };
 
 type RoleContextType = {
-	selectedRole: Role | null;
-	setSelectedRole: (role: Role | null) => void;
+	selectedRole: OldRole | null;
+	setSelectedRole: (role: OldRole | null) => void;
 };
 
 const RoleContext = createContext<RoleContextType | null>(null);
@@ -30,7 +30,7 @@ type RoleProviderProps = {
 };
 
 const RoleProvider = ({ children }: RoleProviderProps) => {
-	const [selectedRole, setSelectedRole] = useState<Role | null>({
+	const [selectedRole, setSelectedRole] = useState<OldRole | null>({
 		id: 1,
 		name: "Super Admin",
 		description:

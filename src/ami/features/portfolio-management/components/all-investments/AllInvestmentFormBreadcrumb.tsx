@@ -19,7 +19,7 @@ const AllInvestmentFormBreadcrumb = () => {
 						<BackIcon fill="#1C1B1F" className="h-4 w-4" /> All Investments
 					</Button>
 					<ChevronRight className="h-4 w-4" />{" "}
-					<span className="text-text-blue">Investment Details</span>
+					<span className="text-admin-secondary">Investment Details</span>
 				</div>
 			</SectionHeader>
 

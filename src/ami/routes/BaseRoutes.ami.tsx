@@ -1,15 +1,11 @@
 import AccountSettingsLayout from "@/ami/features/account-settings/layout/AccountSettingsLayout.ami";
 import AccountSettingsPage from "@/ami/features/account-settings/pages/AccountSettingsPage.ami";
-import { RoleProvider } from "@/ami/features/auth/providers/RoleContext.ami";
 import CustomerBreadcrumbs from "@/ami/features/customer-management/components/CustomerBreadcrumbs";
 import CustomerForm from "@/ami/features/customer-management/components/CustomerForm";
 import CustomerRouteTabs from "@/ami/features/customer-management/components/CustomerRouteTabs";
 import CustomerTable from "@/ami/features/customer-management/components/CustomerTable";
-import CustomerLayout from "@/ami/features/customer-management/layout/CustomerLayout";
-import CustomerActivityLogsPage from "@/ami/features/customer-management/pages/CustomerActivityLogsPage";
 import CustomerApprovalPage from "@/ami/features/customer-management/pages/CustomerApprovalPage";
 import CustomerPage from "@/ami/features/customer-management/pages/CustomerPage";
-import DashboardLayout from "@/ami/features/dashboard/layout/DashboardLayout";
 import DashboardPage from "@/ami/features/dashboard/pages/DashboardPage";
 import InvestmentListingFixedIncomeTable from "@/ami/features/investment-offers/components/InvestmentListingFixedIncomeTable";
 import InvestmentListingRouteTabs from "@/ami/features/investment-offers/components/InvestmentListingRouteTabs";
@@ -44,7 +40,6 @@ import ViewCustomerPortfolio from "@/ami/features/portfolio-management/component
 import PendingTradesForApprovalTable from "@/ami/features/portfolio-management/components/pending-trades/PendingTradesForApprovalTable";
 import PendingTradeRouteTabs from "@/ami/features/portfolio-management/components/pending-trades/PendingTradesRouteTabs";
 import PendingTradesTable from "@/ami/features/portfolio-management/components/pending-trades/PendingTradesTable";
-import PortfolioLayout from "@/ami/features/portfolio-management/layout/PortfolioLayout";
 import AllInvestmentPage from "@/ami/features/portfolio-management/pages/AllInvestmentPage";
 import AllPortfolioForApprovalPage from "@/ami/features/portfolio-management/pages/AllPortfolioForApprovalPage";
 import AllPortfolioPage from "@/ami/features/portfolio-management/pages/AllPortfolioPage";
@@ -58,7 +53,6 @@ import RiskRatingRiskTypesForApprovalTable from "@/ami/features/risk-rating-mana
 import RiskRatingRiskTypesForm from "@/ami/features/risk-rating-management/components/RiskRatingRiskTypesForm";
 import RiskRatingRiskTypesRouteTabs from "@/ami/features/risk-rating-management/components/RiskRatingRiskTypesRouteTabs";
 import RiskRatingRiskTypesTable from "@/ami/features/risk-rating-management/components/RiskRatingRiskTypesTable";
-import RiskRatingLayout from "@/ami/features/risk-rating-management/layout/RiskRatingLayout";
 import RiskRatingQuestionnairePage from "@/ami/features/risk-rating-management/pages/RiskRatingQuestionnairePage";
 import RiskRatingRiskTypesPage from "@/ami/features/risk-rating-management/pages/RiskRatingRiskTypesPage";
 import FrequentlyAskedQuestionsBreadcrumbs from "@/ami/features/support-management/components/FrequentlyAskedQuestionsBreadcrumbs";
@@ -69,46 +63,94 @@ import SupportLayout from "@/ami/features/support-management/layout/SupportLayou
 import FAQPage from "@/ami/features/support-management/pages/FAQPage";
 import SupportApprovalPage from "@/ami/features/support-management/pages/SupportApprovalPage";
 import TransactionTable from "@/ami/features/transaction-history/components/TransactionTable";
-import TransactionLayout from "@/ami/features/transaction-history/layout/TransactionLayout";
 import TransactionPage from "@/ami/features/transaction-history/pages/TransactionPage";
-import UserForm from "@/ami/features/user-management/components/UserForm";
+
 import UserLayout from "@/ami/features/user-management/layout/UserLayout";
 import RolesAndPermissionsPage from "@/ami/features/user-management/pages/RolesAndPermissionsPage";
-import UserActivityLogsPage from "@/ami/features/user-management/pages/UserActivityLogsPage";
 import UserPage from "@/ami/features/user-management/pages/UserPage";
 import RootLayout from "@/ami/layouts/RootLayout.ami";
 import { Route } from "react-router-dom";
 import TestComponent from "../shared/components/TestComponent";
+import RolesAndPermissionsLayout from "../features/user-management/layout/RolesAndPermissionsLayout";
+import RolesAndPermissionsForm from "../features/user-management/components/RolesAndPermissionsForm";
+import { RoleProvider } from "../features/auth/providers/RoleContext.ami";
+import CustomerLayout from "../features/customer-management/layout/CustomerLayout";
+import ServicePage from "../features/service-management/pages/ServicePage";
+import ServiceLayout from "../features/service-management/layout/ServiceLayout";
+import ServiceTable from "../features/service-management/components/ServiceTable";
+import ServiceForm from "../features/service-management/components/ServiceForm";
+import ServiceBreadcrumbs from "../features/service-management/components/ServiceBreadcrumbs";
+import PackageLayout from "../features/package-management/layout/PackageLayout";
+import PackagePage from "../features/package-management/pages/PackagePage";
+import PackageTable from "../features/package-management/components/PackageTable";
+import PackageBreadcrumbs from "../features/package-management/components/PackageBreadcrumbs";
+import ViewPackageForm from "../features/package-management/components/ViewPackageForm";
+import CreatePackageForm from "../features/package-management/components/CreatePackageForm";
+import EditPackageForm from "../features/package-management/components/EditPackageForm";
+import ViewUserForm from "../features/user-management/components/ViewUserForm";
+import UserBreadcrumbs from "../features/user-management/components/UserBreadcrumbs";
+import EditUserForm from "../features/user-management/components/EditUserForm";
+import CreateUserForm from "../features/user-management/components/CreateUserForm";
+
+const selectedRole = {
+	_id: "68a004a613451d2e9d4cb517",
+	name: "Manager",
+	description: "Management level access with approval rights",
+	permissions: [
+		"user:read",
+		"user:update",
+		"customer:create",
+		"customer:read",
+		"customer:update",
+		"customer:approve",
+		"product:create",
+		"product:read",
+		"product:update",
+		"product:approve",
+		"order:read",
+		"order:update",
+		"order:approve",
+		"report:read",
+	],
+};
 
 const baseRoutes = (
 	<Route path="ami" element={<RootLayout />}>
 		{/* DASHBOARD */}
-
 		<Route path="test" element={<TestComponent />} />
-
 		<Route path="dashboard" element={<div />}>
 			<Route index element={<DashboardPage />} />
 		</Route>
-
 		{/* USER MODULE */}
 		<Route path="user-management" element={<UserLayout />}>
 			<Route path="users" element={<UserPage />} />
-			<Route path="users/edit/user/:id" element={<UserForm />} />
-			<Route path="users/view/user/:id" element={<UserForm />} />
 
+			<Route element={<UserBreadcrumbs />}>
+				<Route path="users/create/user" element={<CreateUserForm />} />
+				<Route path="users/edit/user/:id" element={<EditUserForm />} />
+				<Route path="users/view/user/:id" element={<ViewUserForm />} />
+			</Route>
+
+			<Route path="activity-logs" element={<div />} />
+		</Route>
+		<Route
+			path="role-and-permission-management/roles-and-permissions"
+			element={<RolesAndPermissionsLayout />}
+		>
+			<Route index element={<RolesAndPermissionsPage />} />
 			<Route
-				path="roles-and-permissions"
+				path="edit/:id"
 				element={
 					<RoleProvider>
-						{/* <RolesAndPermissionsPage /> */}
-						<div />
+						<RolesAndPermissionsForm
+							selectedRole={selectedRole}
+							onSave={() => console.log("do me")}
+						/>
 					</RoleProvider>
 				}
 			/>
-			<Route path="activity-logs" element={<div />} />
 		</Route>
-
-		{/* PORTFOLIO MODULE */}
+		{/* PORTFOLIO MODULE */}x{" "}
 		<Route path="portfolio-management" element={<div />}>
 			<Route element={<AllPortfolioRouteTabs />}>
 				<Route path="portfolios" element={<AllPortfolioPage />}>
@@ -169,30 +211,59 @@ const baseRoutes = (
 				</Route>
 			</Route>
 		</Route>
-
 		{/* CUSTOMER MODULE */}
-		<Route path="customer-management" element={<div />}>
+		<Route path="customer-management" element={<CustomerLayout />}>
 			<Route element={<CustomerRouteTabs />}>
 				<Route path="customers" element={<CustomerPage />}>
 					<Route index element={<CustomerTable />} />
+					<Route path="activity-log" element={<div />} />
 				</Route>
 
-				<Route
+				{/* <Route
 					path="customers/for-approval"
 					element={<CustomerApprovalPage />}
-				/>
+				/> */}
 			</Route>
-
-			<Route path="activity-logs" element={<div />} />
 
 			<Route element={<CustomerBreadcrumbs />}>
-				<Route path="customers/view/customer/:id" element={<CustomerForm />} />
-				<Route path="customers/edit/customer/:id" element={<CustomerForm />} />
+				<Route path="customers/view/customer/:id" element={<div />} />
+				<Route path="customers/edit/customer/:id" element={<div />} />
+				{/* <Route path="customers/edit/customer/:id" element={<CustomerForm />} /> */}
 			</Route>
 		</Route>
+		{/* SERVICE MODULE */}
+		<Route path="service-management" element={<ServiceLayout />}>
+			<Route path="services" element={<ServicePage />}>
+				<Route index element={<ServiceTable />} />
+			</Route>
 
+			{/* <Route
+					path="customers/for-approval"
+					element={<CustomerApprovalPage />}
+				/> */}
+
+			{/* <Route path="activity-logs" element={<div />} /> */}
+
+			<Route element={<ServiceBreadcrumbs />}>
+				<Route path="services/view/service/:id" element={<ServiceForm />} />
+				<Route path="services/edit/service/:id" element={<ServiceForm />} />
+			</Route>
+		</Route>
+		{/* PACKAGE MODULE */}
+		<Route path="package-management" element={<PackageLayout />}>
+			<Route path="packages" element={<PackagePage />}>
+				<Route index element={<PackageTable />} />
+			</Route>
+
+			<Route element={<PackageBreadcrumbs />}>
+				<Route path="packages/create/package" element={<CreatePackageForm />} />
+				<Route path="packages/view/package/:id" element={<ViewPackageForm />} />
+				<Route path="packages/edit/package/:id" element={<EditPackageForm />} />
+			</Route>
+		</Route>
+		{/* UNUSED */}
 		{/* RISK RATING MODULE */}
-		<Route path="risk-rating-management" element={<div />}>
+		<Route path="booking-management" element={<div />}>
 			<Route path="questionnaires" element={<RiskRatingQuestionnairePage />}>
 				<Route element={<RiskRatingQuestionnaireRouteTabs />}>
 					<Route index element={<RiskRatingQuestionnaireTable />} />
@@ -236,7 +307,6 @@ const baseRoutes = (
 				/>
 			</Route>
 		</Route>
-
 		{/* INVESTMENT MODULE */}
 		<Route path="investment-offers" element={<InvestmentOffersLayout />}>
 			<Route path="investment-listing" element={<InvestmentListingRouteTabs />}>
@@ -304,16 +374,14 @@ const baseRoutes = (
 				<Route index element={<TopOffersTable />} />
 			</Route>
 		</Route>
-
-		{/* TRANSACTION MODULE */}
+		{/* TRANSACTION MODULE */}x{" "}
 		<Route path="transaction-history" element={<div />}>
 			<Route element={<TransactionPage />}>
 				<Route index element={<TransactionTable />} />
 			</Route>
 		</Route>
-
 		{/* SUPPORT MODULE */}
-		<Route path="support-management" element={<SupportLayout />}>
+		<Route path="support-management" element={<div />}>
 			<Route element={<SupportRouteTabs />}>
 				<Route path="faq" element={<FAQPage />}>
 					<Route index element={<FrequentlyAskedQuestionsTable />} />
@@ -343,9 +411,8 @@ const baseRoutes = (
 				/>
 			</Route>
 		</Route>
-
 		{/* ACCOUNT SETTINGS */}
-		<Route path="account-settings" element={<AccountSettingsLayout />}>
+		<Route path="account-settings" element={<div />}>
 			<Route index element={<AccountSettingsPage />} />
 		</Route>
 	</Route>

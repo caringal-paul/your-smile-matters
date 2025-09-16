@@ -1,29 +1,24 @@
-// export type RoleNames =
-// 	| "Super Admin"
-// 	| "Admin"
-// 	| "Customer Experience"
-// 	| "Audit";
+import { UserModel } from "@/core/models/user.model";
 
-import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+export type UserAmi = Pick<
+	UserModel,
+	| "_id"
+	| "email"
+	| "username"
+	| "first_name"
+	| "last_name"
+	| "mobile_number"
+	| "is_active"
+	| "role_id"
+	| "updated_at"
+>;
 
-type User = {
-	id: number;
-	email: string;
-	username: string;
-	firstName: string;
-	lastName: string;
-	mobileNumber: number;
-	isActive: boolean;
-	// role: RoleNames;
-	updated_date: string;
-};
+export type UserAmiFilters = Partial<Record<keyof UserAmi, string[]>>;
 
-export type UserTableType = {
-	[K in keyof User]: string;
+export type UserAmiTableType = {
+	[K in keyof UserAmi]: UserAmi[K];
 } & {
-	activeStatus: AvailabilityStatus;
-	fullName?: string;
+	status?: string;
+	full_name?: string;
 	action?: string;
 };
-
-export type UserFilters = Partial<Record<keyof UserTableType, string[]>>;

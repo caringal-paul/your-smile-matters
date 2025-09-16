@@ -38,7 +38,7 @@ const AllPortfolioFormBreadcrumbs = () => {
 						{name && (
 							<>
 								<ChevronRight className="h-4 w-4" />
-								<span className="text-text-blue">{name}</span>
+								<span className="text-admin-secondary">{name}</span>
 							</>
 						)}
 					</div>

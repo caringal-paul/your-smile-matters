@@ -2,6 +2,7 @@ import { LabelHTMLAttributes, PropsWithChildren, Ref } from "react";
 import { Label } from "../../../../../core/components/base/label";
 import { Separator } from "../../../../../core/components/base/separator";
 import { cn } from "@/core/lib/utils";
+import { FormMessage } from "@/core/components/base/form";
 
 type FormCardProp = PropsWithChildren & {
 	className?: string;
@@ -68,10 +69,9 @@ type FormCardFieldProps = PropsWithChildren & {
 
 const FormCardField = ({ children, className }: FormCardFieldProps) => {
 	return (
-		//
 		<div
 			className={cn(
-				"w-full h-fit gap-1 items-center grid grid-cols-1 md:grid-cols-[20%_1fr]",
+				"w-full h-fit gap-[2px] md:gap-1 items-center grid grid-cols-1 md:grid-cols-[20%_1fr]",
 				className
 			)}
 		>
@@ -83,12 +83,14 @@ const FormCardField = ({ children, className }: FormCardFieldProps) => {
 type FormCardLabelProps = PropsWithChildren &
 	LabelHTMLAttributes<HTMLLabelElement> & {
 		className?: string;
+		required?: boolean;
 		ref?: Ref<HTMLLabelElement>;
 	};
 
 const FormCardLabel = ({
 	className,
 	ref,
+	required = false,
 	children,
 	...props
 }: FormCardLabelProps) => {
@@ -96,9 +98,10 @@ const FormCardLabel = ({
 		<Label
 			ref={ref}
 			{...props}
-			className={cn("text-[11px] font-semibold", className)}
+			className={cn("text-2xs font-semibold mb-1 md:mb-0", className)}
 		>
 			{children}
+			{required && "*"}
 		</Label>
 	);
 };

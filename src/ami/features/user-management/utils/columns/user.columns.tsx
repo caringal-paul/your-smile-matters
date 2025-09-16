@@ -1,6 +1,6 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
-import { UserTableType } from "../types/users-table.types";
+import { UserAmiTableType } from "../types/users-table.types";
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Column } from "@/ami/shared/types/column.types";
@@ -11,12 +11,12 @@ import StatusWithIndicator from "@/ami/shared/components/custom/indicator/Status
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
 
-export const useUserColumns = (): Column<UserTableType>[] => {
+export const useUserColumns = (): Column<UserAmiTableType>[] => {
 	const navigate = useNavigate();
 
-	const columns: Column<UserTableType>[] = [
+	const columns: Column<UserAmiTableType>[] = [
 		{
-			key: "fullName",
+			key: "full_name",
 			label: "Name",
 			sortable: true,
 			priority: 1,
@@ -30,7 +30,7 @@ export const useUserColumns = (): Column<UserTableType>[] => {
 			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "mobileNumber",
+			key: "mobile_number",
 			label: "Mobile Number",
 			sortable: true,
 			priority: 1,
@@ -44,7 +44,7 @@ export const useUserColumns = (): Column<UserTableType>[] => {
 			render: (value) => <DataTableRow value={value} />,
 		},
 		{
-			key: "activeStatus",
+			key: "status",
 			label: "Status",
 			sortable: true,
 			render: (value) => (
@@ -55,7 +55,7 @@ export const useUserColumns = (): Column<UserTableType>[] => {
 			),
 		},
 		{
-			key: "updated_date",
+			key: "updated_at",
 			label: "Updated on",
 			sortable: true,
 			render: (value) => (
@@ -70,14 +70,14 @@ export const useUserColumns = (): Column<UserTableType>[] => {
 					<Button
 						size="icon"
 						variant="icon"
-						onClick={() => navigate(`view/user/${row.id}`)}
+						onClick={() => navigate(`view/user/${row._id}`)}
 					>
 						<EyeIcon fill="#1C1B1F" className="mt-[1px]" />
 					</Button>
 					<Button
 						size="icon"
 						variant="icon"
-						onClick={() => navigate(`edit/user/${row.id}`)}
+						onClick={() => navigate(`edit/user/${row._id}`)}
 					>
 						<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
 					</Button>

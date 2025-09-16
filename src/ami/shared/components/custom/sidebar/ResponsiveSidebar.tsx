@@ -1,12 +1,19 @@
 import { ElementType, useState } from "react";
-import { ChevronDown, Menu } from "lucide-react";
-import DashboardIcon from "@/ami/shared/assets/icons/DashboardIcon";
-import UserIcon from "@/ami/shared/assets/icons/UserIcon";
-import CustomerIcon from "@/ami/shared/assets/icons/CustomerIcon";
-import InvestmentIcon from "@/ami/shared/assets/icons/InvestmentIcon";
-import TransactionIcon from "@/ami/shared/assets/icons/TransactionIcon";
-import SupportIcon from "@/ami/shared/assets/icons/SupportIcon";
-import AccountIcon from "@/ami/shared/assets/icons/AccountIcon";
+import {
+	BookCopy,
+	Box,
+	Boxes,
+	Calendar,
+	ChevronDown,
+	Hand,
+	LayoutDashboard,
+	Menu,
+	MessagesSquare,
+	Settings,
+	UserRound,
+	UsersRound,
+} from "lucide-react";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../../../../core/components/base/button";
 
@@ -66,104 +73,68 @@ const ResponsiveSidebar = () => {
 			id: 1,
 			name: "Dashboard",
 			path: "dashboard",
-			icon: DashboardIcon,
+			icon: LayoutDashboard,
 		},
 		{
 			id: 2,
 			name: "User Management",
-			path: "user-management",
-			icon: UserIcon,
-			subModules: [
-				{ id: 1, name: "Users", path: "user-management/users" },
-				{
-					id: 2,
-					name: "Roles & Permission",
-					path: "user-management/roles-and-permissions",
-				},
-				// TODO ADD ME AGAIN
-				// { id: 3, name: "Activity Log", path: "user-management/activity-logs" },
-			],
+			path: "user-management/users",
+			icon: UserRound,
 		},
-		// {
-		// 	id: 3,
-		// 	name: "Portfolio Management",
-		// 	path: "portfolio-management",
-		// 	icon: PortfolioIcon,
-		// 	subModules: [
-		// 		{
-		// 			id: 1,
-		// 			name: "All Portfolios",
-		// 			path: "portfolio-management/portfolios",
-		// 		},
-		// 		{
-		// 			id: 2,
-		// 			name: "All Investments",
-		// 			path: "portfolio-management/investments",
-		// 		},
-		// 		{
-		// 			id: 3,
-		// 			name: "Pending Trades",
-		// 			path: "portfolio-management/pending-trades",
-		// 		},
-		// 	],
-		// },
+		{
+			id: 10,
+			name: "Roles & Permission",
+			path: "role-and-permission-management/roles-and-permissions",
+			icon: Hand,
+		},
+		{
+			id: 3,
+			name: "Customer Management",
+			path: "customer-management/customers",
+			icon: UsersRound,
+		},
 		{
 			id: 4,
-			name: "Customer Management",
-			path: "customer-management",
-			icon: CustomerIcon,
-			subModules: [
-				{ id: 1, name: "Customers", path: "customer-management/customers" },
-				{
-					id: 2,
-					name: "Activity Log",
-					path: "customer-management/activity-logs",
-				},
-			],
+			name: "Service Management",
+			path: "service-management/services",
+			icon: Box,
 		},
-
+		{
+			id: 5,
+			name: "Package Management",
+			path: "package-management/packages",
+			icon: Boxes,
+		},
 		{
 			id: 6,
-			name: "Package Management",
-			path: "investment-offers",
-			icon: InvestmentIcon,
-			subModules: [
-				{
-					id: 1,
-					name: "Investment Listing",
-					path: "investment-offers/investment-listing/fixed-income",
-				},
-				{
-					id: 2,
-					name: "Top Offers",
-					path: "investment-offers/top-offers",
-				},
-			],
+			name: "Transaction History",
+			path: "transaction-history",
+			icon: BookCopy,
 		},
 		{
 			id: 7,
-			name: "Transaction History",
-			path: "transaction-history",
-			icon: TransactionIcon,
+			name: "Customer Bookings",
+			path: "booking-management",
+			icon: Calendar,
 		},
 		{
 			id: 8,
 			name: "Support Management",
 			path: "support-management/faq",
-			icon: SupportIcon,
+			icon: MessagesSquare,
 		},
 		{
 			id: 9,
 			name: "Account Settings",
 			path: "account-settings",
-			icon: AccountIcon,
+			icon: Settings,
 		},
 	];
 
 	return (
 		<div className="xl:sticky xl:top-0 xl:left-0 xl:h-screen xl:w-[260px] flex flex-col">
 			{/* Mobile Header (only shows on mobile) - Now sticky */}
-			<div className="fixed top-0 z-50 flex flex-row w-full h-16 bg-admin-background-sidebar justify-between items-center pl-1 pr-3 sm:pl-3 sm:pr-5 xl:hidden">
+			<div className="fixed top-0 z-50 flex flex-row items-center justify-between w-full h-16 pl-1 pr-3 bg-admin-background-sidebar sm:pl-3 sm:pr-5 xl:hidden">
 				<img
 					id="logo"
 					src="/ysm-sidebar.png"
@@ -173,7 +144,7 @@ const ResponsiveSidebar = () => {
 				<Button
 					size="icon"
 					onClick={toggleMobileMenu}
-					className="rounded-full bg-button text-white"
+					className="text-white rounded-full bg-button"
 				>
 					<Menu size={24} />
 				</Button>
@@ -192,8 +163,8 @@ const ResponsiveSidebar = () => {
 				`}
 			>
 				{/* Scrollable Content Area */}
-				<div className="flex-1 flex flex-col overflow-y-auto">
-					<div className="flex flex-col p-4 pb-8 xl:pb-12 text-white h-full">
+				<div className="flex flex-col flex-1 overflow-y-auto">
+					<div className="flex flex-col h-full p-4 pb-8 text-white xl:pb-12">
 						<img
 							id="logo"
 							src="/ysm-sidebar.png"
@@ -214,20 +185,18 @@ const ResponsiveSidebar = () => {
 										<li key={module.id}>
 											{/* Main Module Button */}
 											<Button
-												variant="sidebar"
-												className={`bg-transparent hover:bg-primary-20 w-full text-xs ${
+												variant="admin_sidebar"
+												className={`bg-transparent hover:bg-admin-primary-hover w-full text-xs ${
 													location.pathname.includes(mainModulesName[0]) &&
 													!hasSubModules
-														? "bg-primary-foreground"
-														: "text-white/80 border-none hover:bg-primary-20 hover:text-white"
+														? "bg-admin-primary hover:bg-admin-primary-hover"
+														: "text-white/80 border-none hover:bg-admin-primary-hover hover:text-white"
 												}
 												
 												`}
 												onClick={() => handleModuleClick(module)}
 											>
-												{module.icon && (
-													<module.icon className="text-white" fill={"white"} />
-												)}
+												{module.icon && <module.icon className="text-white" />}
 												{module.name}
 
 												{hasSubModules && (
@@ -247,22 +216,22 @@ const ResponsiveSidebar = () => {
 															location.pathname
 																.split("/")
 																.filter(Boolean)
-																.slice(0, 2)
+																.slice(0, 4)
 																.join("/") ===
-															subModule.path
+															`admin/ami/${subModule.path
 																.split("/")
 																.filter(Boolean)
-																.slice(0, 2)
-																.join("/");
+																.slice(0, 4)
+																.join("/")}`;
 
 														return (
 															<li key={subModule.id}>
 																<Button
-																	variant="sidebar"
-																	className={`bg-transparent w-full text-xs ${
+																	variant="admin_sidebar"
+																	className={` w-full text-xs ${
 																		isActive
-																			? "bg-primary-foreground"
-																			: "text-white/80 border-none hover:bg-primary-20 hover:text-white"
+																			? "bg-admin-primary hover:bg-admin-primary-hover"
+																			: "text-white/80 border-none bg-transparent hover:bg-admin-primary-hover hover:text-white"
 																	}`}
 																	onClick={() =>
 																		handleSubModuleClick(subModule)
@@ -295,7 +264,7 @@ const ResponsiveSidebar = () => {
 			{/* Overlay for Mobile Menu */}
 			{isMobileMenuOpen && (
 				<div
-					className="xl:hidden fixed inset-0 bg-black/50 z-30"
+					className="fixed inset-0 z-30 xl:hidden bg-black/50"
 					onClick={toggleMobileMenu}
 				/>
 			)}

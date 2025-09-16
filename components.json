@@ -13,8 +13,8 @@
 	"aliases": {
 		"components": "@/presentation/shared/components",
 		"utils": "@/lib/utils",
-		"ui": "@/shared/components/base",
-		"lib": "@/infrastructure/lib",
+		"ui": "@/core/components/base",
+		"lib": "@/core",
 		"hooks": "@/hooks"
 	},
 	"iconLibrary": "lucide"

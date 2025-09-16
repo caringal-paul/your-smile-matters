@@ -14,8 +14,8 @@ import { Form, FormField } from "@/core/components/base/form";
 import { Label } from "@/core/components/base/label";
 import { Separator } from "@/core/components/base/separator";
 import {
-	formatToNaira,
-	getFormattedNairaInput,
+	formatToPeso,
+	getFormattedPesoInput,
 } from "@/ami/shared/helpers/formatCurrency";
 import {
 	InvestmentDetailsFixedIncome,
@@ -90,7 +90,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 														? "Inactive"
 														: ("Active" as AvailabilityStatus)
 												}
-												textClassName="text-[11px]"
+												textClassName="text-2xs"
 												colorMap={AVAILABILITY_STATUS_COLORS}
 											/>
 
@@ -121,7 +121,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 										<Input
 											placeholder="Investment name"
 											disabled={isViewForm}
-											className="text-[11px]"
+											className="text-2xs"
 											{...field}
 										/>
 									</div>
@@ -138,7 +138,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 									render={({ field }) => (
 										<>
 											{!isPostForm ? (
-												<Label className="text-[11px] font-normal">
+												<Label className="text-2xs font-normal">
 													{formatToProperText(field.value)}
 												</Label>
 											) : (
@@ -180,7 +180,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 									<FormCard.Label>Description</FormCard.Label>
 									<div className="flex flex-row overflow-hidden w-full">
 										{isViewForm ? (
-											<div className="rich-text text-[11px] font-normal">
+											<div className="rich-text text-2xs font-normal">
 												{parse(String(field.value))}
 											</div>
 										) : (
@@ -225,7 +225,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 										</FormCard.Label>
 
 										{isViewForm ? (
-											<Label className="text-[11px] font-normal">
+											<Label className="text-2xs font-normal">
 												{form.getValues("return_of_investment")}{" "}
 												{form.getValues("return_of_investment_frequency")}
 											</Label>
@@ -235,7 +235,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 													<div className="relative w-full">
 														<Input
 															disabled={isViewForm}
-															className="text-[11px] pr-6"
+															className="text-2xs pr-6"
 															placeholder="Portfolio weight"
 															value={
 																isViewForm ? field.value + "%" : field.value
@@ -256,7 +256,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 														<Input
 															placeholder="Frequency of Return of Investment"
 															disabled={isViewForm}
-															className="text-[11px]"
+															className="text-2xs"
 															value={frequencyValue}
 															onChange={(e) =>
 																form.setValue(
@@ -290,8 +290,8 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 							render={({ field }) => {
 								const maxAmount = form.watch("max_investment_amount");
 
-								const { formatted: min } = getFormattedNairaInput(field.value);
-								const { formatted: max } = getFormattedNairaInput(maxAmount);
+								const { formatted: min } = getFormattedPesoInput(field.value);
+								const { formatted: max } = getFormattedPesoInput(maxAmount);
 
 								return (
 									<FormCard.Field className="items-start md:flex md:flex-col lg:grid lg:grid-cols-[20%_1fr]">
@@ -302,7 +302,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 										<div className="flex flex-col lg:flex-row gap-2 lg:items-center w-full">
 											<Input
 												disabled={isViewForm}
-												className="text-[11px]"
+												className="text-2xs"
 												placeholder="Minimum investment amount"
 												value={min}
 												onChange={(e) => {
@@ -322,7 +322,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 
 													<Input
 														disabled={isViewForm}
-														className="text-[11px]"
+														className="text-2xs"
 														placeholder="Maximum investment amount"
 														value={max}
 														onChange={(e) => {
@@ -347,8 +347,8 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 						{isViewForm && (
 							<FormCard.Field>
 								<FormCard.Label>Maximum Investment Amount</FormCard.Label>
-								<Label className="text-[11px] font-normal">
-									{formatToNaira(form.getValues("max_investment_amount"))}
+								<Label className="text-2xs font-normal">
+									{formatToPeso(form.getValues("max_investment_amount"))}
 								</Label>
 							</FormCard.Field>
 						)}
@@ -363,7 +363,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 											Investment Tenor
 										</FormCard.Label>
 										{isViewForm ? (
-											<Label className="text-[11px] font-normal">
+											<Label className="text-2xs font-normal">
 												{form.getValues("investment_tenor")}
 											</Label>
 										) : (
@@ -371,7 +371,7 @@ const InvestmentOfferDetailsFixedIncomeForm = () => {
 												<Input
 													placeholder="Investment tenor"
 													disabled={isViewForm}
-													className="text-[11px] w-full"
+													className="text-2xs w-full"
 													{...field}
 												/>
 

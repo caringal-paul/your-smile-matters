@@ -3,7 +3,7 @@ import ResponsiveSidebar from "../shared/components/custom/sidebar/ResponsiveSid
 
 const RootLayout = () => {
 	return (
-		<div className="relative xl:flex min-h-screen w-screen overflow-hidden">
+		<div className="relative w-screen min-h-screen overflow-hidden xl:flex">
 			<ResponsiveSidebar />
 
 			<div className="relative flex flex-col w-full h-screen p-4 xl:px-12 xl:pt-12 xl:pb-0">

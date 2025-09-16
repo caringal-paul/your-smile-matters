@@ -14,9 +14,9 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 	return (
-		<div className="sticky top-20 xl:top-0 z-10">
-			<div className="flex justify-between items-center w-full h-fit py-2 px-4 xl:py-3 xl:px-8 bg-accent rounded-md">
-				<Label className="text-sm md:text-base lg:text-lg xl:text-xl font-semibold">
+		<div className="sticky z-10 top-20 xl:top-0">
+			<div className="flex items-center justify-between w-full px-4 py-2 rounded-md h-fit xl:py-3 xl:px-8 bg-accent">
+				<Label className="text-sm font-semibold md:text-base lg:text-lg xl:text-xl">
 					{pageTitle}
 				</Label>
 
@@ -25,7 +25,7 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 						<PopoverTrigger asChild>
 							<button
 								onClick={() => setIsPopoverOpen((prev) => !prev)}
-								className="rounded-full h-6 w-6 bg-cover"
+								className="w-6 h-6 bg-cover rounded-full"
 								style={{ backgroundImage: `url("/profile-avatar.png")` }}
 								aria-label="Profile"
 							/>
@@ -34,17 +34,17 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 						<PopoverContent
 							side="bottom"
 							align="start"
-							className="w-fit p-2 z-50 flex flex-col gap-1 bg-white mt-2 mr-8 justify-start"
+							className="z-50 flex flex-col justify-start gap-1 p-2 mt-2 mr-8 bg-white w-fit"
 						>
 							<button
-								className="text-xs p-2 bg-transparent hover:bg-accent w-full text-foreground text-start"
+								className="w-full p-2 text-xs bg-transparent hover:bg-accent text-foreground text-start"
 								onClick={() => navigate("/account-settings")}
 							>
 								Account Settings
 							</button>
 							<button
-								className="text-xs p-2 bg-transparent hover:bg-accent w-full text-foreground text-start"
-								onClick={() => navigate("/auth")}
+								className="w-full p-2 text-xs bg-transparent hover:bg-accent text-foreground text-start"
+								onClick={() => navigate("/admin/ami/auth")}
 							>
 								Logout
 							</button>
@@ -52,7 +52,7 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 					</Popover>
 
 					<div className="flex flex-col gap-0 leading-none tracking-tight text-center">
-						<Label className="text-foreground text-xs font-semibold">
+						<Label className="text-xs font-semibold text-foreground">
 							John Doe
 						</Label>
 						<Label className="text-[#74889E] text-[8px] font-light">

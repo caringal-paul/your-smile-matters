@@ -32,23 +32,23 @@ export const CustomerInfo = ({ data }: CustomerInfoProps) => {
 			<FormCard.Body>
 				<FormCard.Field>
 					<FormCard.Label>Customer ID</FormCard.Label>
-					<Label className="text-[11px] font-normal">{data.id}</Label>
+					<Label className="text-2xs font-normal">{data.id}</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>First Name</FormCard.Label>
-					<Label className="text-[11px] font-normal">{data.first_name}</Label>
+					<Label className="text-2xs font-normal">{data.first_name}</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Surname</FormCard.Label>
-					<Label className="text-[11px] font-normal">{data.surname}</Label>
+					<Label className="text-2xs font-normal">{data.surname}</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Email Address</FormCard.Label>
-					<Label className="text-[11px] font-normal">{data.email}</Label>
+					<Label className="text-2xs font-normal">{data.email}</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Mobile Number</FormCard.Label>
-					<Label className="text-[11px] font-normal">
+					<Label className="text-2xs font-normal">
 						{!data.mobile_number ? "-" : data.mobile_number}
 					</Label>
 				</FormCard.Field>

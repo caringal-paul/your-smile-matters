@@ -199,7 +199,7 @@ const AccountSettingsForm = () => {
 							<FormCard.Label htmlFor="firstName">First Name</FormCard.Label>
 							<div className="flex flex-row">
 								<Input
-									className="h-7 py-1 text-[11px] font-normal placeholder:text-[11px] placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
+									className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
 									value={firstName}
 									onChange={(e) => setFirstName(e.target.value)}
 									disabled={!isEdit}
@@ -209,7 +209,7 @@ const AccountSettingsForm = () => {
 						<FormCard.Field>
 							<FormCard.Label htmlFor="lastName">Last Name</FormCard.Label>
 							<Input
-								className="h-7 py-1 text-[11px] font-normal placeholder:text-[11px] placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
+								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								disabled={!isEdit}
@@ -220,7 +220,7 @@ const AccountSettingsForm = () => {
 								Email address
 							</FormCard.Label>
 							<Input
-								className="h-7 py-1 text-[11px] font-normal placeholder:text-[11px] placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
+								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								disabled={!isEdit}
@@ -231,7 +231,7 @@ const AccountSettingsForm = () => {
 								Mobile Number
 							</FormCard.Label>
 							<Input
-								className="h-7 py-1 text-[11px] font-normal placeholder:text-[11px] placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
+								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
 								value={mobile}
 								onChange={(e) => setMobile(e.target.value)}
 								disabled={!isEdit}

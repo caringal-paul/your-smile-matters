@@ -3,7 +3,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
 import { TRANSACTION_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { TransactionStatus } from "@/ami/shared/types/status.types";
@@ -49,7 +49,7 @@ export const useTransactionColumns = () => {
 			key: "principal_amount",
 			label: "Principal Amount",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "status",

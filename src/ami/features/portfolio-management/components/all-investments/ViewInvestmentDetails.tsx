@@ -1,6 +1,6 @@
 import FormCard from "@/ami/shared/components/custom/card/FormCard";
 import { Label } from "@/core/components/base/label";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import investmentsArray from "../../mock/all-investments/temp-view-investments.json";
 import { ViewInvestments } from "../../utils/types/all-investments/portfolio-view-investments.types";
@@ -30,19 +30,17 @@ const InvestmentDetails = () => {
 			<FormCard.Body>
 				<FormCard.Field>
 					<FormCard.Label>Investment Name</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
+					<Label className="lg:pl-10 text-2xs font-normal">
 						10-year Treasury Bond
 					</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Asset Class</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
-						Fixed Income
-					</Label>
+					<Label className="lg:pl-10 text-2xs font-normal">Fixed Income</Label>
 				</FormCard.Field>
 				<FormCard.Field className="items-start">
 					<FormCard.Label>Description</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal line-clamp-4">
+					<Label className="lg:pl-10 text-2xs font-normal line-clamp-4">
 						A Sharia-compliant investment opportunity, Sukuk Bonds offer steady
 						returns while adhering to Islamic principles. Ideal for ethical
 						investors seeking halal fixed-income solutions with secure,
@@ -61,26 +59,26 @@ const InvestmentTerms = () => {
 			<FormCard.Body>
 				<FormCard.Field>
 					<FormCard.Label>Return of Investment (%)</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
+					<Label className="lg:pl-10 text-2xs font-normal">
 						0.67% annually
 					</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Minimum Investment Amount</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
-						{formatToNaira("150000.00")}
+					<Label className="lg:pl-10 text-2xs font-normal">
+						{formatToPeso("150000.00")}
 					</Label>
 				</FormCard.Field>
 				<FormCard.Field>
 					<FormCard.Label>Maximum Investment Amount</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
-						{formatToNaira("10050000.00")}
+					<Label className="lg:pl-10 text-2xs font-normal">
+						{formatToPeso("10050000.00")}
 					</Label>
 				</FormCard.Field>
 
 				<FormCard.Field>
 					<FormCard.Label>Investment Tenor</FormCard.Label>
-					<Label className="lg:pl-10 text-[11px] font-normal">
+					<Label className="lg:pl-10 text-2xs font-normal">
 						10 years, 20 years, 30 years
 					</Label>
 				</FormCard.Field>

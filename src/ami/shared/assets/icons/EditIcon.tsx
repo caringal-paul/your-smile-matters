@@ -1,5 +1,5 @@
 const EditIcon = ({
-	fill = "none",
+	fill = "#1C1B1F",
 	className,
 }: {
 	fill?: string;

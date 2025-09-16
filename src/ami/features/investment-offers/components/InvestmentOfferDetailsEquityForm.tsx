@@ -13,7 +13,7 @@ import { Form, FormField } from "@/core/components/base/form";
 
 import { Label } from "@/core/components/base/label";
 import { Separator } from "@/core/components/base/separator";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import {
 	InvestmentDetailsEquity,
@@ -73,7 +73,7 @@ const InvestmentOfferDetailsEquityForm = () => {
 														? "Inactive"
 														: ("Active" as AvailabilityStatus)
 												}
-												textClassName="text-[11px]"
+												textClassName="text-2xs"
 												colorMap={AVAILABILITY_STATUS_COLORS}
 											/>
 
@@ -96,14 +96,14 @@ const InvestmentOfferDetailsEquityForm = () => {
 
 						<FormCard.Field>
 							<FormCard.Label>Investment Name</FormCard.Label>
-							<Label className="text-[11px] font-normal">
+							<Label className="text-2xs font-normal">
 								Apple Inc. (AAPL) Stock
 							</Label>
 						</FormCard.Field>
 
 						<FormCard.Field>
 							<FormCard.Label>Asset Class</FormCard.Label>
-							<Label className="text-[11px] font-normal">Equity</Label>
+							<Label className="text-2xs font-normal">Equity</Label>
 						</FormCard.Field>
 
 						<FormField
@@ -114,7 +114,7 @@ const InvestmentOfferDetailsEquityForm = () => {
 									<FormCard.Label>Description</FormCard.Label>
 									<div className="flex flex-row overflow-hidden w-full">
 										{isViewForm ? (
-											<div className="rich-text text-[11px] font-normal">
+											<div className="rich-text text-2xs font-normal">
 												{parse(String(field.value))}
 											</div>
 										) : (
@@ -145,14 +145,14 @@ const InvestmentOfferDetailsEquityForm = () => {
 						<div className="col-span-2 sm:col-span-1 space-y-4">
 							<FormCard.Field>
 								<FormCard.Label>Market Price</FormCard.Label>
-								<Label className="text-[11px] font-normal">
-									{formatToNaira("471454.50")}
+								<Label className="text-2xs font-normal">
+									{formatToPeso("471454.50")}
 								</Label>
 							</FormCard.Field>
 							<FormCard.Field>
 								<FormCard.Label>Price Change</FormCard.Label>
-								<Label className="text-[11px] font-normal">
-									<div className="text-[11px] flex items-center gap-1">
+								<Label className="text-2xs font-normal">
+									<div className="text-2xs flex items-center gap-1">
 										<SelectArrowIcon
 											className={`rotate-180 h-3 w-3`}
 											// className={`${
@@ -167,8 +167,8 @@ const InvestmentOfferDetailsEquityForm = () => {
 							</FormCard.Field>
 							<FormCard.Field>
 								<FormCard.Label>Price per Unit</FormCard.Label>
-								<Label className="text-[11px] font-normal">
-									{formatToNaira("9250")}
+								<Label className="text-2xs font-normal">
+									{formatToPeso("9250")}
 								</Label>
 							</FormCard.Field>
 						</div>
@@ -176,15 +176,15 @@ const InvestmentOfferDetailsEquityForm = () => {
 						<div className="col-span-2 sm:col-span-1 space-y-4">
 							<FormCard.Field>
 								<FormCard.Label>Total Units</FormCard.Label>
-								<Label className="text-[11px] font-normal">2,740</Label>
+								<Label className="text-2xs font-normal">2,740</Label>
 							</FormCard.Field>
 							<FormCard.Field>
 								<FormCard.Label>Available Units</FormCard.Label>
-								<Label className="text-[11px] font-normal">2,500</Label>
+								<Label className="text-2xs font-normal">2,500</Label>
 							</FormCard.Field>
 							<FormCard.Field>
 								<FormCard.Label>Units Bought</FormCard.Label>
-								<Label className="text-[11px] font-normal">240</Label>
+								<Label className="text-2xs font-normal">240</Label>
 							</FormCard.Field>
 						</div>
 					</FormCard.Body>

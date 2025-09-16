@@ -10,8 +10,10 @@ const labelVariants = cva(
 		variants: {
 			variant: {
 				instruction: "",
+				undefined: "",
 			},
 			size: {
+				undefined: "",
 				default: "text-sm font-medium",
 			},
 		},

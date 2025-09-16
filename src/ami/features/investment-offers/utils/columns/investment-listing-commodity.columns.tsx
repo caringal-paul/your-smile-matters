@@ -4,7 +4,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { InvestmentListingCommodityTableType } from "../types/investment-listing-commodity.types";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
@@ -34,7 +34,7 @@ export const useInvestmentListingCommodityColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={formatToNaira(value)}
+						value={formatToPeso(value)}
 						className="whitespace-nowrap"
 					/>
 				),

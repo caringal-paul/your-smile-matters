@@ -59,7 +59,7 @@ export const ActivityLogTable = ({ data }: ActivityLogTableProps) => {
 										</FormCard.Label>
 									</div>
 									<div className="flex flex-col items-end gap-2">
-										<Label className="text-[11px] text-disabled-disable whitespace-nowrap">
+										<Label className="text-2xs text-disabled-disable whitespace-nowrap">
 											{formatToTableDate(String(item["date"]))}
 										</Label>
 

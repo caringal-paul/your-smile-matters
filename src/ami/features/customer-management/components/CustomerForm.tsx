@@ -1,5 +1,5 @@
-import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 // Utils
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,51 +10,101 @@ import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Form, FormField } from "@/core/components/base/form";
 import { cn } from "@/core/lib/utils";
-import { Customer, CustomerSchema } from "../utils/schemas/customer.schema";
 import { Switch } from "@/core/components/base/switch";
 import { Label } from "@/core/components/base/label";
 import { useState } from "react";
 import ConfirmModal from "@/ami/shared/components/custom/modal/ConfirmModal";
+import { useLocation } from "react-router-dom";
 
-import logs from "../mock/temp-customer-logs.json";
-import { CustomerLogTableType } from "../utils/types/customer-logs.types";
-import { ActivityLogTable } from "@/ami/shared/components/custom/table/ActivityLogTable";
+import {
+	customerCreateSchema,
+	customerUpdateSchema,
+	CustomerCreate,
+	CustomerUpdate,
+} from "../utils/schemas/customer.schema";
 
-type CustomerForm = {
+type CustomerFormData = CustomerCreate | CustomerUpdate;
+
+// Props for the main form (if you want to make it more reusable)
+type CustomerFormProps = {
 	className?: string;
-	submitButtonLabel: string;
-	cancelButtonLabel: string;
+	submitButtonLabel?: string;
+	cancelButtonLabel?: string;
 	closeModal?: () => void;
+	initialData?: Partial<CustomerCreate>; // For populating existing customer data
+	onSubmit?: (data: CustomerFormData) => void;
 };
 
-const CustomerForm = () => {
+const CustomerForm = ({
+	className,
+	initialData,
+	onSubmit: onSubmitProp,
+}: CustomerFormProps) => {
 	const location = useLocation();
 	const isEditForm = location.pathname.includes("edit");
 
 	return (
 		<div className="flex flex-col space-y-6 mb-4">
-			<CustomerDetails isEditForm={isEditForm} />
+			<CustomerDetails
+				isEditForm={isEditForm}
+				initialData={initialData}
+				onSubmit={onSubmitProp}
+			/>
 			<SecurityQuestions isEditForm={isEditForm} />
 			<CustomerActivityLog />
 		</div>
 	);
 };
 
-const CustomerDetails = ({ isEditForm }: { isEditForm: boolean }) => {
+const CustomerDetails = ({
+	isEditForm,
+	initialData,
+	onSubmit: onSubmitProp,
+}: {
+	isEditForm: boolean;
+	initialData?: Partial<CustomerCreate>;
+	onSubmit?: (data: CustomerFormData) => void;
+}) => {
 	const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
 		useState(false);
 
-	const form = useForm<Customer>({
-		resolver: zodResolver(CustomerSchema),
+	// Choose schema based on mode
+	const schema = isEditForm ? customerUpdateSchema : customerCreateSchema;
+
+	const form = useForm<CustomerFormData>({
+		resolver: zodResolver(schema),
 		mode: "onChange",
-		defaultValues: {
-			mobile_number: "+234 201 335 3131",
-			status: true,
-		},
+		defaultValues: isEditForm
+			? {
+					// For edit mode, use existing data or empty defaults
+					mobile_number: initialData?.mobile_number || "",
+					is_active: initialData?.is_active ?? true,
+					email: initialData?.email || "",
+					first_name: initialData?.first_name || "",
+					last_name: initialData?.last_name || "",
+					...initialData,
+			  }
+			: {
+					// For create mode, use defaults
+					mobile_number: "+234 201 335 3131",
+					is_active: true,
+					country: "Philippines",
+			  },
 	});
 
-	const onSubmit = (values: Customer) => {
+	// Update form when initialData changes (for edit mode)
+	useEffect(() => {
+		if (isEditForm && initialData) {
+			form.reset({
+				...initialData,
+				is_active: initialData.is_active ?? true,
+			});
+		}
+	}, [initialData, isEditForm, form]);
+
+	const onSubmit = (values: CustomerFormData) => {
 		console.log(values);
+		onSubmitProp?.(values);
 	};
 
 	return (
@@ -66,40 +116,142 @@ const CustomerDetails = ({ isEditForm }: { isEditForm: boolean }) => {
 							Customer Details
 						</FormCard.Title>
 
-						<FormCard.Field>
-							<FormCard.Label>Customer ID</FormCard.Label>
-							<Label className="text-[11px] font-normal">06600003</Label>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label>First Name</FormCard.Label>
-							<Label className="text-[11px] font-normal">Ngozi</Label>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label>Surname</FormCard.Label>
-							<Label className="text-[11px] font-normal">Kelechi</Label>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label>Email address</FormCard.Label>
-							<Label className="text-[11px] font-normal">
-								ngozi.kelechi@email.com
-							</Label>
-						</FormCard.Field>
+						{/* Customer ID - only show in edit mode */}
+						{isEditForm && (
+							<FormCard.Field>
+								<FormCard.Label>Customer ID</FormCard.Label>
+								<Label className="text-2xs font-normal">
+									{/* {initialData?.id || "06600003"} */}
+								</Label>
+							</FormCard.Field>
+						)}
+
+						{/* First Name Field */}
+						<FormField
+							control={form.control}
+							name="first_name"
+							render={({ field }) => (
+								<FormCard.Field>
+									<FormCard.Label>First Name</FormCard.Label>
+									{isEditForm ? (
+										<Label className="text-2xs font-normal">
+											{field.value || "Ngozi"}
+										</Label>
+									) : (
+										<Input
+											className="text-2xs"
+											placeholder="Enter first name"
+											{...field}
+										/>
+									)}
+								</FormCard.Field>
+							)}
+						/>
+
+						{/* Last Name Field */}
+						<FormField
+							control={form.control}
+							name="last_name"
+							render={({ field }) => (
+								<FormCard.Field>
+									<FormCard.Label>Surname</FormCard.Label>
+									{isEditForm ? (
+										<Label className="text-2xs font-normal">
+											{field.value || "Kelechi"}
+										</Label>
+									) : (
+										<Input
+											className="text-2xs"
+											placeholder="Enter last name"
+											{...field}
+										/>
+									)}
+								</FormCard.Field>
+							)}
+						/>
+
+						{/* Email Field */}
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormCard.Field>
+									<FormCard.Label>Email address</FormCard.Label>
+									{isEditForm ? (
+										<Label className="text-2xs font-normal">
+											{field.value || "ngozi.kelechi@email.com"}
+										</Label>
+									) : (
+										<Input
+											className="text-2xs"
+											placeholder="Enter email address"
+											type="email"
+											{...field}
+										/>
+									)}
+								</FormCard.Field>
+							)}
+						/>
+
+						{/* Password - only show reset button in edit mode */}
 						{isEditForm && (
 							<FormCard.Field>
 								<FormCard.Label>Password</FormCard.Label>
 								<Button
-									className="bg-reset-password border-reset-password-border text-reset-password-text border-[1px] w-fit text-[10px] 2xl:text-[11px] py-0 2xl:py-1 px-3 h-6 2xl:h-7 rounded-md shadow-none hover:bg-slate-300"
+									type="button"
+									className="bg-reset-password border-reset-password-border text-reset-password-text border-[1px] w-fit text-[10px] 2xl:text-2xs py-0 2xl:py-1 px-3 h-6 2xl:h-7 rounded-md shadow-none hover:bg-slate-300"
 									onClick={() => setIsResetPasswordModalOpen(true)}
 								>
 									Reset Password
 								</Button>
 							</FormCard.Field>
 						)}
+
+						{/* Password field for create mode */}
+						{!isEditForm && (
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label>Password</FormCard.Label>
+										<Input
+											className="text-2xs"
+											placeholder="Enter password"
+											type="password"
+											{...field}
+										/>
+									</FormCard.Field>
+								)}
+							/>
+						)}
+
+						{/* Gender Field - only for create mode */}
+						{!isEditForm && (
+							<FormField
+								control={form.control}
+								name="gender"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label>Gender</FormCard.Label>
+										<select className="text-2xs p-2 border rounded" {...field}>
+											<option value="">Select Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+											<option value="Other">Other</option>
+										</select>
+									</FormCard.Field>
+								)}
+							/>
+						)}
+
+						{/* BVN - display only */}
 						<FormCard.Field>
 							<FormCard.Label>BVN</FormCard.Label>
-							<Label className="text-[11px] font-normal">23456788769</Label>
+							<Label className="text-2xs font-normal">23456788769</Label>
 						</FormCard.Field>
 
+						{/* Mobile Number */}
 						<FormField
 							control={form.control}
 							name="mobile_number"
@@ -109,7 +261,8 @@ const CustomerDetails = ({ isEditForm }: { isEditForm: boolean }) => {
 									<div className="flex flex-row">
 										<Input
 											disabled={!isEditForm}
-											className="text-[11px]"
+											className="text-2xs"
+											placeholder="Enter mobile number"
 											{...field}
 										/>
 									</div>
@@ -117,42 +270,42 @@ const CustomerDetails = ({ isEditForm }: { isEditForm: boolean }) => {
 							)}
 						/>
 
+						{/* Linked Account Numbers - display only */}
 						<FormCard.Field>
 							<FormCard.Label>Linked Account Number/s</FormCard.Label>
-							<Label className="text-[11px] font-normal">
+							<Label className="text-2xs font-normal">
 								0006292411 , 0006292419 , 0006292418
 							</Label>
 						</FormCard.Field>
 
+						{/* Account Status */}
 						<FormField
 							control={form.control}
-							name="status"
+							name="is_active"
 							render={({ field }) => (
 								<FormCard.Field>
-									<FormCard.Label htmlFor="status">
+									<FormCard.Label htmlFor="is_active">
 										Account Status
 									</FormCard.Label>
 									<div className="flex gap-2 items-center">
 										<Switch
 											checked={field.value}
-											onCheckedChange={() =>
-												form.setValue("status", !field.value, {
-													shouldValidate: true,
-												})
-											}
+											onCheckedChange={(checked) => {
+												field.onChange(checked);
+											}}
 											disabled={!isEditForm}
 										/>
 
 										<div className="relative h-4 w-fit">
 											<Label
-												className={`absolute transition-opacity duration-300 text-[11px] font-normal ${
+												className={`absolute transition-opacity duration-300 text-2xs font-normal ${
 													field.value ? "opacity-0" : "opacity-100"
 												}`}
 											>
 												Inactive
 											</Label>
 											<Label
-												className={`absolute transition-opacity duration-300 text-[11px] font-normal ${
+												className={`absolute transition-opacity duration-300 text-2xs font-normal ${
 													field.value ? "opacity-100" : "opacity-0"
 												}`}
 											>
@@ -164,23 +317,41 @@ const CustomerDetails = ({ isEditForm }: { isEditForm: boolean }) => {
 							)}
 						/>
 
-						<FormCard.Field>
-							<FormCard.Label>Created On</FormCard.Label>
-							<Label className="text-[11px] font-normal">
-								2023-10-22, 1:05:20 pm
-							</Label>
-						</FormCard.Field>
+						{/* Created On - only show in edit mode */}
+						{/* {isEditForm && (
+							<FormCard.Field>
+								<FormCard.Label>Created On</FormCard.Label>
+								<Label className="text-2xs font-normal">
+									{initialData?.created_at
+										? new Date(initialData.created_at).toLocaleString()
+										: "2023-10-22, 1:05:20 pm"}
+								</Label>
+							</FormCard.Field>
+						)} */}
 					</FormCard.Body>
-					{isEditForm && (
-						<FormCard.Footer className="flex gap-2 justify-end">
-							<Button variant="secondary" disabled={!isEditForm}>
-								Delete
-							</Button>
-							<Button className="sm:w-fit" type="submit" disabled={!isEditForm}>
-								Save Changes
-							</Button>
-						</FormCard.Footer>
-					)}
+
+					{/* Form Actions */}
+					<FormCard.Footer className="flex gap-2 justify-end">
+						{isEditForm ? (
+							<>
+								<Button variant="secondary" type="button">
+									Delete
+								</Button>
+								<Button className="sm:w-fit" type="submit">
+									Save Changes
+								</Button>
+							</>
+						) : (
+							<>
+								<Button variant="secondary" type="button">
+									Cancel
+								</Button>
+								<Button className="sm:w-fit" type="submit">
+									Create Customer
+								</Button>
+							</>
+						)}
+					</FormCard.Footer>
 				</form>
 			</Form>
 
@@ -221,12 +392,12 @@ const SecurityQuestions = ({ isEditForm }: { isEditForm: boolean }) => {
 					<FormCard.Field className="items-start">
 						<FormCard.Label>Security Question 1</FormCard.Label>
 						<div className="flex flex-col gap-2">
-							<Label className="text-[11px] font-normal px-2">
+							<Label className="text-2xs font-normal px-2">
 								What is the name of your first pet?
 							</Label>
 							<Input
 								disabled
-								className="hover:cursor-default text-[11px] disabled:bg-disabled disabled:px-2"
+								className="hover:cursor-default text-2xs disabled:bg-disabled disabled:px-2"
 								value={"Summer"}
 							/>
 						</div>
@@ -234,12 +405,12 @@ const SecurityQuestions = ({ isEditForm }: { isEditForm: boolean }) => {
 					<FormCard.Field className="items-start">
 						<FormCard.Label>Security Question 2</FormCard.Label>
 						<div className="flex flex-col gap-2">
-							<Label className="text-[11px] font-normal px-2">
+							<Label className="text-2xs font-normal px-2">
 								In what city you were born?
 							</Label>
 							<Input
 								disabled
-								className="hover:cursor-default text-[11px] disabled:bg-disabled disabled:px-2"
+								className="hover:cursor-default text-2xs disabled:bg-disabled disabled:px-2"
 								value={"Abuja"}
 							/>
 						</div>
@@ -247,12 +418,12 @@ const SecurityQuestions = ({ isEditForm }: { isEditForm: boolean }) => {
 					<FormCard.Field className="items-start">
 						<FormCard.Label>Security Question 3</FormCard.Label>
 						<div className="flex flex-col gap-2">
-							<Label className="text-[11px] font-normal px-2">
+							<Label className="text-2xs font-normal px-2">
 								What is your Mum's maiden name?
 							</Label>
 							<Input
 								disabled
-								className="hover:cursor-default text-[11px] disabled:bg-disabled disabled:px-2"
+								className="hover:cursor-default text-2xs disabled:bg-disabled disabled:px-2"
 								value={"Obi"}
 							/>
 						</div>
@@ -273,11 +444,12 @@ const SecurityQuestions = ({ isEditForm }: { isEditForm: boolean }) => {
 };
 
 const CustomerActivityLog = () => {
-	const customerLogs = logs as unknown;
+	// You'll need to import these
+	// const customerLogs = logs as unknown;
+	// const customerData = customerLogs as CustomerLogTableType[];
+	// return <ActivityLogTable data={customerData} />;
 
-	const customerData = customerLogs as CustomerLogTableType[];
-
-	return <ActivityLogTable data={customerData} />;
+	return <div>Activity Log Component</div>;
 };
 
 export default CustomerForm;

@@ -1,0 +1,69 @@
+[
+	{
+		"_id": "7501a4b2c9d1a00123456701",
+		"name": "Silver Package",
+		"description": "A starter package ideal for small events",
+		"price": 15000,
+		"looks": 2,
+		"included_services": [
+			"64f1b4c2c9d1a00123456701",
+			"64f1b4c2c9d1a00123456702"
+		],
+		"is_available": true,
+		"is_active": true,
+		"created_by": "64f9c1a2c9d1a00123456701",
+		"updated_by": null,
+		"deleted_by": null,
+		"retrieved_by": null,
+		"deleted_at": null,
+		"retrieved_at": null,
+		"created_at": "2025-09-14T10:00:00.000Z",
+		"updated_at": "2025-09-14T10:00:00.000Z"
+	},
+	{
+		"_id": "7501a4b2c9d1a00123456702",
+		"name": "Gold Package",
+		"description": "Comprehensive package for weddings and large events",
+		"price": 45000,
+		"looks": 4,
+		"included_services": [
+			"64f1b4c2c9d1a00123456703",
+			"64f1b4c2c9d1a00123456704",
+			"64f1b4c2c9d1a00123456705"
+		],
+		"is_available": true,
+		"is_active": true,
+		"created_by": "64f9c1a2c9d1a00123456702",
+		"updated_by": "64f9c1a2c9d1a00123456703",
+		"deleted_by": null,
+		"retrieved_by": null,
+		"deleted_at": null,
+		"retrieved_at": null,
+		"created_at": "2025-09-10T14:20:00.000Z",
+		"updated_at": "2025-09-13T09:45:00.000Z"
+	},
+	{
+		"_id": "7501a4b2c9d1a00123456703",
+		"name": "Platinum Package",
+		"description": "Premium package with maximum looks and all services included",
+		"price": 85000,
+		"looks": 8,
+		"included_services": [
+			"64f1b4c2c9d1a00123456705",
+			"64f1b4c2c9d1a00123456706",
+			"64f1b4c2c9d1a00123456707",
+			"64f1b4c2c9d1a00123456701",
+			"64f1b4c2c9d1a00123456703"
+		],
+		"is_available": false,
+		"is_active": true,
+		"created_by": "64f9c1a2c9d1a00123456704",
+		"updated_by": null,
+		"deleted_by": null,
+		"retrieved_by": null,
+		"deleted_at": null,
+		"retrieved_at": null,
+		"created_at": "2025-09-01T08:10:00.000Z",
+		"updated_at": "2025-09-14T07:30:00.000Z"
+	}
+]

@@ -26,7 +26,7 @@ import {
 } from "@/core/components/base/select";
 import { formatToProperText } from "@/ami/shared/helpers/formatToProperText";
 import { Separator } from "@/core/components/base/separator";
-import { getFormattedNairaInput } from "@/ami/shared/helpers/formatCurrency";
+import { getFormattedPesoInput } from "@/ami/shared/helpers/formatCurrency";
 
 const InvestmentOfferDetailsCommodityForm = () => {
 	const location = useLocation();
@@ -85,7 +85,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 														? "Inactive"
 														: ("Active" as AvailabilityStatus)
 												}
-												textClassName="text-[11px]"
+												textClassName="text-2xs"
 												colorMap={AVAILABILITY_STATUS_COLORS}
 											/>
 
@@ -116,7 +116,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 										<Input
 											placeholder="Investment name"
 											disabled={isViewForm}
-											className="text-[11px]"
+											className="text-2xs"
 											{...field}
 										/>
 									</div>
@@ -133,7 +133,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 									render={({ field }) => (
 										<>
 											{!isPostForm ? (
-												<Label className="text-[11px] font-normal">
+												<Label className="text-2xs font-normal">
 													{formatToProperText(field.value)}
 												</Label>
 											) : (
@@ -175,7 +175,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 									<FormCard.Label>Description</FormCard.Label>
 									<div className="flex flex-row overflow-hidden w-full">
 										{isViewForm ? (
-											<div className="rich-text text-[11px] font-normal">
+											<div className="rich-text text-2xs font-normal">
 												{parse(String(field.value))}
 											</div>
 										) : (
@@ -205,7 +205,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 							control={form.control}
 							name="amount"
 							render={({ field }) => {
-								const { formatted } = getFormattedNairaInput(field.value);
+								const { formatted } = getFormattedPesoInput(field.value);
 
 								return (
 									<FormCard.Field>
@@ -214,7 +214,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 											<Input
 												disabled={isViewForm}
 												placeholder="Amount"
-												className="text-[11px]"
+												className="text-2xs"
 												value={formatted}
 												onChange={(e) => {
 													const rawValue = e.target.value.replace(
@@ -240,7 +240,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 										<div className="flex flex-row relative">
 											<Input
 												disabled={isViewForm}
-												className="text-[11px]"
+												className="text-2xs"
 												placeholder="Portfolio weight"
 												value={isViewForm ? field.value + "%" : field.value}
 												onChange={(e) => field.onChange(e.target.value)}
@@ -270,7 +270,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 										<Input
 											placeholder="Minimum holding period"
 											disabled={isViewForm}
-											className="text-[11px]"
+											className="text-2xs"
 											{...field}
 										/>
 									</FormCard.Field>
@@ -282,7 +282,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 							control={form.control}
 							name="minimum_investable_amount"
 							render={({ field }) => {
-								const { formatted } = getFormattedNairaInput(field.value);
+								const { formatted } = getFormattedPesoInput(field.value);
 
 								return (
 									<FormCard.Field>
@@ -292,7 +292,7 @@ const InvestmentOfferDetailsCommodityForm = () => {
 										<div className="flex flex-row">
 											<Input
 												disabled={isViewForm}
-												className="text-[11px]"
+												className="text-2xs"
 												placeholder="Minimum investable amount"
 												value={formatted}
 												onChange={(e) => {

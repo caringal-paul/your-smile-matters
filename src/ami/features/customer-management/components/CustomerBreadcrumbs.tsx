@@ -12,16 +12,18 @@ const CustomerBreadcrumbs = () => {
 		<div>
 			<SectionHeader className="flex justify-start mb-4">
 				<div>
-					<Label className="text-md font-normal flex flex-row flex-wrap gap-1 items-center">
+					<Label className="flex flex-row flex-wrap items-center gap-1 font-normal text-md">
 						<Button
 							variant={"icon"}
-							onClick={() => navigate("/customer-management/customers")}
-							className="hover:bg-transparent px-2 text-md font-normal"
+							onClick={() =>
+								navigate("/admin/ami/customer-management/customers")
+							}
+							className="px-2 font-normal hover:bg-transparent text-md"
 						>
-							<BackIcon fill="#1C1B1F" className="h-4 w-4" /> Customer List
+							<BackIcon fill="#1C1B1F" className="w-4 h-4" /> Customer List
 						</Button>
-						<ChevronRight className="h-4 w-4" />{" "}
-						<span className="text-text-blue">Customer Details</span>
+						<ChevronRight className="w-4 h-4" />{" "}
+						<span className="text-admin-secondary">Customer Details</span>
 					</Label>
 				</div>
 			</SectionHeader>

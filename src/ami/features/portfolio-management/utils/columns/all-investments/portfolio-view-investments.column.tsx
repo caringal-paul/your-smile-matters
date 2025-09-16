@@ -1,7 +1,7 @@
 import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { ViewInvestments } from "../../types/all-investments/portfolio-view-investments.types";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
@@ -40,7 +40,7 @@ export const usePortfolioViewInvestmentsColumns = () => {
 			key: "principal_amount",
 			label: "Principal Amount",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(value)} />,
 		},
 		{
 			key: "status",

@@ -1,0 +1,72 @@
+[
+	{
+		"_id": "64f1b4c2c9d1a00123456701",
+		"name": "Wedding Photography",
+		"description": "Professional wedding photography with editing package",
+		"category": "Photography",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456702",
+		"name": "Bridal Makeup",
+		"description": "Complete bridal beauty and makeup services",
+		"category": "Beauty",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456703",
+		"name": "Camera Rentals",
+		"description": "DSLR and mirrorless cameras available for daily rent",
+		"category": "Equipment",
+		"is_available": false
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456704",
+		"name": "Event Styling",
+		"description": "Venue styling and decoration services for all occasions",
+		"category": "Styling",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456705",
+		"name": "Custom Service",
+		"description": "Personalized services tailored to unique client needs",
+		"category": "Other",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456706",
+		"name": "Portrait Photography",
+		"description": "Studio and outdoor portrait sessions",
+		"category": "Photography",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456707",
+		"name": "Hair Styling",
+		"description": "Professional hair styling for weddings and events",
+		"category": "Beauty",
+		"is_available": false
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456708",
+		"name": "Lighting Equipment Rentals",
+		"description": "Full range of lighting equipment for hire",
+		"category": "Equipment",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456709",
+		"name": "Fashion Styling",
+		"description": null,
+		"category": "Styling",
+		"is_available": true
+	},
+	{
+		"_id": "64f1b4c2c9d1a00123456710",
+		"name": "Custom Event Support",
+		"description": "Miscellaneous services for events and personal needs",
+		"category": "Other",
+		"is_available": false
+	}
+]

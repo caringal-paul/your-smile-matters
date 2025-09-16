@@ -1,18 +1,28 @@
-export type Customer = {
+import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+
+export type Gender = "Male" | "Female" | "Other";
+
+export type CustomerTableFields = {
 	id: number;
+	customer_no: number;
 	first_name: string;
-	surname: string;
+	last_name: string;
 	email: string;
-	portfolio_balance: number;
-	created_on: string; // ISO 8601 format date string
+	total_spent: number;
 	mobile_number?: string;
-	status: boolean;
+	address?: string;
+	gender: Gender;
+	is_active: boolean;
+	// created_on: string;
 };
 
-export type CustomerFilters = Partial<Record<keyof Customer, string[]>>;
+export type CustomerFilters = Partial<
+	Record<keyof CustomerTableFields, string[]>
+>;
 
 export type CustomerTableType = {
-	[K in keyof Customer]: string;
+	[K in keyof CustomerTableFields]: string;
 } & {
 	action?: string;
+	status?: AvailabilityStatus;
 };

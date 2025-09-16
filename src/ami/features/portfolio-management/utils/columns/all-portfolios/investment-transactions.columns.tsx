@@ -2,7 +2,7 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { formatToNaira } from "@/ami/shared/helpers/formatCurrency";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { InvestmentTransactions } from "../../types/all-portfolios/portfolio-investment-transactions.types";
 import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
@@ -28,13 +28,13 @@ export const useInvestmentTransactionColumns = () => {
 			key: "price_per_unit",
 			label: "Price per Unit",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(String(value))} />,
+			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
 		},
 		{
 			key: "total_price",
 			label: "Total Price",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToNaira(String(value))} />,
+			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
 		},
 		{
 			key: "status",

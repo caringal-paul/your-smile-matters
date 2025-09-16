@@ -108,7 +108,7 @@ const RiskRatingQuestionnaireForm = () => {
 							<BackIcon fill="#1C1B1F" className="h-4 w-4" /> Questions
 						</Button>
 						<ChevronRight className="h-4 w-4" />{" "}
-						<span className="text-text-blue">Question Details</span>
+						<span className="text-admin-secondary">Question Details</span>
 					</div>
 				</div>
 			</SectionHeader>
@@ -136,14 +136,14 @@ const RiskRatingQuestionnaireForm = () => {
 
 											<div className="relative h-4 w-fit">
 												<Label
-													className={`absolute transition-opacity duration-300 text-[11px] font-normal ${
+													className={`absolute transition-opacity duration-300 text-2xs font-normal ${
 														field.value ? "opacity-0" : "opacity-100"
 													}`}
 												>
 													Inactive
 												</Label>
 												<Label
-													className={`absolute transition-opacity duration-300 text-[11px] font-normal ${
+													className={`absolute transition-opacity duration-300 text-2xs font-normal ${
 														field.value ? "opacity-100" : "opacity-0"
 													}`}
 												>
@@ -175,7 +175,7 @@ const RiskRatingQuestionnaireForm = () => {
 							) : (
 								<FormCard.Field>
 									<FormCard.Label>Question</FormCard.Label>
-									<Label className="text-[11px] font-normal">
+									<Label className="text-2xs font-normal">
 										{form.getValues().question}
 									</Label>
 								</FormCard.Field>
@@ -218,7 +218,7 @@ const RiskRatingQuestionnaireForm = () => {
 							) : (
 								<FormCard.Field>
 									<FormCard.Label>Answer Format</FormCard.Label>
-									<Label className="text-[11px] font-normal">
+									<Label className="text-2xs font-normal">
 										{formatToProperText(form.getValues().answer_format)}
 									</Label>
 								</FormCard.Field>
@@ -288,7 +288,7 @@ const RiskRatingQuestionnaireForm = () => {
 												</div>
 												<div className="col-span-7 sm:col-span-1 flex flex-row sm:flex-col justify-between gap-2">
 													<div className="flex flex-row gap-1 items-center w-full">
-														<label className="font-semibold text-[11px]">
+														<label className="font-semibold text-2xs">
 															Point
 														</label>
 														<FormField

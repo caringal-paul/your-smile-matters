@@ -70,7 +70,7 @@ const RiskRatingRiskTypesForm = () => {
 							<BackIcon fill="#1C1B1F" className="h-4 w-4" /> Risk Types
 						</Button>
 						<ChevronRight className="h-4 w-4" />{" "}
-						<span className="text-text-blue">Risk Type Details</span>
+						<span className="text-admin-secondary">Risk Type Details</span>
 					</div>
 				</div>
 			</SectionHeader>
@@ -91,7 +91,7 @@ const RiskRatingRiskTypesForm = () => {
 										<div className="flex flex-row">
 											<Input
 												disabled={!isEditForm}
-												className="text-[11px]"
+												className="text-2xs"
 												{...field}
 											/>
 										</div>
@@ -104,7 +104,7 @@ const RiskRatingRiskTypesForm = () => {
 								<div className="flex flex-row">
 									<Input
 										disabled={true}
-										className="text-[11px]"
+										className="text-2xs"
 										value={form.getValues("risk_rating")}
 									/>
 								</div>
@@ -121,7 +121,7 @@ const RiskRatingRiskTypesForm = () => {
 												<div className="flex flex-row relative">
 													<Input
 														disabled={!isEditForm}
-														className="text-[11px] max-w-[15em] w-[15em] pr-11"
+														className="text-2xs max-w-[15em] w-[15em] pr-11"
 														{...field}
 													/>
 
@@ -138,7 +138,7 @@ const RiskRatingRiskTypesForm = () => {
 												<div className="flex flex-row relative">
 													<Input
 														disabled={!isEditForm}
-														className="text-[11px] max-w-[15em] w-[15em] pr-11"
+														className="text-2xs max-w-[15em] w-[15em] pr-11"
 														{...field}
 													/>
 
@@ -153,7 +153,7 @@ const RiskRatingRiskTypesForm = () => {
 							) : (
 								<FormCard.Field>
 									<FormCard.Label>Point Range</FormCard.Label>
-									<Label className="text-[11px] font-normal">
+									<Label className="text-2xs font-normal">
 										{form.getValues("min_point_range")}-
 										{form.getValues("max_point_range")} points
 									</Label>
@@ -171,7 +171,7 @@ const RiskRatingRiskTypesForm = () => {
 												<div className="flex flex-row relative">
 													<Input
 														disabled={!isEditForm}
-														className="text-[11px] max-w-[15em] w-[15em] pr-6"
+														className="text-2xs max-w-[15em] w-[15em] pr-6"
 														{...field}
 													/>
 
@@ -188,7 +188,7 @@ const RiskRatingRiskTypesForm = () => {
 												<div className="flex flex-row relative">
 													<Input
 														disabled={!isEditForm}
-														className="text-[11px] max-w-[15em] w-[15em] pr-6"
+														className="text-2xs max-w-[15em] w-[15em] pr-6"
 														{...field}
 													/>
 
@@ -203,7 +203,7 @@ const RiskRatingRiskTypesForm = () => {
 							) : (
 								<FormCard.Field>
 									<FormCard.Label>Yield Range</FormCard.Label>
-									<Label className="text-[11px] font-normal">
+									<Label className="text-2xs font-normal">
 										{form.getValues("min_yield_range")}-
 										{form.getValues("max_yield_range")}%
 									</Label>
@@ -233,7 +233,7 @@ const RiskRatingRiskTypesForm = () => {
 											)}
 											placeholder="Product Name"
 											disabled={!isEditForm}
-											className="text-[11px] w-full max-w-[30em]"
+											className="text-2xs w-full max-w-[30em]"
 										/>
 
 										<FormCard.Label className="ml-6 mr-2">
@@ -251,7 +251,7 @@ const RiskRatingRiskTypesForm = () => {
 													)}
 													placeholder="Allotment"
 													disabled={!isEditForm}
-													className="text-[11px] w-full max-w-[15em]"
+													className="text-2xs w-full max-w-[15em]"
 												/>
 
 												<span className="absolute right-3 top-1/2 -translate-y-1/2  text-[12px] text-disabled">
@@ -260,7 +260,7 @@ const RiskRatingRiskTypesForm = () => {
 											</div>
 										) : (
 											<div className="flex flex-row relative">
-												<Label className="text-[11px] font-normal">
+												<Label className="text-2xs font-normal">
 													{item.allotment}%
 												</Label>
 											</div>
