@@ -1,8 +1,7 @@
-import { TabRoute } from "@/ami/shared/types/tab-routes.types";
-import { CustomerTableType, Gender } from "../utils/types/customer-table.types";
-import { CustomerApprovalTableType } from "../utils/types/customer-approval-table.types";
-import { CustomerLogTableType } from "../utils/types/customer-logs.types";
+import { CustomerAmiTableType } from "../utils/types/customer-table.types";
 import { FilterOptions } from "@/ami/shared/types/filter.types";
+import { TabRoute } from "@/ami/shared/types/tab-routes.types";
+import { Gender } from "@/core/types/base.types";
 
 export const CUSTOMER_ROUTES: TabRoute[] = [
 	{
@@ -20,15 +19,15 @@ export const CUSTOMER_ROUTES: TabRoute[] = [
 ];
 
 export const CUSTOMER_MODULE_FILTER_OPTIONS: FilterOptions<{
-	activeStatus: ["Active", "Inactive"];
+	status: ["Active", "Inactive"];
 	gender: Gender[];
 }> = {
-	activeStatus: ["Active", "Inactive"],
+	status: ["Active", "Inactive"],
 	gender: ["Male", "Female", "Other"],
 } as const;
 
-export const CUSTOMER_TABLE_SEARCH_KEYS: (keyof CustomerTableType)[] = [
-	"id",
+export const CUSTOMER_TABLE_SEARCH_KEYS: (keyof CustomerAmiTableType)[] = [
+	"_id",
 	"customer_no",
 	"email",
 	"last_name",
@@ -39,15 +38,3 @@ export const CUSTOMER_TABLE_SEARCH_KEYS: (keyof CustomerTableType)[] = [
 	"address",
 	"is_active",
 ];
-
-export const CUSTOMER_FOR_APPROVAL_TABLE_SEARCH_KEYS: (keyof CustomerApprovalTableType)[] =
-	[
-		"date_requested",
-		"change_request",
-		"requested_by",
-		"customer_name",
-		"status",
-	];
-
-export const CUSTOMER_LOGSL_TABLE_SEARCH_KEYS: (keyof CustomerLogTableType)[] =
-	["customer_id", "customer_name", "date", "description_log"];

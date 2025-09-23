@@ -11,3 +11,5 @@ export type MetaData = {
 	retrieved_by?: string;
 	version?: number;
 };
+
+export type Gender = "Male" | "Female" | "Other";

@@ -10,7 +10,7 @@ export type ServiceCategory =
 
 export type ServiceModel = MetaData & {
 	name: string;
-	description: string | null;
+	description?: string;
 	category: string;
 	is_available: boolean;
 };

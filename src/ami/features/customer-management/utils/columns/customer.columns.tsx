@@ -6,17 +6,17 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
-import { CustomerTableType } from "../types/customer-table.types";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+import { CustomerAmiTableType } from "../types/customer-table.types";
 
-export const useCustomerColumns = (): Column<CustomerTableType>[] => {
+export const useCustomerColumns = (): Column<CustomerAmiTableType>[] => {
 	const navigate = useNavigate();
 
-	const columns: Column<CustomerTableType>[] = [
+	const columns: Column<CustomerAmiTableType>[] = [
 		{
 			key: "customer_no",
 			label: "Customer No",
@@ -64,7 +64,7 @@ export const useCustomerColumns = (): Column<CustomerTableType>[] => {
 			key: "total_spent",
 			label: "Total Spent",
 			sortable: true,
-			render: (value) => <DataTableRow value={formatToPeso(value)} />,
+			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
 		},
 		{
 			key: "status",
@@ -87,17 +87,18 @@ export const useCustomerColumns = (): Column<CustomerTableType>[] => {
 					<Button
 						size="icon"
 						variant="icon"
-						onClick={() => navigate(`view/customer/${row.id}`)}
+						onClick={() => navigate(`view/customer/${row._id}`)}
 					>
 						<EyeIcon fill="#1C1B1F" className="mt-[1px]" />
 					</Button>
-					<Button
+					{/* TODO Make this a trash icon for deac react */}
+					{/* <Button
 						size="icon"
 						variant="icon"
 						onClick={() => navigate(`edit/customer/${row.id}`)}
 					>
 						<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
-					</Button>
+					</Button> */}
 				</div>
 			),
 		},

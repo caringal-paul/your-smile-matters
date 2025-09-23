@@ -6,7 +6,7 @@ import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
 import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
 import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
-import { CustomerTableType } from "../utils/types/customer-table.types";
+import { CustomerAmiTableType } from "../utils/types/customer-table.types";
 import { useCustomerColumns } from "../utils/columns/customer.columns";
 import {
 	CUSTOMER_MODULE_FILTER_OPTIONS,
@@ -16,7 +16,7 @@ import {
 const CustomerTable = () => {
 	const customers = customersArray as unknown;
 
-	const customersData = customers as CustomerTableType[];
+	const customersData = customers as CustomerAmiTableType[];
 	const columns = useCustomerColumns();
 
 	const {
@@ -26,11 +26,11 @@ const CustomerTable = () => {
 		setFiltersDraft,
 		applyFilters,
 		filteredData,
-	} = useFilteredTableData<CustomerTableType>({
+	} = useFilteredTableData<CustomerAmiTableType>({
 		data: customersData.map((customer) => {
 			return {
 				...customer,
-				status: customer.isActive ? "Active" : "Inactive",
+				status: customer.is_active ? "Active" : "Inactive",
 			};
 		}),
 		keys: CUSTOMER_TABLE_SEARCH_KEYS,
@@ -39,7 +39,7 @@ const CustomerTable = () => {
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
-				<div className="flex gap-2 items-center h-9 w-full sm:w-fit">
+				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
 					<TableSearch value={searchText} onChange={setSearchText} />
 					<TableFilter
 						filters={filtersDraft}

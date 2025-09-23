@@ -6,19 +6,23 @@
 @layer base {
 	:root {
 		/** AMI SIDE **/
-		--admin-primary: #846e62;
+		--admin-primary: 132 110 98;
 		--admin-primary-foreground: #f0f0f0;
 		--admin-primary-hover: #6f5a4d;
-		--admin-secondary: #a7a29c;
+		--admin-secondary: 167 162 156;
 		--admin-secondary-foreground: #f0f0f0;
 		--admin-secondary-hover: #8f8a84;
 		--admin-background: #efeae6;
-		--admin-background-sidebar: #1c1c1c;
+		--admin-background-sidebar: 28 28 28;
+
+		--sf-background: #ffffff;
+		--sf-navbar-bg: #fefefe;
+		--sf-dark-bg: 28 28 28;
 
 		/** General colors **/
-		--primary: #846e62;
+		--primary: 132 110 98;
 		--foreground: #2d2f2f;
-		--secondary: #a7a29c;
+		--secondary: 167 162 156;
 		--secondary-foreground: #444242;
 		--background: #fcfcfc;
 		--white: #ffffff;
@@ -97,7 +101,7 @@
 
 @layer base {
 	* {
-		@apply border-border font-inter focus-visible:ring-primary scrollbar-small;
+		@apply border-border font-inter focus-visible:ring-primary scrollbar-store-front;
 	}
 	body {
 		@apply bg-background text-foreground;
@@ -141,6 +145,28 @@
 	.rich-text {
 		@apply [&_ol]:list-decimal [&_ol]:ml-6 [&_ul]:list-disc [&_ul]:ml-6 [&_li]:my-1;
 	}
+}
+
+.navigation-menu-viewport-fix {
+	[data-radix-navigation-menu-viewport] {
+		left: 50% !important;
+		transform: translateX(-50%) !important;
+	}
+}
+
+/* To edit the browser scrollbar */
+.scrollbar-store-front::-webkit-scrollbar {
+	width: 3px;
+	height: 6px;
+}
+
+.scrollbar-store-front::-webkit-scrollbar-thumb {
+	background: #846e62;
+	border-radius: 3px;
+}
+
+.scrollbar-store-front::-webkit-scrollbar-thumb:hover {
+	background: #846e62;
 }
 
 /* To edit the browser scrollbar */

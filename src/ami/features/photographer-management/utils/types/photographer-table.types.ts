@@ -18,7 +18,7 @@ export type Customer = {
 
 export type CustomerFilters = Partial<Record<keyof Customer, string[]>>;
 
-export type CustomerTableType = {
+export type CustomerAmiTableType = {
 	[K in keyof Customer]: string;
 } & {
 	action?: string;

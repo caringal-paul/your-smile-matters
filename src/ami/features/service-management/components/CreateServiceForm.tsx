@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 
 // Utils
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,15 +11,10 @@ import { Form, FormField } from "@/core/components/base/form";
 import { cn } from "@/core/lib/utils";
 import { Switch } from "@/core/components/base/switch";
 import { Label } from "@/core/components/base/label";
-import { useState } from "react";
-import ConfirmModal from "@/ami/shared/components/custom/modal/ConfirmModal";
-import { useLocation } from "react-router-dom";
 
 import {
 	serviceCreateSchema,
-	serviceUpdateSchema,
 	ServiceAmiCreate,
-	ServiceAmiUpdate,
 } from "../utils/schemas/service.schema";
 import TextAreaEditor from "@/ami/shared/components/custom/input/TextAreaEditor";
 import {
@@ -32,85 +26,20 @@ import {
 	SelectValue,
 } from "@/core/components/base/select";
 
-type ServiceFormData = ServiceAmiCreate | ServiceAmiUpdate;
-
-// Props for the main form (if you want to make it more reusable)
-type ServiceFormProps = {
-	className?: string;
-	submitButtonLabel?: string;
-	cancelButtonLabel?: string;
-	closeModal?: () => void;
-	initialData?: Partial<ServiceAmiCreate>; // For populating existing service data
-	onSubmit?: (data: ServiceFormData) => void;
-};
-
-const ServiceForm = ({
-	className,
-	initialData,
-	onSubmit: onSubmitProp,
-}: ServiceFormProps) => {
-	const location = useLocation();
-	const isEditForm = location.pathname.includes("edit");
-
-	return (
-		<div className="flex flex-col mb-4 space-y-6">
-			<ServiceDetails
-				isEditForm={isEditForm}
-				initialData={initialData}
-				onSubmit={onSubmitProp}
-			/>
-		</div>
-	);
-};
-
-const ServiceDetails = ({
-	isEditForm,
-	initialData,
-	onSubmit: onSubmitProp,
-}: {
-	isEditForm: boolean;
-	initialData?: Partial<ServiceAmiCreate>;
-	onSubmit?: (data: ServiceFormData) => void;
-}) => {
-	const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
-		useState(false);
-
-	// Choose schema based on mode
-	const schema = isEditForm ? serviceUpdateSchema : serviceCreateSchema;
-
-	const form = useForm<ServiceFormData>({
-		resolver: zodResolver(schema),
+const CreateServiceForm = () => {
+	const form = useForm<ServiceAmiCreate>({
+		resolver: zodResolver(serviceCreateSchema),
 		mode: "onChange",
-		defaultValues: isEditForm
-			? {
-					// For edit mode, use existing data or empty defaults
-					name: initialData?.name || "",
-					description: initialData?.description || "",
-					category: initialData?.category || "Photography",
-					is_available: initialData?.is_available ?? true,
-					...initialData,
-			  }
-			: {
-					name: initialData?.name,
-					description: initialData?.description,
-					category: initialData?.category,
-					is_available: initialData?.is_available,
-			  },
+		defaultValues: {
+			name: "",
+			description: "",
+			category: "",
+			is_available: false,
+		},
 	});
 
-	// Update form when initialData changes (for edit mode)
-	useEffect(() => {
-		if (isEditForm && initialData) {
-			form.reset({
-				...initialData,
-				is_available: initialData.is_available ?? true,
-			});
-		}
-	}, [initialData, isEditForm, form]);
-
-	const onSubmit = (values: ServiceFormData) => {
+	const onSubmit = (values: ServiceAmiCreate) => {
 		console.log(values);
-		onSubmitProp?.(values);
 	};
 
 	return (
@@ -232,39 +161,31 @@ const ServiceDetails = ({
 
 					{/* Form Actions */}
 					<FormCard.Footer className="flex justify-end gap-2">
-						{isEditForm ? (
-							<>
-								<Button variant="secondary" type="button">
-									Delete
-								</Button>
-								<Button className="sm:w-fit" type="submit">
-									Save Changes
-								</Button>
-							</>
-						) : (
-							<>
-								<Button variant="secondary" type="button">
-									Cancel
-								</Button>
-								<Button className="sm:w-fit" type="submit">
-									Create Service
-								</Button>
-							</>
-						)}
+						<Button
+							variant="secondary"
+							type="button"
+							disabled={!form.formState.isDirty}
+							onClick={(e) => {
+								e.stopPropagation();
+								e.preventDefault();
+
+								form.reset();
+							}}
+						>
+							Clear
+						</Button>
+						<Button
+							className="sm:w-fit"
+							onClick={() => onSubmit(form.getValues())}
+							disabled={!form.formState.isDirty || !form.formState.isValid}
+						>
+							Create Package
+						</Button>
 					</FormCard.Footer>
 				</form>
 			</Form>
-
-			<ConfirmModal
-				isConfirmModalOpen={isResetPasswordModalOpen}
-				toggleConfirmModal={setIsResetPasswordModalOpen}
-				confirmButtonLabel="Send for Approval"
-				dismissButtonLabel="Cancel"
-				title="Submit Reset Request"
-				description="Click 'Send for Approval' to submit the reset request. The approver will review and take the necessary action."
-			/>
 		</FormCard>
 	);
 };
 
-export default ServiceForm;
+export default CreateServiceForm;

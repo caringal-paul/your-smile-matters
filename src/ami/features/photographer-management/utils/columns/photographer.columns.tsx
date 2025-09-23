@@ -6,17 +6,17 @@ import { Column } from "@/ami/shared/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
-import { CustomerTableType } from "../types/photographer-table.types";
+import { CustomerAmiTableType } from "../types/photographer-table.types";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
 
-export const useCustomerColumns = (): Column<CustomerTableType>[] => {
+export const useCustomerColumns = (): Column<CustomerAmiTableType>[] => {
 	const navigate = useNavigate();
 
-	const columns: Column<CustomerTableType>[] = [
+	const columns: Column<CustomerAmiTableType>[] = [
 		{
 			key: "customer_no",
 			label: "Customer No",

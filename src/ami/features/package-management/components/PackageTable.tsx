@@ -16,10 +16,13 @@ import {
 import { Button } from "@/core/components/base/button";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ServiceModel } from "@/core/models/service.model";
 
 const PackageTable = () => {
 	const navigate = useNavigate();
 	const packages = packagesArray as unknown;
+
+	const services = servicesArray as unknown as ServiceModel[];
 
 	const packagesData = packages as PackageAmiTableType[];
 	const columns = useServiceColumns();
@@ -35,7 +38,7 @@ const PackageTable = () => {
 		data: packagesData.map((pkg) => {
 			return {
 				...pkg,
-				servicesData: servicesArray.filter((service) =>
+				servicesData: services.filter((service) =>
 					pkg.included_services.includes(service._id)
 				),
 				status: pkg.is_available ? "Available" : "Unavailable",

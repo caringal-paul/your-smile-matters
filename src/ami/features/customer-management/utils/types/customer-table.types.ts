@@ -1,28 +1,32 @@
-import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+import { CustomerModel } from "@/core/models/customer.model";
 
-export type Gender = "Male" | "Female" | "Other";
-
-export type CustomerTableFields = {
-	id: number;
-	customer_no: number;
-	first_name: string;
-	last_name: string;
-	email: string;
-	total_spent: number;
-	mobile_number?: string;
-	address?: string;
-	gender: Gender;
-	is_active: boolean;
-	// created_on: string;
-};
-
-export type CustomerFilters = Partial<
-	Record<keyof CustomerTableFields, string[]>
+export type CustomerAmi = Pick<
+	CustomerModel,
+	| "_id"
+	| "customer_no"
+	| "email"
+	| "birth_date"
+	| "first_name"
+	| "last_name"
+	| "mobile_number"
+	| "is_active"
+	| "gender"
+	| "address"
+	| "barangay"
+	| "city"
+	| "province"
+	| "postal_code"
+	| "country"
+	| "profile_image"
 >;
 
-export type CustomerTableType = {
-	[K in keyof CustomerTableFields]: string;
+export type CustomerAmiFilters = Partial<Record<keyof CustomerAmi, string[]>>;
+
+export type CustomerAmiTableType = {
+	[K in keyof CustomerAmi]: CustomerAmi[K];
 } & {
+	status?: string;
+	detailed_address?: string;
+	total_spent?: string;
 	action?: string;
-	status?: AvailabilityStatus;
 };

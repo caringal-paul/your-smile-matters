@@ -22,21 +22,9 @@ export const serviceCreateSchema = z.object({
 		.trim()
 		.optional(),
 
-	category: z.enum(
-		[
-			ServiceCategoryEnum.Photography,
-			ServiceCategoryEnum.Beauty,
-			ServiceCategoryEnum.Equipment,
-			ServiceCategoryEnum.Styling,
-			ServiceCategoryEnum.Other,
-		],
-		{
-			message:
-				"Category must be: Photography, Beauty, Equipment, Styling, Other",
-		}
-	),
+	category: z.string().optional(),
 
-	is_available: z.boolean().default(true),
+	is_available: z.boolean(),
 });
 
 // For update operations, you might want a separate schema

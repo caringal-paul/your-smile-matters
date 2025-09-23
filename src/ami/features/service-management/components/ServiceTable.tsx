@@ -12,8 +12,13 @@ import {
 	SERVICE_MODULE_FILTER_OPTIONS,
 	SERVICE_TABLE_SEARCH_KEYS,
 } from "../constants/service-constants";
+import { Button } from "@/core/components/base/button";
+import { PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ServiceTable = () => {
+	const navigate = useNavigate();
+
 	const services = servicesArray as unknown;
 
 	const servicesData = services as ServiceAmiTableType[];
@@ -48,6 +53,11 @@ const ServiceTable = () => {
 						onApply={applyFilters}
 					/>
 				</div>
+
+				<Button onClick={() => navigate("create/service")}>
+					<PlusCircle />
+					Create Service
+				</Button>
 			</SectionHeader>
 
 			<DataTable data={filteredData} columns={columns} />

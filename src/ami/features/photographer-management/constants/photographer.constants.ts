@@ -1,6 +1,6 @@
 import { TabRoute } from "@/ami/shared/types/tab-routes.types";
 import {
-	CustomerTableType,
+	CustomerAmiTableType,
 	Gender,
 } from "../utils/types/photographer-table.types";
 
@@ -14,7 +14,7 @@ export const PHOTOGRAPHER_MODULE_FILTER_OPTIONS: FilterOptions<{
 	gender: ["Male", "Female", "Other"],
 } as const;
 
-export const PHOTOGRAPHER_TABLE_SEARCH_KEYS: (keyof CustomerTableType)[] = [
+export const PHOTOGRAPHER_TABLE_SEARCH_KEYS: (keyof CustomerAmiTableType)[] = [
 	"id",
 	"customer_no",
 	"email",

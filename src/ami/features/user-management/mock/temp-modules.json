@@ -1,11 +1,12 @@
 [
 	{ "id": 1, "name": "Dashboard" },
 	{ "id": 2, "name": "User Management" },
-	{ "id": 3, "name": "Portfolio Management" },
-	{ "id": 4, "name": "Risk Rating Management" },
-	{ "id": 5, "name": "Customer Management" },
-	{ "id": 6, "name": "Investment Offers" },
+	{ "id": 3, "name": "Roles & Permission" },
+	{ "id": 4, "name": "Customer Management" },
+	{ "id": 5, "name": "Service Management" },
+	{ "id": 6, "name": "Package Management" },
 	{ "id": 7, "name": "Transaction History" },
-	{ "id": 8, "name": "Support Management" },
-	{ "id": 9, "name": "Account Settings" }
+	{ "id": 8, "name": "Customer Bookings" },
+	{ "id": 9, "name": "Support Management" },
+	{ "id": 10, "name": "Account Settings" }
 ]

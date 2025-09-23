@@ -23,7 +23,7 @@ const CustomerRouteTabs = () => {
 		<div>
 			<div className="flex">
 				<Tabs
-					className="w-full hidden sm:flex xl:mt-0"
+					className="hidden w-full sm:flex xl:mt-0"
 					defaultValue="customers"
 				>
 					<TabsList className="my-5 xl:my-4">
@@ -53,7 +53,7 @@ const CustomerRouteTabs = () => {
 								"mb-4 w-full justify-between shadow-none transition-none sm:hidden bg-transparent hover:bg-transparent text-primary hover:text-text-primary border-b-2 rounded-none border-primary"
 							)}
 						>
-							{tab} <ButtonArrowRightIcon className="h-7 w-7 text-white" />
+							{tab} <ButtonArrowRightIcon className="text-white h-7 w-7" />
 						</Button>
 					</PopoverTrigger>
 

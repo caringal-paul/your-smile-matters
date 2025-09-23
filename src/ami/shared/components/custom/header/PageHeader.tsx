@@ -26,7 +26,7 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 							<button
 								onClick={() => setIsPopoverOpen((prev) => !prev)}
 								className="w-6 h-6 bg-cover rounded-full"
-								style={{ backgroundImage: `url("/profile-avatar.png")` }}
+								style={{ backgroundImage: `url("/profile-avatar.jpg")` }}
 								aria-label="Profile"
 							/>
 						</PopoverTrigger>

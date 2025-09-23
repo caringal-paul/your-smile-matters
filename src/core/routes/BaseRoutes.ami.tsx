@@ -1,10 +1,6 @@
-import AccountSettingsLayout from "@/ami/features/account-settings/layout/AccountSettingsLayout.ami";
 import AccountSettingsPage from "@/ami/features/account-settings/pages/AccountSettingsPage.ami";
 import CustomerBreadcrumbs from "@/ami/features/customer-management/components/CustomerBreadcrumbs";
-import CustomerForm from "@/ami/features/customer-management/components/CustomerForm";
-import CustomerRouteTabs from "@/ami/features/customer-management/components/CustomerRouteTabs";
 import CustomerTable from "@/ami/features/customer-management/components/CustomerTable";
-import CustomerApprovalPage from "@/ami/features/customer-management/pages/CustomerApprovalPage";
 import CustomerPage from "@/ami/features/customer-management/pages/CustomerPage";
 import DashboardPage from "@/ami/features/dashboard/pages/DashboardPage";
 import InvestmentListingFixedIncomeTable from "@/ami/features/investment-offers/components/InvestmentListingFixedIncomeTable";
@@ -70,27 +66,33 @@ import RolesAndPermissionsPage from "@/ami/features/user-management/pages/RolesA
 import UserPage from "@/ami/features/user-management/pages/UserPage";
 import RootLayout from "@/ami/layouts/RootLayout.ami";
 import { Route } from "react-router-dom";
-import TestComponent from "../shared/components/TestComponent";
-import RolesAndPermissionsLayout from "../features/user-management/layout/RolesAndPermissionsLayout";
-import RolesAndPermissionsForm from "../features/user-management/components/RolesAndPermissionsForm";
-import { RoleProvider } from "../features/auth/providers/RoleContext.ami";
-import CustomerLayout from "../features/customer-management/layout/CustomerLayout";
-import ServicePage from "../features/service-management/pages/ServicePage";
-import ServiceLayout from "../features/service-management/layout/ServiceLayout";
-import ServiceTable from "../features/service-management/components/ServiceTable";
-import ServiceForm from "../features/service-management/components/ServiceForm";
-import ServiceBreadcrumbs from "../features/service-management/components/ServiceBreadcrumbs";
-import PackageLayout from "../features/package-management/layout/PackageLayout";
-import PackagePage from "../features/package-management/pages/PackagePage";
-import PackageTable from "../features/package-management/components/PackageTable";
-import PackageBreadcrumbs from "../features/package-management/components/PackageBreadcrumbs";
-import ViewPackageForm from "../features/package-management/components/ViewPackageForm";
-import CreatePackageForm from "../features/package-management/components/CreatePackageForm";
-import EditPackageForm from "../features/package-management/components/EditPackageForm";
-import ViewUserForm from "../features/user-management/components/ViewUserForm";
-import UserBreadcrumbs from "../features/user-management/components/UserBreadcrumbs";
-import EditUserForm from "../features/user-management/components/EditUserForm";
-import CreateUserForm from "../features/user-management/components/CreateUserForm";
+import TestComponent from "../../ami/shared/components/TestComponent";
+import RolesAndPermissionsLayout from "../../ami/features/user-management/layout/RolesAndPermissionsLayout";
+import RolesAndPermissionsForm from "../../ami/features/user-management/components/RolesAndPermissionsForm";
+import { RoleProvider } from "../../ami/features/auth/providers/RoleContext.ami";
+import CustomerLayout from "../../ami/features/customer-management/layout/CustomerLayout";
+import ServicePage from "../../ami/features/service-management/pages/ServicePage";
+import ServiceLayout from "../../ami/features/service-management/layout/ServiceLayout";
+import ServiceTable from "../../ami/features/service-management/components/ServiceTable";
+import CreateServiceForm from "../../ami/features/service-management/components/CreateServiceForm";
+import ServiceBreadcrumbs from "../../ami/features/service-management/components/ServiceBreadcrumbs";
+import PackageLayout from "../../ami/features/package-management/layout/PackageLayout";
+import PackagePage from "../../ami/features/package-management/pages/PackagePage";
+import PackageTable from "../../ami/features/package-management/components/PackageTable";
+import PackageBreadcrumbs from "../../ami/features/package-management/components/PackageBreadcrumbs";
+import ViewPackageForm from "../../ami/features/package-management/components/ViewPackageForm";
+import CreatePackageForm from "../../ami/features/package-management/components/CreatePackageForm";
+import EditPackageForm from "../../ami/features/package-management/components/EditPackageForm";
+import ViewUserForm from "../../ami/features/user-management/components/ViewUserForm";
+import UserBreadcrumbs from "../../ami/features/user-management/components/UserBreadcrumbs";
+import EditUserForm from "../../ami/features/user-management/components/EditUserForm";
+import CreateUserForm from "../../ami/features/user-management/components/CreateUserForm";
+import RolesAndPermissionsBreadcrumbs from "../../ami/features/user-management/components/RolesAndPermissionsBreadcrumbs";
+import EditCustomerForm from "../../ami/features/customer-management/components/ViewCustomerForm";
+import ViewCustomerForm from "../../ami/features/customer-management/components/ViewCustomerForm";
+import CustomerRouteTabs from "../../ami/features/customer-management/components/CustomerRouteTabs";
+import EditServiceForm from "../../ami/features/service-management/components/EditServiceForm";
+import ViewServiceForm from "../../ami/features/service-management/components/ViewServiceForm";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -138,17 +140,17 @@ const baseRoutes = (
 			element={<RolesAndPermissionsLayout />}
 		>
 			<Route index element={<RolesAndPermissionsPage />} />
-			<Route
-				path="edit/:id"
-				element={
-					<RoleProvider>
-						<RolesAndPermissionsForm
-							selectedRole={selectedRole}
-							onSave={() => console.log("do me")}
-						/>
-					</RoleProvider>
-				}
-			/>
+
+			<Route element={<RolesAndPermissionsBreadcrumbs />}>
+				<Route
+					path="edit/:id"
+					element={
+						<RoleProvider>
+							<RolesAndPermissionsForm />
+						</RoleProvider>
+					}
+				/>
+			</Route>
 		</Route>
 		{/* PORTFOLIO MODULE */}x{" "}
 		<Route path="portfolio-management" element={<div />}>
@@ -218,17 +220,13 @@ const baseRoutes = (
 					<Route index element={<CustomerTable />} />
 					<Route path="activity-log" element={<div />} />
 				</Route>
-
-				{/* <Route
-					path="customers/for-approval"
-					element={<CustomerApprovalPage />}
-				/> */}
 			</Route>
 
 			<Route element={<CustomerBreadcrumbs />}>
-				<Route path="customers/view/customer/:id" element={<div />} />
-				<Route path="customers/edit/customer/:id" element={<div />} />
-				{/* <Route path="customers/edit/customer/:id" element={<CustomerForm />} /> */}
+				<Route
+					path="customers/view/customer/:id"
+					element={<ViewCustomerForm />}
+				/>
 			</Route>
 		</Route>
 		{/* SERVICE MODULE */}
@@ -237,16 +235,13 @@ const baseRoutes = (
 				<Route index element={<ServiceTable />} />
 			</Route>
 
-			{/* <Route
-					path="customers/for-approval"
-					element={<CustomerApprovalPage />}
-				/> */}
-
-			{/* <Route path="activity-logs" element={<div />} /> */}
-
 			<Route element={<ServiceBreadcrumbs />}>
-				<Route path="services/view/service/:id" element={<ServiceForm />} />
-				<Route path="services/edit/service/:id" element={<ServiceForm />} />
+				<Route
+					path="services/create/service/"
+					element={<CreateServiceForm />}
+				/>
+				<Route path="services/view/service/:id" element={<ViewServiceForm />} />
+				<Route path="services/edit/service/:id" element={<EditServiceForm />} />
 			</Route>
 		</Route>
 		{/* PACKAGE MODULE */}

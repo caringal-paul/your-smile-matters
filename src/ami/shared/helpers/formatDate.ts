@@ -21,6 +21,17 @@ export function formatToTableDate(isoString: string): string {
 	return formattedDate;
 }
 
+export const formatDateToTextMonth = (utcDate: string): string => {
+	const date = new Date(utcDate);
+
+	return new Intl.DateTimeFormat("en-US", {
+		month: "long",
+		day: "numeric",
+		year: "numeric",
+		timeZone: "UTC",
+	}).format(date);
+};
+
 export const formatDisplayDate = (dateString: string): string => {
 	if (!dateString) return "";
 	const [year, month, day] = dateString.split("-");
