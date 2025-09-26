@@ -1,4 +1,4 @@
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Column } from "@/ami/shared/types/column.types";
 

@@ -1,11 +1,11 @@
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 
 import customersArray from "../mock/temp-customers.json";
 
-import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 import { CustomerAmiTableType } from "../utils/types/customer-table.types";
 import { useCustomerColumns } from "../utils/columns/customer.columns";
 import {

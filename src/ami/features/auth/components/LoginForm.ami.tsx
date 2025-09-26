@@ -3,7 +3,7 @@ import { Label } from "@/core/components/base/label";
 import { Input } from "@/core/components/base/input";
 import { Button } from "@/core/components/base/button";
 import UserIcon from "@/ami/shared/assets/icons/UserIcon";
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 
 const LoginForm = () => {
 	const navigate = useNavigate();

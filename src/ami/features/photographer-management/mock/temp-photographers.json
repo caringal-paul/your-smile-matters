@@ -1,0 +1,299 @@
+[
+	{
+		"name": "Alice Johnson",
+		"email": "alice.johnson@example.com",
+		"mobile_number": "09171234567",
+		"bio": "Wedding and portrait photographer with 8 years of experience.",
+		"profile_image": "https://example.com/images/alice.jpg",
+		"specialties": ["Photography"],
+		"photo_gallery": [
+			"https://example.com/images/alice1.jpg",
+			"https://example.com/images/alice2.jpg"
+		],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Monday",
+				"start_time": "09:00",
+				"end_time": "17:00",
+				"is_available": true,
+				"break_times": [
+					{
+						"start_time": "12:00",
+						"end_time": "13:00",
+						"description": "Lunch"
+					}
+				]
+			},
+			{
+				"day_of_week": "Wednesday",
+				"start_time": "10:00",
+				"end_time": "18:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [
+			{
+				"date": "2025-12-25T00:00:00.000Z",
+				"is_available": false,
+				"reason": "Christmas Holiday"
+			}
+		],
+		"total_bookings": 120,
+		"completed_bookings": 115,
+		"booking_lead_time_hours": 24,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Brian Carter",
+		"email": "brian.carter@example.com",
+		"mobile_number": "09981234567",
+		"bio": "Fashion and beauty photographer for magazines.",
+		"profile_image": "https://example.com/images/brian.jpg",
+		"specialties": ["Photography", "Beauty"],
+		"photo_gallery": [
+			"https://example.com/images/brian1.jpg",
+			"https://example.com/images/brian2.jpg",
+			"https://example.com/images/brian3.jpg"
+		],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Tuesday",
+				"start_time": "08:00",
+				"end_time": "16:00",
+				"is_available": true
+			},
+			{
+				"day_of_week": "Friday",
+				"start_time": "09:00",
+				"end_time": "15:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [
+			{
+				"date": "2025-11-10T00:00:00.000Z",
+				"is_available": false,
+				"reason": "Vacation"
+			}
+		],
+		"total_bookings": 80,
+		"completed_bookings": 75,
+		"booking_lead_time_hours": 48,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Carla Mendoza",
+		"email": "carla.mendoza@example.com",
+		"mobile_number": "09221234567",
+		"bio": "Event photographer specializing in birthdays and concerts.",
+		"profile_image": "https://example.com/images/carla.jpg",
+		"specialties": ["Photography", "Equipment"],
+		"photo_gallery": ["https://example.com/images/carla1.jpg"],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Saturday",
+				"start_time": "14:00",
+				"end_time": "22:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [],
+		"total_bookings": 60,
+		"completed_bookings": 58,
+		"booking_lead_time_hours": 12,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Daniel Lee",
+		"email": "daniel.lee@example.com",
+		"mobile_number": "09193456789",
+		"bio": "Outdoor portrait photographer with passion for natural light.",
+		"profile_image": "https://example.com/images/daniel.jpg",
+		"specialties": ["Photography"],
+		"photo_gallery": [
+			"https://example.com/images/daniel1.jpg",
+			"https://example.com/images/daniel2.jpg"
+		],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Sunday",
+				"start_time": "07:00",
+				"end_time": "12:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [
+			{
+				"date": "2025-10-31T00:00:00.000Z",
+				"is_available": false,
+				"reason": "Halloween Break"
+			}
+		],
+		"total_bookings": 200,
+		"completed_bookings": 198,
+		"booking_lead_time_hours": 24,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Ella Cruz",
+		"email": "ella.cruz@example.com",
+		"mobile_number": "09562345678",
+		"bio": "Styling and makeup expert collaborating with photographers.",
+		"profile_image": "https://example.com/images/ella.jpg",
+		"specialties": ["Styling", "Beauty"],
+		"photo_gallery": [],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Monday",
+				"start_time": "09:00",
+				"end_time": "18:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [],
+		"total_bookings": 40,
+		"completed_bookings": 38,
+		"booking_lead_time_hours": 6,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Francis Torres",
+		"email": "francis.torres@example.com",
+		"mobile_number": "09332345678",
+		"bio": "Specializes in equipment rentals and lighting setups.",
+		"profile_image": "https://example.com/images/francis.jpg",
+		"specialties": ["Equipment"],
+		"photo_gallery": ["https://example.com/images/francis1.jpg"],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Thursday",
+				"start_time": "10:00",
+				"end_time": "20:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [
+			{
+				"date": "2025-12-01T00:00:00.000Z",
+				"is_available": true,
+				"custom_hours": { "start_time": "14:00", "end_time": "18:00" },
+				"reason": "Special Rental Hours"
+			}
+		],
+		"total_bookings": 30,
+		"completed_bookings": 29,
+		"booking_lead_time_hours": 4,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Grace Kim",
+		"email": "grace.kim@example.com",
+		"mobile_number": "09263456789",
+		"bio": "Fine art photographer exploring conceptual themes.",
+		"profile_image": "https://example.com/images/grace.jpg",
+		"specialties": ["Photography", "Other"],
+		"photo_gallery": [
+			"https://example.com/images/grace1.jpg",
+			"https://example.com/images/grace2.jpg",
+			"https://example.com/images/grace3.jpg"
+		],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Wednesday",
+				"start_time": "13:00",
+				"end_time": "19:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [],
+		"total_bookings": 55,
+		"completed_bookings": 50,
+		"booking_lead_time_hours": 24,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Henry Santos",
+		"email": "henry.santos@example.com",
+		"mobile_number": "09184567890",
+		"bio": "Special events photographer available for weddings and conferences.",
+		"profile_image": "https://example.com/images/henry.jpg",
+		"specialties": ["Photography", "Styling"],
+		"photo_gallery": ["https://example.com/images/henry1.jpg"],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Saturday",
+				"start_time": "08:00",
+				"end_time": "20:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [],
+		"total_bookings": 90,
+		"completed_bookings": 87,
+		"booking_lead_time_hours": 48,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "Isabella Ramos",
+		"email": "isabella.ramos@example.com",
+		"mobile_number": "09195678901",
+		"bio": "Travel photographer capturing landscapes and culture.",
+		"profile_image": "https://example.com/images/isabella.jpg",
+		"specialties": ["Photography"],
+		"photo_gallery": [
+			"https://example.com/images/isabella1.jpg",
+			"https://example.com/images/isabella2.jpg"
+		],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Friday",
+				"start_time": "07:00",
+				"end_time": "15:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [
+			{
+				"date": "2025-10-20T00:00:00.000Z",
+				"is_available": false,
+				"reason": "Out of town shoot"
+			}
+		],
+		"total_bookings": 70,
+		"completed_bookings": 65,
+		"booking_lead_time_hours": 36,
+		"is_active": true,
+		"created_by": "1"
+	},
+	{
+		"name": "James Wu",
+		"email": "james.wu@example.com",
+		"mobile_number": "09334567890",
+		"bio": "Street photographer documenting daily life and urban culture.",
+		"profile_image": "https://example.com/images/james.jpg",
+		"specialties": ["Photography", "Other"],
+		"photo_gallery": ["https://example.com/images/james1.jpg"],
+		"weekly_schedule": [
+			{
+				"day_of_week": "Sunday",
+				"start_time": "10:00",
+				"end_time": "16:00",
+				"is_available": true
+			}
+		],
+		"date_overrides": [],
+		"total_bookings": 40,
+		"completed_bookings": 39,
+		"booking_lead_time_hours": 8,
+		"is_active": true,
+		"created_by": "1"
+	}
+]

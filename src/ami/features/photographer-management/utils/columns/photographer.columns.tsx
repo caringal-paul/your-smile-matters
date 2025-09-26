@@ -1,6 +1,6 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Column } from "@/ami/shared/types/column.types";
 
@@ -10,7 +10,7 @@ import { CustomerAmiTableType } from "../types/photographer-table.types";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
-import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
+import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
 
 export const useCustomerColumns = (): Column<CustomerAmiTableType>[] => {

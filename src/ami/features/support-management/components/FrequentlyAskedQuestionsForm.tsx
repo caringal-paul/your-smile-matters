@@ -7,8 +7,8 @@ import { FAQ, FAQSchema } from "../utils/schemas/faq.schema";
 import parse from "html-react-parser";
 
 // Components
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
-import TextAreaEditor from "@/ami/shared/components/custom/input/TextAreaEditor";
+import FormCard from "@/ami/shared/components/card/FormCard";
+import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Form, FormField } from "@/core/components/base/form";

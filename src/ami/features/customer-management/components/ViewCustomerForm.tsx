@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import customersArray from "../mock/temp-customers.json";
 
 import { CustomerModel } from "@/core/models/customer.model";
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import {
 	formatDateToTextMonth,
 	formatDisplayDate,

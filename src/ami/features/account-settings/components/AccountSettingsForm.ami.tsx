@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { Label } from "@/core/components/base/label";
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";

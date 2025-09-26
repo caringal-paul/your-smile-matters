@@ -1,6 +1,6 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { Column } from "@/ami/shared/types/column.types";
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";

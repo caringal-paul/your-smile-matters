@@ -6,6 +6,21 @@ import {
 
 import { FilterOptions } from "@/ami/shared/types/filter.types";
 
+export const PHOTOGRAPHER_ROUTES: TabRoute[] = [
+	{
+		id: 1,
+		path: "/admin/ami/photographer-management/photographers",
+		value: "photographers",
+		name: "Photographers",
+	},
+	{
+		id: 2,
+		path: "/admin/ami/photographer-management/photographers/for-approval",
+		value: "for-approval",
+		name: "For Approval",
+	},
+];
+
 export const PHOTOGRAPHER_MODULE_FILTER_OPTIONS: FilterOptions<{
 	activeStatus: ["Active", "Inactive"];
 	gender: Gender[];

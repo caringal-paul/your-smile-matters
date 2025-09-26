@@ -1,10 +1,10 @@
 import { TransactionHistoryTableType } from "../types/transaction-history-table.types";
 import { Column } from "@/ami/shared/types/column.types";
 
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
-import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
+import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { TRANSACTION_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { TransactionStatus } from "@/ami/shared/types/status.types";
 

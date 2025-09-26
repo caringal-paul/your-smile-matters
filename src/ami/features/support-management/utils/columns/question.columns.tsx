@@ -6,7 +6,7 @@ import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import TrashIcon from "@/ami/shared/assets/icons/TrashIcon";
 import parse from "html-react-parser";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";

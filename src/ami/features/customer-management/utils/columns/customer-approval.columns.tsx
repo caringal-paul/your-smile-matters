@@ -1,12 +1,12 @@
 import { Button } from "@/core/components/base/button";
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { Column } from "@/ami/shared/types/column.types";
 
 import { CustomerApprovalTableType } from "../types/customer-approval-table.types";
 import ApproveIcon from "@/ami/shared/assets/icons/ApproveIcon";
 import DisapproveIcon from "@/ami/shared/assets/icons/DisapproveIcon";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
+import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { ForApprovalStatus } from "@/ami/shared/types/status.types";
 import { FOR_APPROVAL_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 

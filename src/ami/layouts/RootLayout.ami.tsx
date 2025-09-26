@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import ResponsiveSidebar from "../shared/components/custom/sidebar/ResponsiveSidebar";
+import ResponsiveSidebar from "../shared/components/sidebar/ResponsiveSidebar";
 
 const RootLayout = () => {
 	return (

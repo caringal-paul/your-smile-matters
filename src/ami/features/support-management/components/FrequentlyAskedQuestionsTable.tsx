@@ -1,15 +1,15 @@
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useState } from "react";
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 import questionsArray from "../mock/temp-questions.json";
 import { useQuestionsColumns } from "../utils/columns/question.columns";
 import { Button } from "@/core/components/base/button";
 import AddButtonIcon from "@/ami/shared/assets/icons/AddButtonIcon";
 import { Checkbox } from "@/core/components/base/checkbox";
-import ConfirmModal from "@/ami/shared/components/custom/modal/ConfirmModal";
+import ConfirmModal from "@/ami/shared/components/modal/ConfirmModal";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
-import FormModal from "@/ami/shared/components/custom/modal/FormModal";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
+import FormModal from "@/ami/shared/components/modal/FormModal";
 import FrequentlyAskedQuestionsForm from "./FrequentlyAskedQuestionsForm";
 import { FAQTableType } from "../utils/types/support-table.types";
 

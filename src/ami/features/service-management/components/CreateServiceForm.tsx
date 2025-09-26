@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // Components
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Form, FormField } from "@/core/components/base/form";
@@ -16,7 +16,7 @@ import {
 	serviceCreateSchema,
 	ServiceAmiCreate,
 } from "../utils/schemas/service.schema";
-import TextAreaEditor from "@/ami/shared/components/custom/input/TextAreaEditor";
+import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import {
 	Select,
 	SelectContent,

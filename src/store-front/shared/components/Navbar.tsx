@@ -80,6 +80,8 @@ const NavLinkWithSublink = ({ title, subLinks }: NavLinkWithSublinkProps) => {
 };
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
 	return (
 		<div className="flex items-center justify-between">
 			<div
@@ -144,7 +146,10 @@ const Navbar = () => {
 				</NavigationMenuList>
 			</NavigationMenu>
 
-			<Button className="z-20 p-5 text-base transition-all duration-300 rounded-lg shadow-lg shadow-primary/80 hover:shadow-primary/40 hover:bg-primary/80">
+			<Button
+				className="z-20 p-5 text-base transition-all duration-300 rounded-lg shadow-lg shadow-primary/80 hover:shadow-primary/40 hover:bg-primary/80"
+				onClick={() => navigate("auth/login")}
+			>
 				<ArrowRightFromLine />
 				Login
 			</Button>

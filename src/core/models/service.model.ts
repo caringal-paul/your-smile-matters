@@ -1,6 +1,5 @@
 import { MetaData } from "../types/base.types";
 
-// [x]
 export type ServiceCategory =
 	| "Photography"
 	| "Beauty"

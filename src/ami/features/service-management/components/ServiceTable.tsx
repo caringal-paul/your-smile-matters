@@ -1,11 +1,11 @@
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 
 import servicesArray from "../mock/temp-services.json";
 
-import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 import { ServiceAmiTableType } from "../utils/types/service-table.types";
 import { useServiceColumns } from "../utils/columns/service.columns";
 import {

@@ -6,7 +6,7 @@ import servicesArray from "../../service-management/mock/temp-services.json";
 import packagesArray from "../mock/temp-packages.json";
 
 // Components
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Form, FormField, FormMessage } from "@/core/components/base/form";
@@ -19,7 +19,7 @@ import {
 	packageUpdateSchema,
 	PackageAmiUpdate,
 } from "../utils/schemas/package.schema";
-import TextAreaEditor from "@/ami/shared/components/custom/input/TextAreaEditor";
+import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import {
 	MultipleSelectInput,
 	PricingInput,

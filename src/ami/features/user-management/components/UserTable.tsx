@@ -1,4 +1,4 @@
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 import {
 	USER_TABLE_SEARCH_KEYS,
 	USERS_MODULE_FILTER_OPTIONS,
@@ -7,10 +7,10 @@ import { useUserColumns } from "../utils/columns/user.columns";
 import { UserAmiTableType } from "../utils/types/users-table.types";
 import usersArray from "../mock/temp-user.json";
 
-import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";

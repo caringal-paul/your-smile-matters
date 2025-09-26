@@ -1,13 +1,13 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
 import { UserAmiTableType } from "../types/users-table.types";
-import { DataTableRow } from "@/ami/shared/components/custom/table/DataTableRow";
+import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Column } from "@/ami/shared/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
-import StatusWithIndicator from "@/ami/shared/components/custom/indicator/StatusWithIndicator";
+import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
 

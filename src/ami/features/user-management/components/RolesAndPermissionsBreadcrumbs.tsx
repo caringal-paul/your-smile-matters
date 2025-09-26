@@ -1,5 +1,5 @@
 import BackIcon from "@/ami/shared/assets/icons/BackIcon";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { Button } from "@/core/components/base/button";
 import { Label } from "@/core/components/base/label";
 import { ChevronRight } from "lucide-react";

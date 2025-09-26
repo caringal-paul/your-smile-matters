@@ -1,13 +1,13 @@
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useState } from "react";
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 import supportForApprovalArray from "../mock/temp-support-approval.json";
 import { useSupportsForApprovalColumn } from "../utils/columns/support-approval.columns";
-import ConfirmModal from "@/ami/shared/components/custom/modal/ConfirmModal";
-import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
+import ConfirmModal from "@/ami/shared/components/modal/ConfirmModal";
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
 import { SupportsApprovalTableType } from "../utils/types/support-table.types";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 import { SUPPORT_TABLE_SEARCH_KEYS } from "../constants/support-constants";
 import { FOR_APPROVAL_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
 

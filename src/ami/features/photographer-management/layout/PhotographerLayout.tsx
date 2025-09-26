@@ -1,4 +1,4 @@
-import PageHeader from "@/ami/shared/components/custom/header/PageHeader";
+import PageHeader from "@/ami/shared/components/header/PageHeader";
 import { Outlet } from "react-router-dom";
 
 const PhotographerLayout = () => {

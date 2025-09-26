@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
-
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-import { ServiceCard } from "@/store-front/shared/components/ServiceCard";
-
 import { Label } from "@/core/components/base/label";
 import {
 	Select,
@@ -16,220 +13,231 @@ import {
 	SelectValue,
 } from "@/core/components/base/select";
 import { useNavigate } from "react-router-dom";
+import { PackageAccordionCard } from "../components/PackageAccordionCard";
+import PackageCustomizationCard from "../components/PackageCustomizationCard";
 
 const PackagePage = () => {
 	const navigate = useNavigate();
 	const [currentPage, setCurrentPage] = useState(1);
-	const servicesPerPage = 9;
+	const packagesPerPage = 6;
 
-	const allServices = [
+	const allPackages = [
 		// Photography Packages
 		{
-			category: "Photography",
-			title: "Professional Portrait Studio",
-			location: "Downtown Arts District, Road: 542, USA",
-			price: 180,
-			oldPrice: 220,
+			id: "photo-portrait-pro",
+			name: "Professional Portrait Studio Package",
+			description:
+				"Complete portrait photography session with professional editing and multiple outfit changes in our premium studio.",
 			image:
 				"https://images.unsplash.com/photo-1554048612-b6a482b224b4?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"2-hour studio session",
+				"Professional lighting setup",
+				"Up to 3 outfit changes",
+				"50 edited high-resolution photos",
+				"Online gallery access",
+				"Print release included",
+			],
+			price: 180,
+			oldPrice: 220,
+			looks: 3,
 		},
 		{
-			category: "Photography",
-			title: "Wedding Photography Pro",
-			location: "Sunset Boulevard, Road: 789, USA",
+			id: "wedding-photo-pro",
+			name: "Wedding Photography Pro Package",
+			description:
+				"Comprehensive wedding photography coverage from preparation to reception with dual photographer team.",
+			image:
+				"https://images.unsplash.com/photo-1511285560929-80b023f02d71?w=400&h=300&fit=crop",
+			status: "unavailable" as const,
+			services: [
+				"8-hour wedding day coverage",
+				"Dual photographer team",
+				"Bridal preparation photos",
+				"Ceremony and reception coverage",
+				"500+ edited photos",
+				"Wedding album (50 pages)",
+				"USB drive with all photos",
+			],
 			price: 850,
 			oldPrice: 1000,
-			image:
-				"https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=300&fit=crop",
+			looks: 2,
 		},
 		{
-			category: "Photography",
-			title: "Nature & Landscape Photos",
-			location: "Green Valley Park, Road: 123, USA",
-			price: 120,
-			oldPrice: 150,
+			id: "nature-landscape",
+			name: "Nature & Landscape Photography",
+			description:
+				"Outdoor photography session capturing stunning landscapes and natural beauty with professional equipment.",
 			image:
 				"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"3-hour outdoor session",
+				"Professional landscape equipment",
+				"Golden hour photography",
+				"30 edited high-resolution photos",
+				"Location scouting included",
+				"Weather contingency planning",
+			],
+			price: 120,
+			oldPrice: 150,
+			looks: 4,
 		},
 		{
-			category: "Photography",
-			title: "Event Photography Packages",
-			location: "City Center Plaza, Road: 456, USA",
-			price: 300,
-			oldPrice: 380,
+			id: "event-photography",
+			name: "Event Photography Package",
+			description:
+				"Professional event coverage for corporate events, parties, and special occasions with quick turnaround.",
 			image:
 				"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"4-hour event coverage",
+				"Candid and posed photography",
+				"Real-time photo sharing",
+				"100+ edited photos",
+				"Same-day highlights reel",
+				"Professional editing",
+			],
+			price: 300,
+			oldPrice: 380,
+			looks: 1,
 		},
 		// Beauty Packages
 		{
-			category: "Beauty",
-			title: "Luxury Spa & Wellness",
-			location: "Wellness District, Road: 321, USA",
-			price: 95,
-			oldPrice: 120,
+			id: "luxury-spa-wellness",
+			name: "Luxury Spa & Wellness Package",
+			description:
+				"Complete relaxation and rejuvenation experience with premium treatments and personalized care.",
 			image:
 				"https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"90-minute full body massage",
+				"Facial treatment with premium products",
+				"Manicure and pedicure",
+				"Steam room access",
+				"Healthy refreshments",
+				"Take-home skincare kit",
+			],
+			price: 95,
+			oldPrice: 120,
+			looks: 3,
 		},
 		{
-			category: "Beauty",
-			title: "Professional Makeup Artist",
-			location: "Fashion Avenue, Road: 654, USA",
-			price: 75,
-			oldPrice: 100,
+			id: "professional-makeup",
+			name: "Professional Makeup Artist Package",
+			description:
+				"Expert makeup application for special events, photoshoots, or weddings with premium cosmetics.",
 			image:
 				"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=300&fit=crop",
+			status: "unavailable" as const,
+			services: [
+				"Consultation and skin analysis",
+				"Professional makeup application",
+				"False lash application",
+				"Touch-up kit for events",
+				"Makeup removal service",
+				"Product recommendations",
+			],
+			price: 75,
+			oldPrice: 100,
+			looks: 5,
 		},
 		{
-			category: "Beauty",
-			title: "Hair Styling & Color",
-			location: "Style Central, Road: 987, USA",
-			price: 85,
-			oldPrice: 110,
+			id: "hair-styling-color",
+			name: "Hair Styling & Color Package",
+			description:
+				"Complete hair transformation with professional coloring, cutting, and styling by expert stylists.",
 			image:
 				"https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"Hair consultation and analysis",
+				"Professional color treatment",
+				"Precision cut and styling",
+				"Deep conditioning treatment",
+				"Heat protection application",
+				"Styling tips and aftercare",
+			],
+			price: 85,
+			oldPrice: 110,
+			looks: 2,
 		},
 		{
-			category: "Beauty",
-			title: "Nail Art & Manicure",
-			location: "Beauty Plaza, Road: 147, USA",
-			price: 45,
-			oldPrice: 65,
+			id: "nail-art-manicure",
+			name: "Nail Art & Manicure Package",
+			description:
+				"Creative nail art designs with professional manicure service using premium nail products.",
 			image:
 				"https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Beauty",
-			title: "Skincare & Facial Treatments",
-			location: "Glow Center, Road: 258, USA",
-			price: 110,
-			oldPrice: 140,
-			image:
-				"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=300&fit=crop",
-		},
-		// Styling Packages
-		{
-			category: "Styling",
-			title: "Personal Fashion Stylist",
-			location: "Fashion District, Road: 369, USA",
-			price: 150,
-			oldPrice: 200,
-			image:
-				"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Wardrobe Consulting",
-			location: "Style Boulevard, Road: 741, USA",
-			price: 200,
-			oldPrice: 250,
-			image:
-				"https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Interior Design Packages",
-			location: "Design Hub, Road: 852, USA",
-			price: 400,
-			oldPrice: 500,
-			image:
-				"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Event Styling & Decor",
-			location: "Party Central, Road: 963, USA",
-			price: 320,
-			oldPrice: 400,
-			image:
-				"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&h=300&fit=crop",
+			status: "unavailable" as const,
+			services: [
+				"Hand and nail care treatment",
+				"Custom nail art design",
+				"Gel or regular polish application",
+				"Cuticle care and shaping",
+				"Hand massage with moisturizer",
+				"Nail care maintenance tips",
+			],
+			price: 45,
+			oldPrice: 65,
+			looks: 1,
 		},
 		// Equipment Packages
 		{
-			category: "Equipment",
-			title: "Photography Equipment Rental",
-			location: "Tech Rental Hub, Road: 159, USA",
-			price: 80,
-			oldPrice: 100,
+			id: "photo-equipment-rental",
+			name: "Photography Equipment Rental",
+			description:
+				"Professional photography equipment rental with delivery and setup assistance for your projects.",
 			image:
 				"https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"DSLR camera with multiple lenses",
+				"Professional lighting kit",
+				"Tripods and stabilizers",
+				"Memory cards and batteries",
+				"Equipment delivery and pickup",
+				"24/7 technical support",
+			],
+			price: 80,
+			oldPrice: 100,
+			looks: 4,
 		},
 		{
-			category: "Equipment",
-			title: "Audio & Sound Equipment",
-			location: "Music District, Road: 357, USA",
-			price: 120,
-			oldPrice: 150,
+			id: "audio-sound-equipment",
+			name: "Audio & Sound Equipment Package",
+			description:
+				"Complete audio equipment rental for events, recordings, and presentations with technical support.",
 			image:
 				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Equipment",
-			title: "Lighting Equipment Rental",
-			location: "Studio Row, Road: 753, USA",
-			price: 90,
-			oldPrice: 120,
-			image:
-				"https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Equipment",
-			title: "Video Production Gear",
-			location: "Media Center, Road: 951, USA",
-			price: 200,
-			oldPrice: 250,
-			image:
-				"https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=400&h=300&fit=crop",
-		},
-		// Other Packages
-		{
-			category: "Other",
-			title: "Social Media Management",
-			location: "Digital Hub, Road: 159, USA",
-			price: 250,
-			oldPrice: 300,
-			image:
-				"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Brand Consulting Packages",
-			location: "Business District, Road: 357, USA",
-			price: 350,
-			oldPrice: 420,
-			image:
-				"https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Creative Workshop Sessions",
-			location: "Art Quarter, Road: 753, USA",
-			price: 65,
-			oldPrice: 85,
-			image:
-				"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Digital Art Commissions",
-			location: "Creative Space, Road: 951, USA",
-			price: 180,
-			oldPrice: 220,
-			image:
-				"https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop",
+			status: "available" as const,
+			services: [
+				"Professional microphone system",
+				"Sound mixing console",
+				"Speaker system with amplifiers",
+				"Wireless communication devices",
+				"Audio recording equipment",
+				"On-site technical assistance",
+			],
+			price: 120,
+			oldPrice: 150,
+			looks: 2,
 		},
 	];
 
 	// Calculate pagination
-	const totalPages = Math.ceil(allServices.length / servicesPerPage);
-	const startIndex = (currentPage - 1) * servicesPerPage;
-	const endIndex = startIndex + servicesPerPage;
-	const currentServices = allServices.slice(startIndex, endIndex);
+	const totalPages = Math.ceil(allPackages.length / packagesPerPage);
+	const startIndex = (currentPage - 1) * packagesPerPage;
+	const endIndex = startIndex + packagesPerPage;
+	const currentPackages = allPackages.slice(startIndex, endIndex);
 
 	// Pagination handlers
 	const goToPage = (page: number) => {
 		window.scrollTo({ top: 100, behavior: "smooth" });
 		setCurrentPage(page);
-		// Scroll to top of packages grid
 	};
 
 	const goToPrevPage = () => {
@@ -266,25 +274,26 @@ const PackagePage = () => {
 			<div className="flex mx-auto max-w-7xl">
 				{/* Sidebar */}
 				<div className="sticky space-y-4 p-6 bg-white rounded-lg shadow-sm w-80 h-fit top-4">
-					{/* Categories */}
+					{/* Search */}
 					<Label className="text-xl text-primary font-bold">
 						Search Package:
 					</Label>
 					<Input
 						className="h-[38px] text-sm xl:text-base placeholder:text-base font-normal"
-						placeholder="Browse for service names here"
+						placeholder="Browse for package names here"
 					/>
-
-					{/* <CategoriesFilterCard /> */}
-
-					{/* Pricing */}
-					{/* <PricingFilterCard /> */}
 
 					{/* Search Button */}
 					<Button className="w-full px-6 bg-gradient-to-r from-primary to-primary/65 hover:opacity-90">
 						<Search size={16} className="mr-2" />
 						Search Now
 					</Button>
+
+					<PackageCustomizationCard
+						onCustomize={() => {
+							console.log("Customize");
+						}}
+					/>
 				</div>
 
 				{/* Main Content */}
@@ -294,7 +303,7 @@ const PackagePage = () => {
 						<div className="flex flex-row gap-4">
 							<h1 className="mb-2 text-2xl font-bold">
 								We Found{" "}
-								<span className="text-primary">{allServices.length}</span>{" "}
+								<span className="text-primary">{allPackages.length}</span>{" "}
 								Packages
 							</h1>
 							<Button className="text-xs rounded-2xl px-4 py-2 h-8 bg-secondary hover:bg-secondary-foreground">
@@ -335,24 +344,33 @@ const PackagePage = () => {
 
 					{/* Page Info */}
 					<div className="mb-4 text-sm text-gray-600">
-						Showing {startIndex + 1}-{Math.min(endIndex, allServices.length)} of{" "}
-						{allServices.length} packages
+						Showing {startIndex + 1}-{Math.min(endIndex, allPackages.length)} of{" "}
+						{allPackages.length} packages
 					</div>
 
-					{/* Packages Grid */}
-					<div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-3">
-						{currentServices.map((service, index) => (
-							<ServiceCard
-								key={startIndex + index}
-								category={service.category}
-								title={service.title}
-								location={service.location}
-								price={service.price}
-								oldPrice={service.oldPrice}
-								image={service.image}
+					{/* Packages List - Accordion Layout */}
+					<div className="flex flex-col space-y-4 mb-8">
+						{currentPackages.map((packageItem) => (
+							<PackageAccordionCard
+								key={packageItem.id}
+								id={packageItem.id}
+								name={packageItem.name}
+								description={packageItem.description}
+								image={packageItem.image}
+								status={packageItem.status}
+								services={packageItem.services}
+								price={packageItem.price}
+								oldPrice={packageItem.oldPrice}
+								looks={packageItem.looks}
 								onBook={() => {
 									window.scrollTo({ top: 0, behavior: "smooth" });
-									navigate("/packages/service/1/service-details");
+									navigate(
+										`/packages/service/${packageItem.id}/service-details`
+									);
+								}}
+								onView={() => {
+									window.scrollTo({ top: 0, behavior: "smooth" });
+									navigate(`/packages/service/${packageItem.id}/details`);
 								}}
 							/>
 						))}

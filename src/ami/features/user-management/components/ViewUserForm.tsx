@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import FormCard from "@/ami/shared/components/card/FormCard";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { Button } from "@/core/components/base/button";
 import { Label } from "@/core/components/base/label";
 import BackIcon from "@/ami/shared/assets/icons/BackIcon";
@@ -40,9 +40,7 @@ const ViewUserForm = () => {
 
 	console.log(userWithRolesAndPermissions);
 
-
-
-// WORKON ADD IS_ACTIVE
+	// WORKON ADD IS_ACTIVE
 	return (
 		<FormCard>
 			<FormCard.Body className="mt-0 mb-2 space-y-4">

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
 import { Label } from "@/core/components/base/label";
 import { Switch } from "@/core/components/base/switch";

@@ -1,18 +1,18 @@
-import DataTable from "@/ami/shared/components/custom/table/DataTable";
+import DataTable from "@/ami/shared/components/table/DataTable";
 import { USERS_MODULE_FILTER_OPTIONS } from "../constants/user-constants";
 
 import userLogs from "../mock/temp-user-logs.json";
 
-import TableFilter from "@/ami/shared/components/custom/filter/TableFilter";
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
 
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { Button } from "@/core/components/base/button";
 import InfoIcon from "@/ami/shared/assets/icons/InfoIcon";
 import { UserLogsTableType } from "../utils/types/user-logs-table.types";
 import { useUserLogsColumns } from "../utils/columns/user-logs.columns";
 import ExportIcon from "@/ami/shared/assets/icons/ExportIcon";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-import TableSearch from "@/ami/shared/components/custom/filter/TableSearch";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 
 const USER_LOGS_TABLE_SEARCH_KEYS: (keyof UserLogsTableType)[] = [
 	"name",

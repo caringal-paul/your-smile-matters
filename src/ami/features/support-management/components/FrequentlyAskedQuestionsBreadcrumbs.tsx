@@ -1,6 +1,6 @@
 import BackIcon from "@/ami/shared/assets/icons/BackIcon";
 import { Button } from "@/core/components/base/button";
-import SectionHeader from "@/ami/shared/components/custom/header/SectionHeader";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { ChevronRight } from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
 

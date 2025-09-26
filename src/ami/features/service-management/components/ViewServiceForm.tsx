@@ -1,5 +1,5 @@
 // Components
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { cn } from "@/core/lib/utils";
 import { Label } from "@/core/components/base/label";
 import { useParams } from "react-router-dom";

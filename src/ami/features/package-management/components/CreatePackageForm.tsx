@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import servicesArray from "../../service-management/mock/temp-services.json";
 
 // Components
-import FormCard from "@/ami/shared/components/custom/card/FormCard";
+import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Form, FormField, FormMessage } from "@/core/components/base/form";
@@ -13,13 +13,13 @@ import { cn } from "@/core/lib/utils";
 import { Switch } from "@/core/components/base/switch";
 import { Label } from "@/core/components/base/label";
 import { useState } from "react";
-import ConfirmModal from "@/ami/shared/components/custom/modal/ConfirmModal";
+import ConfirmModal from "@/ami/shared/components/modal/ConfirmModal";
 
 import {
 	packageCreateSchema,
 	PackageAmiCreate,
 } from "../utils/schemas/package.schema";
-import TextAreaEditor from "@/ami/shared/components/custom/input/TextAreaEditor";
+import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import {
 	MultipleSelectInput,
 	PricingInput,

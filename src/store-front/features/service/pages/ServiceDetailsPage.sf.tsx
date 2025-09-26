@@ -126,9 +126,9 @@ const ServiceDetailsPage: React.FC = () => {
 									<img
 										key={index}
 										src={img || "/sf/ysm-card-fallback.png"}
-										// onError={(e) => {
-										// 	e.currentTarget.src = "/sf/ysm-card-fallback.png";
-										// }}
+										onError={(e) => {
+											e.currentTarget.src = "/sf/ysm-card-fallback.png";
+										}}
 										alt={`Service ${index + 1}`}
 										onClick={() => setCurrent(index)}
 										className={`w-full h-20 sm:h-24 lg:h-28 object-cover rounded-lg cursor-pointer transition-opacity  border-2 border-border    ${

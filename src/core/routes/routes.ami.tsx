@@ -2,6 +2,7 @@ import { Outlet, Route } from "react-router-dom";
 import authRoutes from "./AuthRoutes.ami";
 import baseRoutes from "./BaseRoutes.ami";
 import mainRoutes from "./MainRoutes.sf";
+import sfAuthRoutes from "./AuthRoutes.sf";
 
 export const routes = (
 	<>
@@ -25,6 +26,7 @@ export const routes = (
 				</div>
 			}
 		>
+			{sfAuthRoutes}
 			{mainRoutes}
 		</Route>
 	</>
