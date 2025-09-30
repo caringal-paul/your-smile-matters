@@ -8,6 +8,8 @@ import { Button } from "@/core/components/base/button";
 import { Badge } from "@/core/components/base/badge";
 import { Check, ChevronDown, Search, X } from "lucide-react";
 import { SelectOptions } from "@/core/types/option.types";
+import { Input } from "../base/input";
+import { cn } from "@/core/lib/utils";
 
 type MultipleSelectInput = {
 	placeholder?: string;
@@ -412,4 +414,46 @@ const PricingInput: React.FC<PricingInputProps> = ({
 	);
 };
 
-export { MultipleSelectInput, PricingInput };
+type InputWithSuffixProps = React.InputHTMLAttributes<HTMLInputElement> & {
+	className?: string;
+	placeholder?: string;
+	disabled?: boolean;
+	readOnly?: boolean;
+	suffix?: string;
+	value?: string | number;
+	type: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const InputWithSuffix = ({
+	className,
+	placeholder,
+	disabled,
+	readOnly,
+	suffix,
+	value,
+	onChange,
+	type = "text",
+	...props
+}: InputWithSuffixProps) => {
+	return (
+		<div className="flex flex-row relative">
+			<Input
+				type={type}
+				readOnly={readOnly}
+				placeholder={placeholder}
+				disabled={disabled}
+				value={value}
+				className={cn(`text-[11px] max-w-[15em] w-[15em] pr-11`, className)}
+				onChange={onChange}
+				{...props}
+			/>
+
+			<span className="absolute right-3 top-1/2 -translate-y-1/2  text-2xs 2xl:text-xs text-gray-200">
+				{suffix}
+			</span>
+		</div>
+	);
+};
+
+export { MultipleSelectInput, PricingInput, InputWithSuffix };

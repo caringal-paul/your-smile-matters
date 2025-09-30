@@ -5,20 +5,23 @@ import ServicePage from "@/store-front/features/service/pages/ServicePage.sf";
 import PageContainer from "@/store-front/shared/components/PageContainer";
 import ServiceDetailsPage from "@/store-front/features/service/pages/ServiceDetailsPage.sf";
 import PackagePage from "@/store-front/features/package/pages/PackagePage";
+import BookingLayout from "@/store-front/features/booking/layout/BookingLayout";
 
 const mainRoutes = (
 	<Route path="/" element={<MainLayout />}>
 		<Route index element={<HomePage />} />
 
 		<Route element={<PageContainer />}>
-			<Route path="services" element={<ServicePage />} />
+			<Route element={<BookingLayout />}>
+				<Route path="services" element={<ServicePage />} />
 
-			<Route
-				path="services/service/:id/service-details"
-				element={<ServiceDetailsPage />}
-			/>
+				<Route
+					path="services/service/:id/service-details"
+					element={<ServiceDetailsPage />}
+				/>
 
-			<Route path="packages" element={<PackagePage />} />
+				<Route path="packages" element={<PackagePage />} />
+			</Route>
 		</Route>
 	</Route>
 );

@@ -1,27 +1,31 @@
 import { Card, CardContent, CardHeader } from "@/core/components/base/card";
 import { Button } from "@/core/components/base/button";
-import { Heart, MapPin } from "lucide-react";
+import { Book, Clock, Eye, Heart, MapPin } from "lucide-react";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
+import { formatDuration } from "../helpers/formatDurationMinutes";
+import { Badge } from "@/core/components/base/badge";
 import { Label } from "@/core/components/base/label";
 
 interface ServiceCardProps {
 	category: string;
 	title: string;
-	location: string;
+	duration_minutes: number | null;
 	price: number;
 	oldPrice?: number;
 	image: string;
 	onBook?: () => void;
+	onView?: () => void;
 }
 
 export function ServiceCard({
 	category,
 	title,
-	location,
+	duration_minutes,
 	price,
 	oldPrice,
 	image,
 	onBook,
+	onView,
 }: ServiceCardProps) {
 	return (
 		<Card className="max-w-xs overflow-hidden transition shadow-md rounded-2xl hover:shadow-lg">
@@ -41,33 +45,45 @@ export function ServiceCard({
 			</CardHeader>
 
 			{/* Content */}
-			<CardContent className="p-5 space-y-3">
-				<p className="text-sm text-gray-500">{category}</p>
-				<h3 className="text-lg font-semibold">{title}</h3>
+			<CardContent className="p-4 pb-6 space-y-1 ">
+				<Label className="text-2xl font-bold tracking-normal">{title}</Label>
+				<div className="flex gap-2 items-center">
+					<Badge className="hover:bg-secondary bg-secondary">{category}</Badge>
 
-				{/* Location */}
-				<div className="flex items-center gap-2 text-sm text-gray-600 w-[17em]">
-					<MapPin size={16} className="shrink-0" />
-					<span className="truncate">{location}</span>
+					{/* duration_minutes */}
+					<div className="flex items-center gap-1 text-2xs text-gray-400">
+						<Clock size={12} className="shrink-0" />
+						<span className="truncate">
+							{formatDuration(duration_minutes ?? 120)}
+						</span>
+					</div>
+				</div>
+
+				<div className="flex flex-row items-center justify-start gap-2 tracking-tight">
+					<span className="text-lg font-semibold ">
+						{formatToPeso(price.toFixed(2))}
+					</span>
+					{oldPrice && (
+						<span className="text-sm text-gray-400 line-through">
+							{formatToPeso(oldPrice.toFixed(2))}
+						</span>
+					)}
 				</div>
 
 				{/* Price + Button */}
 				<div className="flex items-center justify-between pt-3">
-					<div className="flex flex-col justify-start gap-2">
-						<span className="text-xl font-bold">
-							{formatToPeso(price.toFixed(2))}
-						</span>
-						{oldPrice && (
-							<span className="text-sm text-gray-400 line-through">
-								{formatToPeso(oldPrice.toFixed(2))}
-							</span>
-						)}
-					</div>
 					<Button
 						onClick={onBook}
-						className="px-6 bg-gradient-to-r from-primary to-primary/65 hover:opacity-90"
+						className="text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
 					>
-						View Service
+						<Book />
+						Book Service
+					</Button>
+					<Button
+						onClick={onView}
+						className="text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
+					>
+						<Eye /> View Service
 					</Button>
 				</div>
 			</CardContent>

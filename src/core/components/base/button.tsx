@@ -28,7 +28,7 @@ const buttonVariants = cva(
 				roleSelected:
 					"w-full justify-between rounded-[13px] shadow-none border-2 text-white bg-primary-foreground",
 
-				ghost: "hover:bg-accent hover:text-accent-foreground ",
+				ghost: "hover:bg-accent hover:text-accent-foreground",
 				edit: "text-2xs text-foreground gap-1 hover:border-b-[1px] hover:border-secondary rounded-none shadow-none [&_svg]:size-3 [&_svg]:shrink-0",
 
 				dismiss:

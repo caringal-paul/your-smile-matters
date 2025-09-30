@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function formatToTableDate(isoString: string): string {
 	const now = new Date(isoString);
 
@@ -32,12 +34,6 @@ export const formatDateToTextMonth = (utcDate: string): string => {
 	}).format(date);
 };
 
-export const formatDisplayDate = (dateString: string): string => {
-	if (!dateString) return "";
-	const [year, month, day] = dateString.split("-");
-	return `${month} - ${day} - ${year}`;
-};
-
 export const getFormattedToday = (): string => {
 	const today = new Date();
 
@@ -48,3 +44,74 @@ export const getFormattedToday = (): string => {
 	// * This will return mm - dd - yyyy
 	return `${year} - ${month} -  ${day}`;
 };
+export const formatDisplayDate = (dateString: string): string => {
+	if (!dateString) return "";
+	const [year, month, day] = dateString.split("-");
+	return `${month} - ${day} - ${year}`;
+};
+
+// HIGHLY USED
+
+/**
+ *  @returns format: Month Day, Year (e.g., January 01, 2024)
+ */
+export function formatToNormalDate(utcDate: string | Date): string {
+	const date = new Date(utcDate);
+	const month = date.toLocaleString("default", { month: "long" });
+	const day = String(date.getDate()).padStart(2, "0");
+	const year = date.getFullYear();
+
+	return `${month}, ${day}, ${year}`;
+}
+
+/**
+ *  @returns format: 2025-10-06T00:00:00Z
+ */
+export const formatToUtc = (date: Date): Date => {
+	const utcDate = new Date(
+		Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+	);
+	return utcDate;
+};
+
+/**
+ *  @returns format: 00:00 || 16:30
+ */
+export function formatTo24HourTime(time12h: string): string {
+	const match = time12h
+		.trim()
+		.toLowerCase()
+		.match(/^(\d{1,2}):(\d{2})\s?(am|pm)$/);
+
+	if (!match) {
+		throw new Error(`Invalid time format: ${time12h}`);
+	}
+
+	let [_, hoursStr, minutes, meridian] = match;
+	let hours = parseInt(hoursStr, 10);
+
+	if (meridian === "pm" && hours < 12) {
+		hours += 12;
+	}
+	if (meridian === "am" && hours === 12) {
+		hours = 0;
+	}
+
+	// Always return HH:MM with leading zero
+	return `${hours.toString().padStart(2, "0")}:${minutes}`;
+}
+
+/**
+ *  @returns format: 05:00 AM || 06:30 PM
+ */
+export function formatToNormalTime(time24: string): string {
+	if (!time24) return "";
+
+	const [hourStr, minute] = time24.split(":");
+	let hour = parseInt(hourStr, 10);
+
+	const period = hour >= 12 ? "PM" : "AM";
+	hour = hour % 12 || 12; // convert 0 → 12 for AM, 13 → 1 for PM
+
+	return `${hour.toString().padStart(2, "0")}:${minute} ${period}`;
+}

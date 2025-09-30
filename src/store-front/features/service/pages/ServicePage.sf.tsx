@@ -17,206 +17,151 @@ import {
 	SelectValue,
 } from "@/core/components/base/select";
 import { useNavigate } from "react-router-dom";
+import {
+	PaymentMethod,
+	useBookingFormStore,
+} from "@/store-front/store/useBookingFormStore";
+import { formatToUtc } from "@/ami/shared/helpers/formatDate";
+
+interface Service {
+	_id: string;
+	name: string;
+	description: string;
+	category: "Beauty" | "Photography" | "Styling" | "Other";
+	price: number;
+	old_price?: number;
+	duration_minutes: number | null;
+	is_available: boolean;
+	service_gallery: string[];
+}
 
 const ServicePage = () => {
 	const navigate = useNavigate();
+
+	const { openModal, saveOriginalForm } = useBookingFormStore();
+
 	const [currentPage, setCurrentPage] = useState(1);
 	const servicesPerPage = 9;
 
-	const allServices = [
-		// Photography Services
+	const allServices: Service[] = [
 		{
+			_id: "68db7cd6a46929dc4e9479f0",
+			name: "Bridal Makeup",
+			description:
+				"<p><b>💍 Bridal Makeup</b> includes a <i>trial session</i> to perfect your look before the big day.</p><ul><li>✨ <b>Consultation</b> for personalized style</li><li>💄 <i>Premium waterproof products</i></li><li>📸 <b>Camera-ready finish</b></li></ul><p><s>Old Price: 3000</s> <b>Now only 2500!</b></p>",
+			category: "Beauty",
+			price: 2500,
+			old_price: 3000,
+			duration_minutes: 120,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2",
+				"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+				"https://images.unsplash.com/photo-1516975080664-ed2fc6a32937",
+			],
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479ef",
+			name: "Event Photography",
+			description:
+				"<p><b>📷 Event Photography</b> captures <i>every important moment</i> of your gathering.</p><ol><li>🎉 <b>Corporate & Social Coverage</b></li><li>🤵 <i>Candid Highlights</i></li><li>👨‍👩‍👧 Group Portraits</li></ol><p><b>Special Deal:</b> Free editing on 10 selected photos!</p>",
 			category: "Photography",
-			title: "Professional Portrait Studio",
-			location: "Downtown Arts District, Road: 542, USA",
-			price: 180,
-			oldPrice: 220,
-			image:
-				"https://images.unsplash.com/photo-1554048612-b6a482b224b4?w=400&h=300&fit=crop",
+			price: 3500,
+			duration_minutes: 240,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
+				"https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+			],
 		},
 		{
+			_id: "68db7cd6a46929dc4e9479f2",
+			name: "Hair Styling",
+			description:
+				"<p><b>💇 Hair Styling</b> tailored to your <i>special event</i>.</p><ul><li>👑 Elegant Updos</li><li>🌊 Beach Waves</li><li>✨ Sleek Straightening</li></ul><p><b>Pro Tip:</b> Book with makeup for a <s>10% discount</s>.</p>",
+			category: "Styling",
+			price: 800,
+			duration_minutes: 60,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1562322140-8baeececf3df",
+				"https://images.unsplash.com/photo-1605497788044-5a32c7078486",
+				"https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1",
+			],
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479f1",
+			name: "Party Makeup",
+			description:
+				"<p><b>💃 Party Makeup</b> for a <i>glamorous</i> night out.</p><ol><li>🔥 Smokey Eyes</li><li>✨ Glitter Highlights</li><li>🌟 Natural Glow Finish</li></ol><p><s>Regular 1500</s> <b>Now only 1200!</b></p>",
+			category: "Beauty",
+			price: 1200,
+			duration_minutes: 90,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1560066984-138dadb4c035",
+				"https://images.unsplash.com/photo-1583001809809-a2b0c6e3f22f",
+			],
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479ed",
+			name: "Photo Editing",
+			description:
+				"<p><b>🖼️ Photo Editing</b> for stunning transformations.</p><ul><li>💎 Skin Retouching</li><li>🎨 Color Correction</li><li>🌅 Background Cleanup</li></ul><p><b>Price:</b> 500 per photo</p>",
+			category: "Other",
+			price: 500,
+			duration_minutes: null,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1542744173-8e7e53415bb0",
+			],
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479ed",
+			name: "Portrait Photography",
+			description:
+				"<p><b>📸 Portrait Photography</b> for timeless shots.</p><ul><li>💡 Studio Lighting</li><li>🌳 Outdoor Natural Light</li><li>🖼️ Up to 20 Edited Shots</li></ul><p><s>Old Price: 2000</s> <b>Now 1500!</b></p>",
 			category: "Photography",
-			title: "Wedding Photography Pro",
-			location: "Sunset Boulevard, Road: 789, USA",
-			price: 850,
-			oldPrice: 1000,
-			image:
-				"https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=300&fit=crop",
+			price: 1500,
+			old_price: 2000,
+			duration_minutes: 60,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04",
+				"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+				"https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+			],
 		},
 		{
+			_id: "68db7cd6a46929dc4e9479ed",
+			name: "Videography",
+			description:
+				"<p><b>🎬 Videography</b> that tells your story in cinematic style.</p><ul><li>📹 HD & 4K Recording</li><li>✂️ Professional Editing</li><li>🎞️ Highlight Reel</li></ul><p><s>Starting at 5000</s> <b>Now 5000</b></p>",
+			category: "Other",
+			price: 5000,
+			duration_minutes: 480,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1492691527719-9d1e07e534b4",
+				"https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+			],
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479f7",
+			name: "Wedding Photography",
+			description:
+				"<p><b>💒 Wedding Photography</b> for <i>unforgettable memories</i>.</p><ol><li>💍 Pre-Wedding Shoot</li><li>👰 Ceremony Coverage</li><li>🎉 Reception Highlights</li></ol><p><s>Old Price: 10000</s> <b>Now 8000!</b></p>",
 			category: "Photography",
-			title: "Nature & Landscape Photos",
-			location: "Green Valley Park, Road: 123, USA",
-			price: 120,
-			oldPrice: 150,
-			image:
-				"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Photography",
-			title: "Event Photography Services",
-			location: "City Center Plaza, Road: 456, USA",
-			price: 300,
-			oldPrice: 380,
-			image:
-				"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop",
-		},
-		// Beauty Services
-		{
-			category: "Beauty",
-			title: "Luxury Spa & Wellness",
-			location: "Wellness District, Road: 321, USA",
-			price: 95,
-			oldPrice: 120,
-			image:
-				"https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Beauty",
-			title: "Professional Makeup Artist",
-			location: "Fashion Avenue, Road: 654, USA",
-			price: 75,
-			oldPrice: 100,
-			image:
-				"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Beauty",
-			title: "Hair Styling & Color",
-			location: "Style Central, Road: 987, USA",
-			price: 85,
-			oldPrice: 110,
-			image:
-				"https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Beauty",
-			title: "Nail Art & Manicure",
-			location: "Beauty Plaza, Road: 147, USA",
-			price: 45,
-			oldPrice: 65,
-			image:
-				"https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Beauty",
-			title: "Skincare & Facial Treatments",
-			location: "Glow Center, Road: 258, USA",
-			price: 110,
-			oldPrice: 140,
-			image:
-				"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=300&fit=crop",
-		},
-		// Styling Services
-		{
-			category: "Styling",
-			title: "Personal Fashion Stylist",
-			location: "Fashion District, Road: 369, USA",
-			price: 150,
-			oldPrice: 200,
-			image:
-				"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Wardrobe Consulting",
-			location: "Style Boulevard, Road: 741, USA",
-			price: 200,
-			oldPrice: 250,
-			image:
-				"https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Interior Design Services",
-			location: "Design Hub, Road: 852, USA",
-			price: 400,
-			oldPrice: 500,
-			image:
-				"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Styling",
-			title: "Event Styling & Decor",
-			location: "Party Central, Road: 963, USA",
-			price: 320,
-			oldPrice: 400,
-			image:
-				"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&h=300&fit=crop",
-		},
-		// Equipment Services
-		{
-			category: "Equipment",
-			title: "Photography Equipment Rental",
-			location: "Tech Rental Hub, Road: 159, USA",
-			price: 80,
-			oldPrice: 100,
-			image:
-				"https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Equipment",
-			title: "Audio & Sound Equipment",
-			location: "Music District, Road: 357, USA",
-			price: 120,
-			oldPrice: 150,
-			image:
-				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Equipment",
-			title: "Lighting Equipment Rental",
-			location: "Studio Row, Road: 753, USA",
-			price: 90,
-			oldPrice: 120,
-			image:
-				"https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Equipment",
-			title: "Video Production Gear",
-			location: "Media Center, Road: 951, USA",
-			price: 200,
-			oldPrice: 250,
-			image:
-				"https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=400&h=300&fit=crop",
-		},
-		// Other Services
-		{
-			category: "Other",
-			title: "Social Media Management",
-			location: "Digital Hub, Road: 159, USA",
-			price: 250,
-			oldPrice: 300,
-			image:
-				"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Brand Consulting Services",
-			location: "Business District, Road: 357, USA",
-			price: 350,
-			oldPrice: 420,
-			image:
-				"https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Creative Workshop Sessions",
-			location: "Art Quarter, Road: 753, USA",
-			price: 65,
-			oldPrice: 85,
-			image:
-				"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
-		},
-		{
-			category: "Other",
-			title: "Digital Art Commissions",
-			location: "Creative Space, Road: 951, USA",
-			price: 180,
-			oldPrice: 220,
-			image:
-				"https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop",
+			price: 8000,
+			old_price: 10000,
+			duration_minutes: 480,
+			is_available: true,
+			service_gallery: [
+				"https://images.unsplash.com/photo-1519741497674-611481863552",
+				"https://images.unsplash.com/photo-1606800052052-a08af7148866",
+				"https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+				"https://images.unsplash.com/photo-1525258847-a273d31b68fd",
+			],
 		},
 	];
 
@@ -346,14 +291,58 @@ const ServicePage = () => {
 							<ServiceCard
 								key={startIndex + index}
 								category={service.category}
-								title={service.title}
-								location={service.location}
+								title={service.name}
+								duration_minutes={service.duration_minutes}
 								price={service.price}
-								oldPrice={service.oldPrice}
-								image={service.image}
+								oldPrice={service.old_price}
+								image={service.service_gallery[0]}
 								onBook={() => {
+									const initialData = {
+										services: [
+											{
+												_id: service._id,
+												quantity: 1,
+												price_per_unit: service.price,
+												total_price: service.price,
+												duration_minutes: service.duration_minutes,
+											},
+										],
+
+										is_customized: false,
+										customer_id: "12",
+										customization_notes: null,
+										package_id: null,
+
+										booking_date: formatToUtc(new Date()),
+										start_time: "",
+										end_time: "",
+										session_duration_minutes: 0,
+										location: "",
+
+										photographer_id: "",
+										photographer_name: null,
+										theme: null,
+										special_requests: null,
+
+										total_amount: service.price,
+										discount_amount: 0,
+										promo_id: null,
+										final_amount: service.price,
+										amount_paid: 0,
+										method_of_payment: null,
+										payment_images: [],
+
+										is_booking_sent: false,
+										status: "Pending" as const,
+										booking_reference: "",
+									};
+
+									openModal();
+									saveOriginalForm(initialData);
+								}}
+								onView={() => {
 									window.scrollTo({ top: 0, behavior: "smooth" });
-									navigate("/services/service/1/service-details");
+									navigate(`/services/service/${service._id}/service-details`);
 								}}
 							/>
 						))}

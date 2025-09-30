@@ -15,216 +15,440 @@ import {
 import { useNavigate } from "react-router-dom";
 import { PackageAccordionCard } from "../components/PackageAccordionCard";
 import PackageCustomizationCard from "../components/PackageCustomizationCard";
+import {
+	PaymentMethod,
+	useBookingFormStore,
+} from "@/store-front/store/useBookingFormStore";
+import { formatToUtc } from "@/ami/shared/helpers/formatDate";
+
+// WORKON REMOVE THIS HERE
+export interface ServiceDetails {
+	_id: string;
+	name: string;
+	description: string;
+	category: string;
+	price: number;
+	old_price?: number;
+	duration_minutes: number;
+	is_available: boolean;
+	service_gallery: string[];
+	is_active: boolean;
+	__v: number;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface PackageService {
+	service_id: string;
+	quantity: number;
+	price_per_unit: number;
+	total_price: number;
+	duration_minutes: number;
+	_id: string;
+	service_details: ServiceDetails;
+}
+
+export interface Package {
+	_id: string;
+	name: string;
+	description: string;
+	image: string;
+	package_price: number;
+	discount_percentage: number;
+	discount_amount: number | null;
+	final_price: number;
+	looks: number;
+	custom_duration_minutes: number | null;
+	is_available: boolean;
+	is_active: boolean;
+	services: PackageService[];
+	created_at: string;
+	updated_at: string;
+}
 
 const PackagePage = () => {
 	const navigate = useNavigate();
 	const [currentPage, setCurrentPage] = useState(1);
 	const packagesPerPage = 6;
 
-	const allPackages = [
-		// Photography Packages
+	const {
+		openModal,
+		clearForm,
+		setLoading,
+		saveOriginalForm,
+		setFieldImmediate,
+	} = useBookingFormStore();
+
+	const handleBook = (pkg: Package) => {
+		const initialData = {
+			services: pkg.services.map(
+				({
+					service_id,
+					quantity,
+					price_per_unit,
+					total_price,
+					duration_minutes,
+				}) => ({
+					_id: service_id,
+					quantity: quantity,
+					price_per_unit: price_per_unit,
+					total_price: total_price,
+					duration_minutes: duration_minutes,
+				})
+			),
+
+			is_customized: false,
+			customer_id: "12",
+			customization_notes: null,
+			package_id: pkg._id,
+
+			booking_date: formatToUtc(new Date()),
+			start_time: "",
+			end_time: "",
+			session_duration_minutes: 0,
+			location: "",
+
+			photographer_id: "",
+			photographer_name: null,
+			theme: null,
+			special_requests: null,
+
+			total_amount: pkg.package_price,
+			discount_amount: 0,
+			promo_id: null,
+			final_amount: pkg.final_price,
+			amount_paid: 0,
+			method_of_payment: null,
+			payment_images: [],
+
+			is_booking_sent: false,
+			status: "Pending" as const,
+			booking_reference: "",
+		};
+
+		try {
+			saveOriginalForm(initialData);
+			setLoading(true);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			// small timeout to ensure loading state renders
+			setLoading(false);
+			openModal();
+		}
+	};
+
+	const allPackages: Package[] = [
 		{
-			id: "photo-portrait-pro",
-			name: "Professional Portrait Studio Package",
-			description:
-				"Complete portrait photography session with professional editing and multiple outfit changes in our premium studio.",
-			image:
-				"https://images.unsplash.com/photo-1554048612-b6a482b224b4?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"2-hour studio session",
-				"Professional lighting setup",
-				"Up to 3 outfit changes",
-				"50 edited high-resolution photos",
-				"Online gallery access",
-				"Print release included",
-			],
-			price: 180,
-			oldPrice: 220,
-			looks: 3,
-		},
-		{
-			id: "wedding-photo-pro",
-			name: "Wedding Photography Pro Package",
-			description:
-				"Comprehensive wedding photography coverage from preparation to reception with dual photographer team.",
-			image:
-				"https://images.unsplash.com/photo-1511285560929-80b023f02d71?w=400&h=300&fit=crop",
-			status: "unavailable" as const,
-			services: [
-				"8-hour wedding day coverage",
-				"Dual photographer team",
-				"Bridal preparation photos",
-				"Ceremony and reception coverage",
-				"500+ edited photos",
-				"Wedding album (50 pages)",
-				"USB drive with all photos",
-			],
-			price: 850,
-			oldPrice: 1000,
-			looks: 2,
-		},
-		{
-			id: "nature-landscape",
-			name: "Nature & Landscape Photography",
-			description:
-				"Outdoor photography session capturing stunning landscapes and natural beauty with professional equipment.",
-			image:
-				"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"3-hour outdoor session",
-				"Professional landscape equipment",
-				"Golden hour photography",
-				"30 edited high-resolution photos",
-				"Location scouting included",
-				"Weather contingency planning",
-			],
-			price: 120,
-			oldPrice: 150,
-			looks: 4,
-		},
-		{
-			id: "event-photography",
-			name: "Event Photography Package",
-			description:
-				"Professional event coverage for corporate events, parties, and special occasions with quick turnaround.",
-			image:
-				"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"4-hour event coverage",
-				"Candid and posed photography",
-				"Real-time photo sharing",
-				"100+ edited photos",
-				"Same-day highlights reel",
-				"Professional editing",
-			],
-			price: 300,
-			oldPrice: 380,
+			_id: "68db7cd6a46929dc4e9479f7",
+			name: "Basic Portrait Package",
+			description: "Perfect for individual portraits and headshots",
+			image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04",
+			package_price: 2000,
+			discount_percentage: 10,
+			discount_amount: null,
+			final_price: 1800,
 			looks: 1,
-		},
-		// Beauty Packages
-		{
-			id: "luxury-spa-wellness",
-			name: "Luxury Spa & Wellness Package",
-			description:
-				"Complete relaxation and rejuvenation experience with premium treatments and personalized care.",
-			image:
-				"https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=400&h=300&fit=crop",
-			status: "available" as const,
+			custom_duration_minutes: null,
+			is_available: true,
+			is_active: true,
 			services: [
-				"90-minute full body massage",
-				"Facial treatment with premium products",
-				"Manicure and pedicure",
-				"Steam room access",
-				"Healthy refreshments",
-				"Take-home skincare kit",
+				{
+					service_id: "68db7cd6a46929dc4e9479ed",
+					quantity: 1,
+					price_per_unit: 1500,
+					total_price: 1500,
+					duration_minutes: 60,
+					_id: "68db7cd6a46929dc4e9479f8",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ed",
+						name: "Portrait Photography",
+						description:
+							"Professional portrait photography session with studio lighting",
+						category: "Photography",
+						price: 1500,
+						old_price: 2000,
+						duration_minutes: 60,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04",
+							"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+							"https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.081Z",
+						updated_at: "2025-09-30T06:46:46.081Z",
+					},
+				},
 			],
-			price: 95,
-			oldPrice: 120,
+			created_at: "2025-09-30T06:46:46.097Z",
+			updated_at: "2025-09-30T06:46:46.097Z",
+		},
+		{
+			_id: "68db7cd6a46929dc4e947a00",
+			name: "Glam Party Package",
+			description: "Party makeup with hair styling and portrait photography",
+			image: "https://images.unsplash.com/photo-1560066984-138dadb4c035",
+			package_price: 3500,
+			discount_percentage: 12,
+			discount_amount: null,
+			final_price: 3080,
+			looks: 2,
+			custom_duration_minutes: 210,
+			is_available: true,
+			is_active: true,
+			services: [
+				{
+					service_id: "68db7cd6a46929dc4e9479f1",
+					quantity: 1,
+					price_per_unit: 1200,
+					total_price: 1200,
+					duration_minutes: 90,
+					_id: "68db7cd6a46929dc4e947a01",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479f1",
+						name: "Party Makeup",
+						description: "Glamorous makeup for parties and special occasions",
+						category: "Beauty",
+						price: 1200,
+						duration_minutes: 90,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1560066984-138dadb4c035",
+							"https://images.unsplash.com/photo-1583001809809-a2b0c6e3f22f",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+				{
+					service_id: "68db7cd6a46929dc4e9479f2",
+					quantity: 1,
+					price_per_unit: 800,
+					total_price: 800,
+					duration_minutes: 60,
+					_id: "68db7cd6a46929dc4e947a02",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479f2",
+						name: "Hair Styling",
+						description: "Professional hair styling and updos for any occasion",
+						category: "Styling",
+						price: 800,
+						duration_minutes: 60,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1562322140-8baeececf3df",
+							"https://images.unsplash.com/photo-1605497788044-5a32c7078486",
+							"https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+				{
+					service_id: "68db7cd6a46929dc4e9479ed",
+					quantity: 1,
+					price_per_unit: 1500,
+					total_price: 1500,
+					duration_minutes: 60,
+					_id: "68db7cd6a46929dc4e947a03",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ed",
+						name: "Portrait Photography",
+						description:
+							"Professional portrait photography session with studio lighting",
+						category: "Photography",
+						price: 1500,
+						old_price: 2000,
+						duration_minutes: 60,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04",
+							"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+							"https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.081Z",
+						updated_at: "2025-09-30T06:46:46.081Z",
+					},
+				},
+			],
+			created_at: "2025-09-30T06:46:46.098Z",
+			updated_at: "2025-09-30T06:46:46.098Z",
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479fd",
+			name: "Event Coverage Package",
+			description: "Professional event photography and videography",
+			image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
+			package_price: 10000,
+			discount_percentage: 10,
+			discount_amount: null,
+			final_price: 9000,
+			looks: 2,
+			custom_duration_minutes: null,
+			is_available: true,
+			is_active: true,
+			services: [
+				{
+					service_id: "68db7cd6a46929dc4e9479ef",
+					quantity: 1,
+					price_per_unit: 3500,
+					total_price: 3500,
+					duration_minutes: 240,
+					_id: "68db7cd6a46929dc4e9479fe",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ef",
+						name: "Event Photography",
+						description:
+							"Professional event coverage for corporate and social events",
+						category: "Photography",
+						price: 3500,
+						duration_minutes: 240,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
+							"https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+				{
+					service_id: "68db7cd6a46929dc4e9479ed",
+					quantity: 1,
+					price_per_unit: 5000,
+					total_price: 5000,
+					duration_minutes: 480,
+					_id: "68db7cd6a46929dc4e9479ff",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ed",
+						name: "Videography",
+						description: "Professional video coverage with cinematic editing",
+						category: "Other",
+						price: 5000,
+						duration_minutes: 480,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1492691527719-9d1e07e534b4",
+							"https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+			],
+			created_at: "2025-09-30T06:46:46.098Z",
+			updated_at: "2025-09-30T06:46:46.098Z",
+		},
+		{
+			_id: "68db7cd6a46929dc4e9479f9",
+			name: "Wedding Premium Package",
+			description:
+				"Complete wedding coverage with photography, videography, and makeup",
+			image: "https://images.unsplash.com/photo-1519741497674-611481863552",
+			package_price: 18000,
+			discount_percentage: 15,
+			discount_amount: null,
+			final_price: 15300,
 			looks: 3,
-		},
-		{
-			id: "professional-makeup",
-			name: "Professional Makeup Artist Package",
-			description:
-				"Expert makeup application for special events, photoshoots, or weddings with premium cosmetics.",
-			image:
-				"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=300&fit=crop",
-			status: "unavailable" as const,
+			custom_duration_minutes: 600,
+			is_available: true,
+			is_active: true,
 			services: [
-				"Consultation and skin analysis",
-				"Professional makeup application",
-				"False lash application",
-				"Touch-up kit for events",
-				"Makeup removal service",
-				"Product recommendations",
+				{
+					service_id: "68db7cd6a46929dc4e9479ee",
+					quantity: 1,
+					price_per_unit: 8000,
+					total_price: 8000,
+					duration_minutes: 480,
+					_id: "68db7cd6a46929dc4e9479fa",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ee",
+						name: "Wedding Photography",
+						description: "Complete wedding day coverage with two photographers",
+						category: "Photography",
+						price: 8000,
+						old_price: 10000,
+						duration_minutes: 480,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1519741497674-611481863552",
+							"https://images.unsplash.com/photo-1606800052052-a08af7148866",
+							"https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+							"https://images.unsplash.com/photo-1525258847-a273d31b68fd",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+				{
+					service_id: "68db7cd6a46929dc4e9479ed",
+					quantity: 1,
+					price_per_unit: 5000,
+					total_price: 5000,
+					duration_minutes: 480,
+					_id: "68db7cd6a46929dc4e9479fb",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479ed",
+						name: "Videography",
+						description: "Professional video coverage with cinematic editing",
+						category: "Other",
+						price: 5000,
+						duration_minutes: 480,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1492691527719-9d1e07e534b4",
+							"https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
+				{
+					service_id: "68db7cd6a46929dc4e9479f0",
+					quantity: 2,
+					price_per_unit: 2500,
+					total_price: 5000,
+					duration_minutes: 120,
+					_id: "68db7cd6a46929dc4e9479fc",
+					service_details: {
+						_id: "68db7cd6a46929dc4e9479f0",
+						name: "Bridal Makeup",
+						description: "Complete bridal makeup with trial session included",
+						category: "Beauty",
+						price: 2500,
+						old_price: 3000,
+						duration_minutes: 120,
+						is_available: true,
+						service_gallery: [
+							"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2",
+							"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+							"https://images.unsplash.com/photo-1516975080664-ed2fc6a32937",
+						],
+						is_active: true,
+						__v: 0,
+						created_at: "2025-09-30T06:46:46.083Z",
+						updated_at: "2025-09-30T06:46:46.083Z",
+					},
+				},
 			],
-			price: 75,
-			oldPrice: 100,
-			looks: 5,
-		},
-		{
-			id: "hair-styling-color",
-			name: "Hair Styling & Color Package",
-			description:
-				"Complete hair transformation with professional coloring, cutting, and styling by expert stylists.",
-			image:
-				"https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"Hair consultation and analysis",
-				"Professional color treatment",
-				"Precision cut and styling",
-				"Deep conditioning treatment",
-				"Heat protection application",
-				"Styling tips and aftercare",
-			],
-			price: 85,
-			oldPrice: 110,
-			looks: 2,
-		},
-		{
-			id: "nail-art-manicure",
-			name: "Nail Art & Manicure Package",
-			description:
-				"Creative nail art designs with professional manicure service using premium nail products.",
-			image:
-				"https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-			status: "unavailable" as const,
-			services: [
-				"Hand and nail care treatment",
-				"Custom nail art design",
-				"Gel or regular polish application",
-				"Cuticle care and shaping",
-				"Hand massage with moisturizer",
-				"Nail care maintenance tips",
-			],
-			price: 45,
-			oldPrice: 65,
-			looks: 1,
-		},
-		// Equipment Packages
-		{
-			id: "photo-equipment-rental",
-			name: "Photography Equipment Rental",
-			description:
-				"Professional photography equipment rental with delivery and setup assistance for your projects.",
-			image:
-				"https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"DSLR camera with multiple lenses",
-				"Professional lighting kit",
-				"Tripods and stabilizers",
-				"Memory cards and batteries",
-				"Equipment delivery and pickup",
-				"24/7 technical support",
-			],
-			price: 80,
-			oldPrice: 100,
-			looks: 4,
-		},
-		{
-			id: "audio-sound-equipment",
-			name: "Audio & Sound Equipment Package",
-			description:
-				"Complete audio equipment rental for events, recordings, and presentations with technical support.",
-			image:
-				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
-			status: "available" as const,
-			services: [
-				"Professional microphone system",
-				"Sound mixing console",
-				"Speaker system with amplifiers",
-				"Wireless communication devices",
-				"Audio recording equipment",
-				"On-site technical assistance",
-			],
-			price: 120,
-			oldPrice: 150,
-			looks: 2,
+			created_at: "2025-09-30T06:46:46.098Z",
+			updated_at: "2025-09-30T06:46:46.098Z",
 		},
 	];
 
@@ -291,7 +515,10 @@ const PackagePage = () => {
 
 					<PackageCustomizationCard
 						onCustomize={() => {
-							console.log("Customize");
+							clearForm();
+							setFieldImmediate("is_customized", true);
+
+							openModal();
 						}}
 					/>
 				</div>
@@ -352,25 +579,26 @@ const PackagePage = () => {
 					<div className="flex flex-col space-y-4 mb-8">
 						{currentPackages.map((packageItem) => (
 							<PackageAccordionCard
-								key={packageItem.id}
-								id={packageItem.id}
+								key={packageItem._id}
+								id={packageItem._id}
 								name={packageItem.name}
 								description={packageItem.description}
 								image={packageItem.image}
-								status={packageItem.status}
-								services={packageItem.services}
-								price={packageItem.price}
-								oldPrice={packageItem.oldPrice}
+								status={packageItem.is_available ? "available" : "unavailable"}
+								services={packageItem.services.map(
+									(service) => service.service_details.name
+								)}
+								price={packageItem.final_price}
+								oldPrice={packageItem.package_price}
 								looks={packageItem.looks}
 								onBook={() => {
 									window.scrollTo({ top: 0, behavior: "smooth" });
-									navigate(
-										`/packages/service/${packageItem.id}/service-details`
-									);
+
+									handleBook(packageItem);
 								}}
 								onView={() => {
 									window.scrollTo({ top: 0, behavior: "smooth" });
-									navigate(`/packages/service/${packageItem.id}/details`);
+									navigate(`/packages/service/${packageItem._id}/details`);
 								}}
 							/>
 						))}
