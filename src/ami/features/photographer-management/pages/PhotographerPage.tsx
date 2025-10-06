@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
-const CustomerPage = () => {
+const PhotographerPage = () => {
 	return (
 		<Suspense fallback={<div>Loading...</div>}>
 			<Outlet />
@@ -9,4 +9,4 @@ const CustomerPage = () => {
 	);
 };
 
-export default CustomerPage;
+export default PhotographerPage;

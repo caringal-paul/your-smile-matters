@@ -6,7 +6,6 @@ import { Route } from "react-router-dom";
 const authRoutes = (
 	<Route path="ami/auth" element={<AuthLayout />}>
 		<Route index element={<LoginForm />} />
-		<Route path="verify" element={<VerifyCodeForm />} />
 	</Route>
 );
 

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { MetaData } from "@/core/types/base.types";
 
+// Email regex same as in mongoose
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 export const userCreateSchema = z.object({
@@ -13,7 +13,8 @@ export const userCreateSchema = z.object({
 	email: z
 		.string()
 		.regex(emailRegex, { message: "Invalid email format" })
-		.trim(),
+		.trim()
+		.toLowerCase(),
 
 	first_name: z
 		.string()
@@ -27,33 +28,21 @@ export const userCreateSchema = z.object({
 		.max(25, "Last name cannot exceed 25 characters")
 		.trim(),
 
-	mobile_number: z
+	mobile_number: z.string().min(1, "Mobile number is required"), // mongoose only requires presence
+
+	role_id: z
 		.string()
-		.min(7, "Mobile number must have at least 7 digits")
-		.max(15, "Mobile number cannot exceed 15 digits"),
-
-	password: z.string().min(6, "Password must be at least 6 characters"), // same as Mongoose required
-
-	role_id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid role ID format"),
+		.min(1, "Role is required") // Ensures non-empty string
+		.refine((val) => val.trim() !== "", {
+			message: "Role is required",
+		}), // no regex, backend handles ObjectId
 
 	is_active: z.boolean(),
-
-	// Metadata (optional fields)
-	created_at: z.string().optional(),
-	updated_at: z.string().optional(),
-	deleted_at: z.string().optional(),
-	retrieved_at: z.string().optional(),
-
-	// Optional hidden fields
-	reset_password_token: z.string().optional(),
-	reset_password_expires: z.string().optional(),
 });
 
 // For update operations
 export const userUpdateSchema = userCreateSchema.partial();
 
-// Type inference for TS
+// Type inference
 export type UserAmiCreate = z.infer<typeof userCreateSchema>;
 export type UserAmiUpdate = z.infer<typeof userUpdateSchema>;
-
-export type UserAmiSchema = z.infer<typeof userCreateSchema> & MetaData;

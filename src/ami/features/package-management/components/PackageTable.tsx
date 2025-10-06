@@ -17,12 +17,17 @@ import { Button } from "@/core/components/base/button";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ServiceModel } from "@/core/models/service.model";
+import { useGetAllServicesQuery } from "../../service-management/queries/getServices.ami.query";
+import { useGetAllPackagesQuery } from "../queries/getPackages.ami.query";
+import { PluginKey } from "@tiptap/pm/state";
 
 const PackageTable = () => {
 	const navigate = useNavigate();
-	const packages = packagesArray as unknown;
 
-	const services = servicesArray as unknown as ServiceModel[];
+	const { data: services = [], isLoading: isServicesFetching } =
+		useGetAllServicesQuery();
+	const { data: packages = [], isLoading: isPackagesFetching } =
+		useGetAllPackagesQuery();
 
 	const packagesData = packages as PackageAmiTableType[];
 	const columns = useServiceColumns();
@@ -36,16 +41,22 @@ const PackageTable = () => {
 		filteredData,
 	} = useFilteredTableData<PackageAmiTableType>({
 		data: packagesData.map((pkg) => {
+			const servicesData = pkg.services.map((service) => {
+				return { ...service.service_details };
+			});
+
 			return {
 				...pkg,
-				servicesData: services.filter((service) =>
-					pkg.included_services.includes(service._id)
-				),
+				servicesData,
 				status: pkg.is_available ? "Available" : "Unavailable",
 			};
 		}),
 		keys: PACKAGE_TABLE_SEARCH_KEYS,
 	});
+
+	if (isServicesFetching && isPackagesFetching) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div className="relative pb-4">

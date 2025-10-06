@@ -1,26 +1,8 @@
-import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+import { GetAllPhotographerResponseAmi } from "./photographer-response.ami.types";
 
-export type Gender = "Male" | "Female" | "Other";
-
-export type Customer = {
-	id: number;
-	customer_no: number;
-	first_name: string;
-	last_name: string;
-	email: string;
-	total_spent: number;
-	mobile_number?: string;
-	address?: string;
-	gender: Gender;
-	isActive: boolean;
-	// created_on: string;
-};
-
-export type CustomerFilters = Partial<Record<keyof Customer, string[]>>;
-
-export type CustomerAmiTableType = {
-	[K in keyof Customer]: string;
+export type PhotographerAmiTableType = {
+	[K in keyof GetAllPhotographerResponseAmi]: GetAllPhotographerResponseAmi[K];
 } & {
+	status?: string;
 	action?: string;
-	status?: AvailabilityStatus;
 };

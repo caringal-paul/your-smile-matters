@@ -1,8 +1,7 @@
-import { LabelHTMLAttributes, PropsWithChildren, Ref } from "react";
-import { Label } from "../../../../core/components/base/label";
-import { Separator } from "../../../../core/components/base/separator";
+import { Label } from "@/core/components/base/label";
+import { Separator } from "@/core/components/base/separator";
 import { cn } from "@/core/lib/utils";
-import { FormMessage } from "@/core/components/base/form";
+import { LabelHTMLAttributes, PropsWithChildren, Ref } from "react";
 
 type FormCardProp = PropsWithChildren & {
 	className?: string;
@@ -50,7 +49,7 @@ type FormCardBodyProps = PropsWithChildren & {
 };
 
 const FormCardBody = ({ children, className }: FormCardBodyProps) => {
-	return <div className={cn("space-y-2 my-4", className)}>{children}</div>;
+	return <div className={cn("space-y-4 my-4", className)}>{children}</div>;
 };
 
 type FormCardFooterProps = PropsWithChildren & {
@@ -71,7 +70,7 @@ const FormCardField = ({ children, className }: FormCardFieldProps) => {
 	return (
 		<div
 			className={cn(
-				"w-full h-fit gap-[2px] md:gap-1 items-center grid grid-cols-1 md:grid-cols-[20%_1fr]",
+				"w-full h-fit grid grid-cols-1 gap-1 items-center md:grid-cols-[20%_1fr]",
 				className
 			)}
 		>
@@ -80,17 +79,35 @@ const FormCardField = ({ children, className }: FormCardFieldProps) => {
 	);
 };
 
+type FormCardDescriptionProps = PropsWithChildren & {
+	className?: string;
+};
+
+const FormCardDescription = ({
+	children,
+	className,
+}: FormCardDescriptionProps) => {
+	return (
+		<Label
+			className={cn(
+				"ml-1 text-gray-400 font-light tracking-tighter text-2xs italic",
+				className
+			)}
+		>
+			{children}
+		</Label>
+	);
+};
+
 type FormCardLabelProps = PropsWithChildren &
 	LabelHTMLAttributes<HTMLLabelElement> & {
 		className?: string;
-		required?: boolean;
 		ref?: Ref<HTMLLabelElement>;
 	};
 
 const FormCardLabel = ({
 	className,
 	ref,
-	required = false,
 	children,
 	...props
 }: FormCardLabelProps) => {
@@ -98,10 +115,9 @@ const FormCardLabel = ({
 		<Label
 			ref={ref}
 			{...props}
-			className={cn("text-2xs font-semibold mb-1 md:mb-0", className)}
+			className={cn("text-2xs 2xl:text-xs font-semibold", className)}
 		>
 			{children}
-			{required && "*"}
 		</Label>
 	);
 };
@@ -111,5 +127,6 @@ FormCard.Body = FormCardBody;
 FormCard.Label = FormCardLabel;
 FormCard.Field = FormCardField;
 FormCard.Footer = FormCardFooter;
+FormCard.Description = FormCardDescription;
 
 export default FormCard;

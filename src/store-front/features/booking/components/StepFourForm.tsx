@@ -477,7 +477,7 @@ const StepFourForm = ({}) => {
 									<p className="text-sm text-foreground font-medium mb-1">
 										Theme
 									</p>
-									<p className=" text-xs font-normal tracking-tight leading-none">
+									<p className="rich-text text-xs font-normal tracking-tight leading-none">
 										{parse(formData?.theme)}
 									</p>
 								</div>
@@ -487,7 +487,7 @@ const StepFourForm = ({}) => {
 									<p className="text-sm text-foreground font-medium mb-1">
 										Special Requests
 									</p>
-									<p className="text-xs tracking-tight leading-none">
+									<p className="text-xs tracking-tight leading-none rich-text">
 										{parse(formData?.special_requests)}
 									</p>
 								</div>
@@ -637,6 +637,8 @@ const StepFourForm = ({}) => {
 							// set reference number
 
 							setFieldImmediate("booking_reference", generateBookingRef());
+
+							console.log(formData);
 						}}
 						size="lg"
 						className="w-full rounded-lg"

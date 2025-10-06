@@ -200,7 +200,11 @@ const DataTable = <T extends Record<string, any>>({
 										key={String(key)}
 										className={`border-none  py-2 text-left ${
 											sortable ? "cursor-pointer" : ""
-										} ${key == "id" ? "pl-8 pr-0" : "px-8"}`}
+										} ${
+											key == "id"
+												? "pl-8 pr-0"
+												: `${isColumnsCompressed ? "px-2" : "px-8"} `
+										}`}
 										onClick={() => sortable && handleSort(key)}
 									>
 										<div className="flex flex-row gap-1 items-center">
@@ -233,7 +237,7 @@ const DataTable = <T extends Record<string, any>>({
 												key == "id"
 													? "pl-8 pr-0"
 													: `${isColumnsCompressed ? "px-2" : "px-8"} `
-											}`}
+											} `}
 										>
 											{render ? render(item[key], item) : String(item[key])}
 										</td>
@@ -336,7 +340,7 @@ const DataTable = <T extends Record<string, any>>({
 												priority2Column.key !== priority1Column?.key && (
 													<div className="text-xs flex gap-1 text-gray-500 max-w-[22em] sm:max-w-full">
 														<span>{priority2Column.label}:</span>
-														<span className="truncate ">
+														<span className="truncate rich-text">
 															{priority2Column.render
 																? priority2Column.render(
 																		item[priority2Column.key],

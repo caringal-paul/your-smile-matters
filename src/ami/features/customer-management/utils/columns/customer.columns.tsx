@@ -60,12 +60,13 @@ export const useCustomerColumns = (): Column<CustomerAmiTableType>[] => {
 			sortable: true,
 			render: (value) => <DataTableRow value={value} />,
 		},
-		{
-			key: "total_spent",
-			label: "Total Spent",
-			sortable: true,
-			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
-		},
+		// BRING BACK
+		// {
+		// 	key: "total_spent",
+		// 	label: "Total Spent",
+		// 	sortable: true,
+		// 	render: (value) => <DataTableRow value={formatToPeso(String(value))} />,
+		// },
 		{
 			key: "status",
 			label: "Status",

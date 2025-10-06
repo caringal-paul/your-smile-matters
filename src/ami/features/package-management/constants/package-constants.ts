@@ -11,9 +11,9 @@ export const PACKAGE_TABLE_SEARCH_KEYS: (keyof PackageAmiTableType)[] = [
 	"_id",
 	"name",
 	"status",
-	"included_services",
+	"services",
 	"looks",
-	"price",
+	"package_price",
 	"description",
 	"is_available",
 ];

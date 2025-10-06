@@ -1,10 +1,20 @@
 import { MetaData } from "../types/base.types";
 
+export type IncludedService = {
+	service_id: string;
+	quantity: number;
+	price_per_unit: number;
+	total_price: number;
+	duration_minutes?: number;
+};
+
 export type PackageModel = MetaData & {
 	name: string;
-	description: string;
-	price: number;
+	description?: string;
+	image?: string | null;
+	package_price: number;
+	services: IncludedService[];
 	looks: number;
-	included_services: string[];
 	is_available: boolean;
+	custom_duration_minutes?: number;
 };

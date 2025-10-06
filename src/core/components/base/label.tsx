@@ -9,7 +9,6 @@ const labelVariants = cva(
 	{
 		variants: {
 			variant: {
-				instruction: "",
 				gradient:
 					"text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80",
 				undefined: "",
@@ -20,7 +19,7 @@ const labelVariants = cva(
 			},
 		},
 		defaultVariants: {
-			variant: "instruction",
+			variant: "undefined",
 			size: "default",
 		},
 	}

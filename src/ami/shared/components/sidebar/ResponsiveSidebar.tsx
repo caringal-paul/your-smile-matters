@@ -82,12 +82,12 @@ const ResponsiveSidebar = () => {
 			path: "user-management/users",
 			icon: UserRound,
 		},
-		{
-			id: 10,
-			name: "Roles & Permission",
-			path: "role-and-permission-management/roles-and-permissions",
-			icon: Hand,
-		},
+		// {
+		// 	id: 10,
+		// 	name: "Roles & Permission",
+		// 	path: "role-and-permission-management/roles-and-permissions",
+		// 	icon: Hand,
+		// },
 		{
 			id: 3,
 			name: "Customer Management",
@@ -124,12 +124,12 @@ const ResponsiveSidebar = () => {
 			path: "booking-management",
 			icon: Calendar,
 		},
-		{
-			id: 8,
-			name: "Support Management",
-			path: "support-management/faq",
-			icon: MessagesSquare,
-		},
+		// {
+		// 	id: 8,
+		// 	name: "Support Management",
+		// 	path: "support-management/faq",
+		// 	icon: MessagesSquare,
+		// },
 		{
 			id: 9,
 			name: "Account Settings",

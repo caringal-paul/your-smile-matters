@@ -9,8 +9,15 @@ export default {
 		extend: {
 			fontFamily: {
 				inter: ["Inter", ...defaultTheme.fontFamily.sans],
+				poppins: ["Poppins"],
 			},
 			fontSize: {
+				"4xs": [
+					"0.50rem",
+					{
+						lineHeight: "0.65rem",
+					},
+				],
 				"3xs": [
 					"0.55rem",
 					{

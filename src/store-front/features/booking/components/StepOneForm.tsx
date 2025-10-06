@@ -19,7 +19,7 @@ import {
 	Loader2,
 } from "lucide-react";
 import { Separator } from "@/core/components/base/separator";
-import { formatDuration } from "@/store-front/shared/helpers/formatDurationMinutes";
+import { formatDurationByMinutes } from "@/store-front/shared/helpers/formatDuration";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { ServiceModel } from "@/core/models/service.model";
 import ServiceAccordionCard from "@/store-front/shared/components/ServiceAccordionCard";
@@ -526,7 +526,9 @@ const StepOneForm = () => {
 											</Label>
 											<Label className="text-xs text-gray-600 h-2">
 												Session duration:{" "}
-												{formatDuration(formData.session_duration_minutes)}
+												{formatDurationByMinutes(
+													formData.session_duration_minutes
+												)}
 											</Label>
 										</>
 									) : (
@@ -592,7 +594,7 @@ const StepOneForm = () => {
 													{/* Duration */}
 													<Label className="text-2xs font-normal text-gray-300 [&_svg]:size-3 [&_svg]:shrink-0 flex gap-1 items-center">
 														<Clock />{" "}
-														{formatDuration(
+														{formatDurationByMinutes(
 															foundService.duration_minutes ?? 120
 														)}
 													</Label>

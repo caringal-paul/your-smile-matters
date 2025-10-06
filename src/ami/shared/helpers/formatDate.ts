@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-
 export function formatToTableDate(isoString: string): string {
 	const now = new Date(isoString);
 

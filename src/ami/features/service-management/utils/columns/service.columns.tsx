@@ -5,6 +5,8 @@ import { Column } from "@/ami/shared/types/column.types";
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
 import { ServiceAmiTableType } from "../types/service-table.types";
+import parse from "html-react-parser";
+import { Badge } from "@/core/components/base/badge";
 
 export const useServiceColumns = (): Column<ServiceAmiTableType>[] => {
 	const navigate = useNavigate();
@@ -21,13 +23,21 @@ export const useServiceColumns = (): Column<ServiceAmiTableType>[] => {
 			key: "description",
 			label: "Description",
 			sortable: true,
-			render: (value) => <DataTableRow value={!value ? "-" : value} />,
+			render: (value, row) => (
+				<div
+					className={
+						"font-normal text-2xs 2xl:text-xs rich-text max-h-[10em] max-w-[40em] line-clamp-3 truncate"
+					}
+				>
+					{!value ? <>-</> : <> {parse(String(row.description))}</>}
+				</div>
+			),
 		},
 		{
 			key: "category",
 			label: "Category",
 			sortable: true,
-			render: (value) => <DataTableRow value={value} />,
+			render: (value) => <Badge>{value}</Badge>,
 		},
 		{
 			key: "is_available",

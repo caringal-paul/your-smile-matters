@@ -10,7 +10,7 @@ import {
 import { Card, CardContent } from "@/core/components/base/card";
 import { Button } from "@/core/components/base/button";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
-import { formatDuration } from "@/store-front/shared/helpers/formatDurationMinutes";
+import { formatDurationByMinutes } from "@/store-front/shared/helpers/formatDuration";
 import DurationInput from "@/core/components/custom/DurationInput";
 import { Textarea } from "@/core/components/base/textarea";
 
@@ -118,7 +118,9 @@ const StepTwoForm = () => {
 											) : (
 												<Label className="text-sm text-foreground">
 													Session duration:{" "}
-													{formatDuration(formData.session_duration_minutes)}
+													{formatDurationByMinutes(
+														formData.session_duration_minutes
+													)}
 												</Label>
 											)}
 										</div>

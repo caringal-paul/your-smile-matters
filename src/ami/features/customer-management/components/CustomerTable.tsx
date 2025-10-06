@@ -12,11 +12,11 @@ import {
 	CUSTOMER_MODULE_FILTER_OPTIONS,
 	CUSTOMER_TABLE_SEARCH_KEYS,
 } from "../constants/customer-constants";
+import { useGetAllCustomersQuery } from "../queries/getCustomers.ami.query";
 
 const CustomerTable = () => {
-	const customers = customersArray as unknown;
+	const { data: customers = [], isLoading } = useGetAllCustomersQuery();
 
-	const customersData = customers as CustomerAmiTableType[];
 	const columns = useCustomerColumns();
 
 	const {
@@ -27,7 +27,7 @@ const CustomerTable = () => {
 		applyFilters,
 		filteredData,
 	} = useFilteredTableData<CustomerAmiTableType>({
-		data: customersData.map((customer) => {
+		data: customers.map((customer) => {
 			return {
 				...customer,
 				status: customer.is_active ? "Active" : "Inactive",
@@ -35,6 +35,10 @@ const CustomerTable = () => {
 		}),
 		keys: CUSTOMER_TABLE_SEARCH_KEYS,
 	});
+
+	if (isLoading) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div className="relative pb-4">

@@ -15,13 +15,13 @@ import {
 import { Button } from "@/core/components/base/button";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useGetAllServicesQuery } from "../queries/getServices.ami.query";
 
 const ServiceTable = () => {
 	const navigate = useNavigate();
 
-	const services = servicesArray as unknown;
+	const { data: services = [], isLoading } = useGetAllServicesQuery();
 
-	const servicesData = services as ServiceAmiTableType[];
 	const columns = useServiceColumns();
 
 	const {
@@ -32,7 +32,7 @@ const ServiceTable = () => {
 		applyFilters,
 		filteredData,
 	} = useFilteredTableData<ServiceAmiTableType>({
-		data: servicesData.map((service) => {
+		data: services.map((service) => {
 			return {
 				...service,
 				status: service.is_available ? "Available" : "Unavailable",
@@ -40,6 +40,10 @@ const ServiceTable = () => {
 		}),
 		keys: SERVICE_TABLE_SEARCH_KEYS,
 	});
+
+	if (isLoading) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div className="relative pb-4">

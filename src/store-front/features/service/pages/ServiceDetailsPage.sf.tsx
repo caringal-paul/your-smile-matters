@@ -448,7 +448,7 @@ const ServiceDetailsPage = () => {
 								<h2 className="text-3xl font-semibold text-gray-900 tracking-tight">
 									Service Description
 								</h2>
-								<p className="text-gray-700 leading-6">
+								<p className="text-gray-700 leading-6 rich-text">
 									{parse(String(selectedService?.description))}
 								</p>
 							</div>

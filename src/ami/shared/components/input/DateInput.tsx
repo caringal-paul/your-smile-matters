@@ -6,7 +6,7 @@ import {
 	PopoverTrigger,
 } from "@/core/components/base/popover";
 import { Button } from "../../../../core/components/base/button";
-import { formatDisplayDate } from "@/ami/shared/helpers/formatDate";
+import { formatDisplayDate } from "../../helpers/formatDate";
 
 interface DateInputProps {
 	onChange?: (date: string) => void;

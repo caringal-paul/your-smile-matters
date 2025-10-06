@@ -1,27 +1,21 @@
 // Components
 import { Label } from "@/core/components/base/label";
 import { useParams } from "react-router-dom";
-import customersArray from "../mock/temp-customers.json";
-
-import { CustomerModel } from "@/core/models/customer.model";
 import FormCard from "@/ami/shared/components/card/FormCard";
-import {
-	formatDateToTextMonth,
-	formatDisplayDate,
-} from "@/ami/shared/helpers/formatDate";
+import { formatDateToTextMonth } from "@/ami/shared/helpers/formatDate";
 
 import image from "/profile-avatar.jpg";
 import { Badge } from "@/core/components/base/badge";
+import { useGetCustomerByIdQuery } from "../queries/getCustomerById.ami.query";
 
 const ViewCustomerForm = () => {
 	const { id } = useParams();
 
-	const customers = customersArray as unknown;
-	const customersData = customers as CustomerModel[];
+	const { data: foundCustomer, isLoading } = useGetCustomerByIdQuery(id!);
 
-	const foundCustomer = id
-		? customersData.find((customer) => customer._id === id)
-		: undefined;
+	if (isLoading) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div>

@@ -5,13 +5,15 @@ import { useState } from "react";
 interface DurationInputProps {
 	value: string;
 	onChange: (value: string) => void;
-	disabled: boolean;
+	disabled?: boolean;
+	hideError?: boolean;
 }
 
 export default function DurationInput({
 	value,
 	onChange,
 	disabled = false,
+	hideError = false,
 }: DurationInputProps) {
 	const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +69,9 @@ export default function DurationInput({
 						: "border-input focus-visible:ring-ring"
 				}`}
 			/>
-			{error && <p className="text-sm text-red-500">{error}</p>}
+			{!hideError && error ? (
+				<p className="text-sm text-red-500">{error}</p>
+			) : null}
 		</div>
 	);
 }

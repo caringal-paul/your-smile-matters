@@ -6,6 +6,7 @@ import {
 	TooltipTrigger,
 } from "@/core/components/base/tooltip";
 import InfoIcon from "@/ami/shared/assets/icons/InfoIcon";
+import { Label } from "@/core/components/base/label";
 
 type StatusWithIndicatorProps<T extends string> = {
 	className?: string;
@@ -32,7 +33,11 @@ const StatusWithIndicator = <T extends string>({
 					{value.split(" ")[0]} <RolloverIndicatorIcon className="h-4 w-4" />
 				</span>
 			) : (
-				<span className={`${textClassName} truncate`}>{value}</span>
+				<Label
+					className={`${textClassName} font-normal text-2xs 2xl:text-xs truncate`}
+				>
+					{value}
+				</Label>
 			)}
 
 			{value == "Terminated" && !!reason ? (

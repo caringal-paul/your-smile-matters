@@ -1,10 +1,7 @@
 import { TabRoute } from "@/ami/shared/types/tab-routes.types";
-import {
-	CustomerAmiTableType,
-	Gender,
-} from "../utils/types/photographer-table.types";
 
 import { FilterOptions } from "@/ami/shared/types/filter.types";
+import { PhotographerAmiTableType } from "../utils/types/photographer-table.types";
 
 export const PHOTOGRAPHER_ROUTES: TabRoute[] = [
 	{
@@ -22,22 +19,10 @@ export const PHOTOGRAPHER_ROUTES: TabRoute[] = [
 ];
 
 export const PHOTOGRAPHER_MODULE_FILTER_OPTIONS: FilterOptions<{
-	activeStatus: ["Active", "Inactive"];
-	gender: Gender[];
+	status: ["Active", "Inactive"];
 }> = {
-	activeStatus: ["Active", "Inactive"],
-	gender: ["Male", "Female", "Other"],
+	status: ["Active", "Inactive"],
 } as const;
 
-export const PHOTOGRAPHER_TABLE_SEARCH_KEYS: (keyof CustomerAmiTableType)[] = [
-	"id",
-	"customer_no",
-	"email",
-	"last_name",
-	"first_name",
-	"total_spent",
-	"mobile_number",
-	"gender",
-	"address",
-	"isActive",
-];
+export const PHOTOGRAPHER_TABLE_SEARCH_KEYS: (keyof PhotographerAmiTableType)[] =
+	["bio", "email", "is_active", "mobile_number", "name", "specialties"];

@@ -7,21 +7,13 @@ export type ServiceCategory =
 	| "Equipment"
 	| "Other";
 
-// export type ServiceModel = MetaData & {
-// 	name: string;
-// 	description?: string;
-// 	category: string;
-// 	is_available: boolean;
-// };
-
 export type ServiceModel = MetaData & {
-	_id: string;
 	name: string;
-	description?: string | null;
+	description?: string;
 	category: ServiceCategory;
 	price: number;
 	old_price?: number;
-	duration_minutes?: number | null;
+	duration_minutes?: number;
 	is_available: boolean;
 	service_gallery: string[];
 };

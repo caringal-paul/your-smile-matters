@@ -25,13 +25,7 @@ type WeeklyScheduleItem = {
 	start_time: string;
 	end_time: string;
 	is_available: boolean;
-	break_times?:
-		| {
-				start_time: string;
-				end_time: string;
-				description?: string;
-		  }[]
-		| null;
+
 	notes?: string | null;
 };
 
@@ -84,7 +78,7 @@ const PhotographerAccordionCard = React.memo(
 		onSelect,
 		isSelected = false,
 	}: PhotographerAccordionCardProps) => {
-		const mainImage = profile_image || "/sf/ysm-profile-fallback.png";
+		const mainImage = profile_image || "/sf/ysm-profile-fallback.jpg";
 		const galleryImages = photo_gallery || [];
 		const completionRate =
 			total_bookings > 0
@@ -113,7 +107,7 @@ const PhotographerAccordionCard = React.memo(
 									<img
 										src={mainImage}
 										onError={(e) =>
-											(e.currentTarget.src = "/sf/ysm-profile-fallback.png")
+											(e.currentTarget.src = "/sf/ysm-profile-fallback.jpg")
 										}
 										alt={name}
 										className="w-14 h-14 2xl:w-16 2xl:h-16 object-cover rounded-full"
@@ -199,7 +193,7 @@ const PhotographerAccordionCard = React.memo(
 								<h4 className="text-xs 2xl:text-sm font-semibold tracking-tight text-gray-900 mb-2">
 									About:
 								</h4>
-								<p className="text-2xs 2xl:text-xs text-foreground tracking-tight leading-normal line-clamp-3">
+								<p className="text-2xs 2xl:text-xs text-foreground tracking-tight leading-normal line-clamp-3 rich-text">
 									{bio
 										? parse(bio)
 										: "This photographer has not provided a bio."}
@@ -278,13 +272,6 @@ const PhotographerAccordionCard = React.memo(
 														</span>
 													)}
 												</div>
-												{schedule.break_times &&
-													schedule.break_times.length > 0 && (
-														<Badge variant="outline" className="text-3xs">
-															{schedule.break_times.length} break
-															{schedule.break_times.length > 1 ? "s" : ""}
-														</Badge>
-													)}
 											</div>
 										))}
 									</div>

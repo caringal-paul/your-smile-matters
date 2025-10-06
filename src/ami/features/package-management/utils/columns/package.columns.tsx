@@ -8,6 +8,7 @@ import { PackageAmiTableType } from "../types/package-table.types";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { ServiceModel } from "@/core/models/service.model";
 import { Badge } from "@/core/components/base/badge";
+import parse from "html-react-parser";
 
 export const useServiceColumns = (): Column<PackageAmiTableType>[] => {
 	const navigate = useNavigate();
@@ -24,7 +25,15 @@ export const useServiceColumns = (): Column<PackageAmiTableType>[] => {
 			key: "description",
 			label: "Description",
 			sortable: true,
-			render: (value) => <DataTableRow value={!value ? "-" : value} />,
+			render: (value, row) => (
+				<div
+					className={
+						"font-normal text-2xs 2xl:text-xs rich-text max-h-[10em] max-w-[40em] line-clamp-3 truncate"
+					}
+				>
+					{!value ? <>-</> : <> {parse(String(row.description))}</>}
+				</div>
+			),
 		},
 		{
 			key: "servicesData",
@@ -63,7 +72,7 @@ export const useServiceColumns = (): Column<PackageAmiTableType>[] => {
 			},
 		},
 		{
-			key: "price",
+			key: "package_price",
 			label: "Price",
 			sortable: true,
 			render: (value) => <DataTableRow value={formatToPeso(String(value))} />,

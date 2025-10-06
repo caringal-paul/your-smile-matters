@@ -14,13 +14,7 @@ type WeeklyScheduleItem = {
 	start_time: string;
 	end_time: string;
 	is_available: boolean;
-	break_times?:
-		| {
-				start_time: string;
-				end_time: string;
-				description?: string;
-		  }[]
-		| null;
+
 	notes?: string | null;
 };
 
@@ -112,13 +106,6 @@ const StepThreeForm = () => {
 									start_time: "09:00",
 									end_time: "17:00",
 									is_available: true,
-									break_times: [
-										{
-											start_time: "12:00",
-											end_time: "13:00",
-											description: "Lunch break",
-										},
-									],
 								},
 								{
 									day_of_week: "Tuesday",

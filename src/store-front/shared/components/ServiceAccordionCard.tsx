@@ -9,8 +9,8 @@ import {
 import { ShoppingCart, Clock } from "lucide-react";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { Label } from "@/core/components/base/label";
-import { formatDuration } from "../helpers/formatDurationMinutes";
 import React from "react";
+import { formatDurationByMinutes } from "../helpers/formatDuration";
 
 type ServiceAccordionCardProps = {
 	id: string;
@@ -80,7 +80,8 @@ const ServiceAccordionCard = React.memo(
 												</Badge>
 
 												<Label className="text-2xs font-normal text-gray-300 [&_svg]:size-3 [&_svg]:shrink-0 flex gap-1 items-center">
-													<Clock /> {formatDuration(duration_minutes ?? 120)}
+													<Clock />{" "}
+													{formatDurationByMinutes(duration_minutes ?? 120)}
 												</Label>
 											</div>
 

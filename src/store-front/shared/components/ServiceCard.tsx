@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/core/components/base/card";
 import { Button } from "@/core/components/base/button";
 import { Book, Clock, Eye, Heart, MapPin } from "lucide-react";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
-import { formatDuration } from "../helpers/formatDurationMinutes";
+import { formatDurationByMinutes } from "../helpers/formatDuration";
 import { Badge } from "@/core/components/base/badge";
 import { Label } from "@/core/components/base/label";
 
@@ -54,7 +54,7 @@ export function ServiceCard({
 					<div className="flex items-center gap-1 text-2xs text-gray-400">
 						<Clock size={12} className="shrink-0" />
 						<span className="truncate">
-							{formatDuration(duration_minutes ?? 120)}
+							{formatDurationByMinutes(duration_minutes ?? 120)}
 						</span>
 					</div>
 				</div>

@@ -24,7 +24,7 @@ const PhotographerRouteTabs = () => {
 			<div className="flex">
 				<Tabs
 					className="hidden w-full sm:flex xl:mt-0"
-					defaultValue="customers"
+					defaultValue="photographers"
 				>
 					<TabsList className="my-5 xl:my-4">
 						{PHOTOGRAPHER_ROUTES.map((route: TabRoute) => {

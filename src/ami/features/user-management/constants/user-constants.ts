@@ -1,5 +1,5 @@
 import { FilterOptions } from "@/ami/shared/types/filter.types";
-import { UserAmiTableType } from "../utils/types/users-table.types";
+import { UserAmiTableType } from "../utils/types/users-table.ami.types";
 
 // ? Options for your filter box. This will be rendered as checkboses.
 // export const USERS_MODULE_FILTER_OPTIONS: FilterOptions<{ role: RoleNames }> = {

@@ -4,7 +4,7 @@ import {
 	USERS_MODULE_FILTER_OPTIONS,
 } from "../constants/user-constants";
 import { useUserColumns } from "../utils/columns/user.columns";
-import { UserAmiTableType } from "../utils/types/users-table.types";
+import { UserAmiTableType } from "../utils/types/users-table.ami.types";
 import usersArray from "../mock/temp-user.json";
 
 import TableFilter from "@/ami/shared/components/filter/TableFilter";
@@ -14,12 +14,13 @@ import TableSearch from "@/ami/shared/components/filter/TableSearch";
 import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
+import { useGetAllUsersQuery } from "../queries/getUsers.ami.query";
 
 const UserTable = () => {
 	const navigate = useNavigate();
-	const users = usersArray as unknown;
 
-	const usersData = users as UserAmiTableType[];
+	const { data: users = [], isLoading } = useGetAllUsersQuery();
+
 	const columns = useUserColumns();
 
 	const {
@@ -32,7 +33,7 @@ const UserTable = () => {
 		applyFilters,
 		filteredData,
 	} = useFilteredTableData<UserAmiTableType>({
-		data: usersData.map((user) => {
+		data: users.map((user) => {
 			return {
 				...user,
 				full_name: `${user.first_name} ${user.last_name}`,
@@ -42,6 +43,10 @@ const UserTable = () => {
 		keys: USER_TABLE_SEARCH_KEYS,
 		dateFields: ["updated_at"],
 	});
+
+	if (isLoading) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div className="relative pb-4">

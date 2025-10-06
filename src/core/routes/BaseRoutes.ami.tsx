@@ -13,12 +13,9 @@ import SupportApprovalPage from "@/ami/features/support-management/pages/Support
 // import TransactionPage from "@/ami/features/transaction-history/pages/TransactionPage";
 
 import UserLayout from "@/ami/features/user-management/layout/UserLayout";
-import RolesAndPermissionsPage from "@/ami/features/user-management/pages/RolesAndPermissionsPage";
 import UserPage from "@/ami/features/user-management/pages/UserPage";
 import RootLayout from "@/ami/layouts/RootLayout.ami";
 import { Route } from "react-router-dom";
-import RolesAndPermissionsLayout from "@/ami/features/user-management/layout/RolesAndPermissionsLayout";
-import RolesAndPermissionsForm from "@/ami/features/user-management/components/RolesAndPermissionsForm";
 import { RoleProvider } from "@/ami/features/auth/providers/RoleContext.ami";
 import CustomerLayout from "@/ami/features/customer-management/layout/CustomerLayout";
 import ServicePage from "@/ami/features/service-management/pages/ServicePage";
@@ -32,18 +29,27 @@ import PackageTable from "@/ami/features/package-management/components/PackageTa
 import PackageBreadcrumbs from "@/ami/features/package-management/components/PackageBreadcrumbs";
 import ViewPackageForm from "@/ami/features/package-management/components/ViewPackageForm";
 import CreatePackageForm from "@/ami/features/package-management/components/CreatePackageForm";
-import EditPackageForm from "@/ami/features/package-management/components/EditPackageForm";
+import UpdatePackageForm from "@/ami/features/package-management/components/UpdatePackageForm";
 import ViewUserForm from "@/ami/features/user-management/components/ViewUserForm";
 import UserBreadcrumbs from "@/ami/features/user-management/components/UserBreadcrumbs";
-import EditUserForm from "@/ami/features/user-management/components/EditUserForm";
+import UpdateUserForm from "@/ami/features/user-management/components/UpdateUserForm";
 import CreateUserForm from "@/ami/features/user-management/components/CreateUserForm";
-import RolesAndPermissionsBreadcrumbs from "@/ami/features/user-management/components/RolesAndPermissionsBreadcrumbs";
 import ViewCustomerForm from "@/ami/features/customer-management/components/ViewCustomerForm";
 import CustomerRouteTabs from "@/ami/features/customer-management/components/CustomerRouteTabs";
-import EditServiceForm from "@/ami/features/service-management/components/EditServiceForm";
+import UpdateServiceForm from "@/ami/features/service-management/components/UpdateServiceForm";
 import ViewServiceForm from "@/ami/features/service-management/components/ViewServiceForm";
 import PhotographerLayout from "@/ami/features/photographer-management/layout/PhotographerLayout";
 import PhotographerRouteTabs from "@/ami/features/photographer-management/components/PhotographerRouteTabs";
+import RolesAndPermissionsLayout from "@/ami/features/role-and-permission/layout/RolesAndPermissionsLayout";
+import RolesAndPermissionsPage from "@/ami/features/role-and-permission/pages/RolesAndPermissionsPage";
+import RolesAndPermissionsBreadcrumbs from "@/ami/features/role-and-permission/components/RolesAndPermissionsBreadcrumbs";
+import RolesAndPermissionsForm from "@/ami/features/role-and-permission/components/RolesAndPermissionsForm";
+import PhotographerPage from "@/ami/features/photographer-management/pages/PhotographerPage";
+import PhotographerTable from "@/ami/features/photographer-management/components/PhotographerTable";
+import PhotographerBreadcrumbs from "@/ami/features/photographer-management/components/PhotographerBreadcrumbs";
+import ViewPhotographerForm from "@/ami/features/photographer-management/components/VIewPhotographerForm";
+import CreatePhotographerForm from "@/ami/features/photographer-management/components/CreatePhotographerForm";
+import UpdatePhotographerForm from "@/ami/features/photographer-management/components/UpdatePhotographerForm";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -79,12 +85,14 @@ const baseRoutes = (
 
 			<Route element={<UserBreadcrumbs />}>
 				<Route path="users/create/user" element={<CreateUserForm />} />
-				<Route path="users/edit/user/:id" element={<EditUserForm />} />
+				<Route path="users/edit/user/:id" element={<UpdateUserForm />} />
 				<Route path="users/view/user/:id" element={<ViewUserForm />} />
 			</Route>
 
 			<Route path="activity-logs" element={<div />} />
 		</Route>
+
+		{/* ROLE MODULE */}
 		<Route
 			path="role-and-permission-management/roles-and-permissions"
 			element={<RolesAndPermissionsLayout />}
@@ -102,6 +110,7 @@ const baseRoutes = (
 				/>
 			</Route>
 		</Route>
+
 		{/* CUSTOMER MODULE */}
 		<Route path="customer-management" element={<CustomerLayout />}>
 			<Route element={<CustomerRouteTabs />}>
@@ -122,21 +131,27 @@ const baseRoutes = (
 		{/* PHOTOGRAPHER MODULE */}
 		<Route path="photographer-management" element={<PhotographerLayout />}>
 			<Route element={<PhotographerRouteTabs />}>
-				<Route path="photographers" element={<div />}>
-					<Route index element={<div />} />
-					{/* <Route path="activity-log" element={<div />} /> */}
+				<Route path="photographers" element={<PhotographerPage />}>
+					<Route index element={<PhotographerTable />} />
 				</Route>
 
 				<Route path="photographers/for-approval" element={<div />}>
 					<Route index element={<div />} />
-					{/* <Route path="activity-log" element={<div />} /> */}
 				</Route>
 			</Route>
 
-			<Route element={<CustomerBreadcrumbs />}>
+			<Route element={<PhotographerBreadcrumbs />}>
 				<Route
-					path="customers/view/customer/:id"
-					element={<ViewCustomerForm />}
+					path="photographers/create/photographer"
+					element={<CreatePhotographerForm />}
+				/>
+				<Route
+					path="photographers/edit/photographer/:id"
+					element={<UpdatePhotographerForm />}
+				/>
+				<Route
+					path="photographers/view/photographer/:id"
+					element={<ViewPhotographerForm />}
 				/>
 			</Route>
 		</Route>
@@ -153,7 +168,10 @@ const baseRoutes = (
 					element={<CreateServiceForm />}
 				/>
 				<Route path="services/view/service/:id" element={<ViewServiceForm />} />
-				<Route path="services/edit/service/:id" element={<EditServiceForm />} />
+				<Route
+					path="services/edit/service/:id"
+					element={<UpdateServiceForm />}
+				/>
 			</Route>
 		</Route>
 		{/* PACKAGE MODULE */}
@@ -165,7 +183,10 @@ const baseRoutes = (
 			<Route element={<PackageBreadcrumbs />}>
 				<Route path="packages/create/package" element={<CreatePackageForm />} />
 				<Route path="packages/view/package/:id" element={<ViewPackageForm />} />
-				<Route path="packages/edit/package/:id" element={<EditPackageForm />} />
+				<Route
+					path="packages/edit/package/:id"
+					element={<UpdatePackageForm />}
+				/>
 			</Route>
 		</Route>
 

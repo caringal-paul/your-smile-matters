@@ -12,4 +12,11 @@ export type MetaData = {
 	version?: number;
 };
 
+export type BaseResponseDto<T> = {
+	status: number;
+	message: string;
+	data: T | null;
+	error?: string;
+};
+
 export type Gender = "Male" | "Female" | "Other";

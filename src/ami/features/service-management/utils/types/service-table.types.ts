@@ -1,14 +1,7 @@
-import { ServiceModel } from "@/core/models/service.model";
-
-export type ServiceAmi = Pick<
-	ServiceModel,
-	"_id" | "category" | "name" | "description" | "is_available"
->;
-
-export type ServiceAmiFilters = Partial<Record<keyof ServiceAmi, string[]>>;
+import { GetAllServiceResponseAmi } from "./service-response.ami.types";
 
 export type ServiceAmiTableType = {
-	[K in keyof ServiceAmi]: string;
+	[K in keyof GetAllServiceResponseAmi]: GetAllServiceResponseAmi[K];
 } & {
 	status?: string;
 	action?: string;

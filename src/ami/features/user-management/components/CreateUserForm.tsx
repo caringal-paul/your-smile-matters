@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
@@ -7,12 +7,17 @@ import { Switch } from "@/core/components/base/switch";
 
 import { Form, FormField, FormMessage } from "@/core/components/base/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserAmiUpdate, userUpdateSchema } from "../utils/schemas/user.schema";
+import {
+	UserAmiCreate,
+	UserAmiUpdate,
+	userCreateSchema,
+	userUpdateSchema,
+} from "../utils/schemas/user.schema";
 import { useForm } from "react-hook-form";
 import { Input } from "@/core/components/base/input";
 
 import usersArray from "../mock/temp-user.json";
-import roleArray from "../mock/temp-roles.json";
+import roleArray from "@/ami/features/role-and-permission/mock/temp-roles.json";
 
 import { UserModel } from "@/core/models/user.model";
 import { RoleModel } from "@/core/models/role.model";
@@ -25,12 +30,18 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/core/components/base/select";
+import { useCreateUserMutation } from "../queries/createUser.ami.mutation";
+import { useGetAllRolesQuery } from "../../role-and-permission/queries/getRoles.ami.query";
 
 const CreateUserForm = () => {
-	const roles = roleArray as unknown;
-	const sampleRoles = roles as RoleModel[];
+	const navigate = useNavigate();
 
-	const roleOptions: SelectOptions[] = sampleRoles.map((role) => {
+	const { mutateAsync: createUser, isPending: isCreateUserLoading } =
+		useCreateUserMutation();
+	const { data: roles = [], isLoading: isRolesDataFetching } =
+		useGetAllRolesQuery();
+
+	const roleOptions: SelectOptions[] = roles.map((role) => {
 		return {
 			label: role.name,
 			value: role._id,
@@ -38,8 +49,8 @@ const CreateUserForm = () => {
 		};
 	});
 
-	const form = useForm<UserAmiUpdate>({
-		resolver: zodResolver(userUpdateSchema),
+	const form = useForm<UserAmiCreate>({
+		resolver: zodResolver(userCreateSchema),
 		mode: "onChange",
 		defaultValues: {
 			username: "",
@@ -47,20 +58,34 @@ const CreateUserForm = () => {
 			first_name: "",
 			last_name: "",
 			mobile_number: "",
-			is_active: false,
+			is_active: true,
 			role_id: "",
 		},
 	});
 
-	const onSubmit = (values: UserAmiUpdate) => {
-		console.log(values);
+	const onSubmit = async (payload: UserAmiCreate) => {
+		try {
+			const response = await createUser(payload);
+
+			if (response) {
+				navigate("/admin/ami/user-management/users");
+			}
+
+			console.log("User created:", response);
+		} catch (error) {
+			console.error("Failed to create user:", error);
+		}
 	};
+
+	if (isRolesDataFetching) {
+		return <>Loading</>;
+	}
 
 	return (
 		<div>
 			<FormCard>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form>
 						<FormCard.Title>Create User</FormCard.Title>
 						<FormCard.Body className="grid gap-4 space-y-0 lg:grid-cols-2">
 							<FormField
@@ -230,16 +255,26 @@ const CreateUserForm = () => {
 									form.reset();
 									form.clearErrors();
 								}}
-								disabled={!form.formState.isDirty}
+								disabled={!form.formState.isDirty || isCreateUserLoading}
 							>
 								Clear
 							</Button>
 							<Button
 								className="sm:w-fit"
-								type="submit"
-								disabled={!form.formState.isDirty || !form.formState.isValid}
+								onClick={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									onSubmit(form.getValues());
+								}}
+								disabled={
+									!form.formState.isDirty ||
+									!form.formState.isValid ||
+									isCreateUserLoading
+								}
 							>
-								Create User Account
+								{isCreateUserLoading
+									? "Creating User..."
+									: "Create User Account"}
 							</Button>
 						</FormCard.Footer>
 					</form>

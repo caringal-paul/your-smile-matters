@@ -1,6 +1,6 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
-import { UserAmiTableType } from "../types/users-table.types";
+import { UserAmiTableType } from "../types/users-table.ami.types";
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Column } from "@/ami/shared/types/column.types";

@@ -107,7 +107,7 @@ const MultipleSelectInput = ({
 							justify-between text-left
 							text-sm text-input font-medium
 							bg-transparent shadow-none
-							border-input-border border-[1px] rounded-lg
+							border-input-border border-[1px] rounded-lg hover:bg-transparent
 						`}
 					disabled={disabled || readOnly}
 				>
@@ -200,7 +200,9 @@ const MultipleSelectInput = ({
 												isSelected ? "opacity-100" : "opacity-0"
 											}`}
 										/>
-										<span className="text-xs truncate">{option.label}</span>
+										<span className="text-xs truncate text-foreground">
+											{option.label}
+										</span>
 										{!!option.status && (
 											<Badge className={`ml-2`}>{option.status}</Badge>
 										)}
@@ -444,7 +446,7 @@ const InputWithSuffix = ({
 				placeholder={placeholder}
 				disabled={disabled}
 				value={value}
-				className={cn(`text-[11px] max-w-[15em] w-[15em] pr-11`, className)}
+				className={cn(`text-[11px] w-full pr-11`, className)}
 				onChange={onChange}
 				{...props}
 			/>
