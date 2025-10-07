@@ -50,6 +50,11 @@ import PhotographerBreadcrumbs from "@/ami/features/photographer-management/comp
 import ViewPhotographerForm from "@/ami/features/photographer-management/components/VIewPhotographerForm";
 import CreatePhotographerForm from "@/ami/features/photographer-management/components/CreatePhotographerForm";
 import UpdatePhotographerForm from "@/ami/features/photographer-management/components/UpdatePhotographerForm";
+import AmiBookingLayout from "@/ami/features/booking-management/layout/BookingLayout.ami";
+import BookingPage from "@/ami/features/booking-management/pages/BookingPage";
+import BookingTable from "@/ami/features/booking-management/components/BookingTable";
+import BookingBreadcrumbs from "@/ami/features/booking-management/components/BookingBreadcrumbs";
+import ViewBookingForm from "@/ami/features/booking-management/components/ViewBookingForm";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -79,6 +84,7 @@ const baseRoutes = (
 		<Route path="dashboard" element={<div />}>
 			<Route index element={<DashboardPage />} />
 		</Route>
+
 		{/* USER MODULE */}
 		<Route path="user-management" element={<UserLayout />}>
 			<Route path="users" element={<UserPage />} />
@@ -174,6 +180,7 @@ const baseRoutes = (
 				/>
 			</Route>
 		</Route>
+
 		{/* PACKAGE MODULE */}
 		<Route path="package-management" element={<PackageLayout />}>
 			<Route path="packages" element={<PackagePage />}>
@@ -196,6 +203,20 @@ const baseRoutes = (
 				<Route index element={<div />} />
 			</Route>
 		</Route>
+
+		{/* BOOKING MODULE */}
+		<Route path="booking-management" element={<AmiBookingLayout />}>
+			<Route path="bookings" element={<BookingPage />}>
+				<Route index element={<BookingTable />} />
+			</Route>
+
+			<Route element={<BookingBreadcrumbs />}>
+				<Route path="bookings/create/booking" element={<div />} />
+				<Route path="bookings/view/booking/:id" element={<ViewBookingForm />} />
+				<Route path="bookings/edit/booking/:id" element={<div />} />
+			</Route>
+		</Route>
+
 		{/* SUPPORT MODULE */}
 		<Route path="support-management" element={<div />}>
 			<Route element={<SupportRouteTabs />}>
@@ -227,6 +248,7 @@ const baseRoutes = (
 				/>
 			</Route>
 		</Route>
+
 		{/* ACCOUNT SETTINGS */}
 		<Route path="account-settings" element={<div />}>
 			<Route index element={<AccountSettingsPage />} />

@@ -99,7 +99,8 @@ const photographerBaseSchema = z.object({
 		.max(5, "Cannot have more than 5 specialties"),
 
 	photo_gallery: z
-		.array(z.string().regex(imageUrlRegex, "Invalid image URL format"))
+		.array(z.string())
+		// .regex(imageUrlRegex, "Invalid image URL format"))
 		.max(9, "Photo gallery cannot have more than 9 images")
 		.optional(),
 

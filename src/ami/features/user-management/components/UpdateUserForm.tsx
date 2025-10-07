@@ -82,7 +82,7 @@ const UpdateUserForm = () => {
 	};
 
 	useEffect(() => {
-		if (userWithRoleAndPermissions) {
+		if (userWithRoleAndPermissions && roleOptions.length > 0) {
 			form.reset({
 				username: userWithRoleAndPermissions.username,
 				email: userWithRoleAndPermissions.email,
@@ -92,8 +92,10 @@ const UpdateUserForm = () => {
 				is_active: userWithRoleAndPermissions.is_active,
 				role_id: userWithRoleAndPermissions.role_id,
 			});
+
+			form.trigger();
 		}
-	}, [userWithRoleAndPermissions, form]);
+	}, [userWithRoleAndPermissions, roles, form]);
 
 	if (isUserDataFetching && isRolesDataFetching) {
 		return <>Loading</>;

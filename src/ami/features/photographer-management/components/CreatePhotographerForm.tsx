@@ -21,13 +21,12 @@ import {
 import { SERVICE_OPTIONS } from "@/core/constants/options.constants";
 import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import { DEFAULT_WEEKLY_SCHEDULE } from "@/core/constants/schedule.constants";
-import { Separator } from "@/core/components/base/separator";
-import { WeeklyScheduleItem } from "@/core/models/photographer.model";
 import { Checkbox } from "@/core/components/base/checkbox";
 import { Textarea } from "@/core/components/base/textarea";
 import { UploadCloud } from "lucide-react";
 import AddButtonIcon from "@/ami/shared/assets/icons/AddButtonIcon";
 import TrashIcon from "@/ami/shared/assets/icons/TrashIcon";
+import { useEffect } from "react";
 
 const CreatePhotographerForm = () => {
 	const navigate = useNavigate();
@@ -50,20 +49,9 @@ const CreatePhotographerForm = () => {
 
 			photo_gallery: [],
 
-			weekly_schedule: DEFAULT_WEEKLY_SCHEDULE,
+			weekly_schedule: [],
 
-			date_overrides: [
-				{
-					date: new Date(),
-					is_available: false,
-					custom_hours: {
-						start_time: "",
-						end_time: "",
-					},
-					reason: "",
-					notes: "",
-				},
-			],
+			date_overrides: [],
 
 			booking_lead_time_hours: 1,
 			is_active: true,
@@ -83,6 +71,10 @@ const CreatePhotographerForm = () => {
 			console.error("Failed to create user:", error);
 		}
 	};
+
+	useEffect(() => {
+		form.setValue("weekly_schedule", DEFAULT_WEEKLY_SCHEDULE);
+	}, []);
 
 	console.log("Is valid", form.formState.isValid);
 	console.log("Values", form.getValues());
@@ -301,7 +293,7 @@ const CreatePhotographerForm = () => {
 						/>
 
 						<FormCard.Title className="pt-3 border-t-[1px] border-dashed">
-							Weekly Schedule
+							Weekly Schedule{" "}
 						</FormCard.Title>
 
 						{/* Weekly Schedule Fields */}
@@ -508,7 +500,7 @@ const CreatePhotographerForm = () => {
 									]);
 								}}
 							>
-								<AddButtonIcon fill="black" /> Add Date Override
+								<AddButtonIcon fill="black" /> Add Custom Schedule
 							</Button>
 						</FormCard.Title>
 

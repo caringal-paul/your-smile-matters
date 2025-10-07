@@ -203,7 +203,7 @@ const DataTable = <T extends Record<string, any>>({
 										} ${
 											key == "id"
 												? "pl-8 pr-0"
-												: `${isColumnsCompressed ? "px-2" : "px-8"} `
+												: `${isColumnsCompressed ? "px-4" : "px-8"} `
 										}`}
 										onClick={() => sortable && handleSort(key)}
 									>
@@ -236,7 +236,7 @@ const DataTable = <T extends Record<string, any>>({
 											className={`border-b-[.5px] border-table py-4 ${
 												key == "id"
 													? "pl-8 pr-0"
-													: `${isColumnsCompressed ? "px-2" : "px-8"} `
+													: `${isColumnsCompressed ? "px-4" : "px-8"} `
 											} `}
 										>
 											{render ? render(item[key], item) : String(item[key])}

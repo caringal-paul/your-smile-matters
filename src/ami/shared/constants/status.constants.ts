@@ -1,5 +1,9 @@
 import { FilterOptions } from "../types/filter.types";
-import { AvailabilityStatus, ForApprovalStatus } from "../types/status.types";
+import {
+	AvailabilityStatus,
+	BookingStatus,
+	ForApprovalStatus,
+} from "../types/status.types";
 
 export const FOR_APPROVAL_STATUSES_FILTER_OPTIONS: FilterOptions<{
 	status: ForApprovalStatus;
@@ -12,3 +16,17 @@ export const AVAILABILITY_STATUSES_FILTER_OPTIONS: FilterOptions<{
 }> = {
 	status: ["Active", "Inactive"],
 };
+
+export const BOOKING_STATUSES_FILTER_OPTIONS: FilterOptions<{
+	status: BookingStatus[];
+}> = {
+	status: [
+		"Pending",
+		"Confirmed",
+		"Assigned",
+		"Ongoing",
+		"Completed",
+		"Cancelled",
+		"Rescheduled",
+	],
+} as const;

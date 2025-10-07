@@ -121,7 +121,7 @@ const ResponsiveSidebar = () => {
 		{
 			id: 7,
 			name: "Customer Bookings",
-			path: "booking-management",
+			path: "booking-management/bookings",
 			icon: Calendar,
 		},
 		// {
