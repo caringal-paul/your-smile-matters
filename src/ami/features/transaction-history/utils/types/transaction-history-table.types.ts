@@ -1,20 +1,14 @@
-import { AssetClass } from "@/ami/shared/types/asset-class.types";
-import { TransactionStatus } from "@/ami/shared/types/status.types";
+import { GetAllTransactionsResponseAmi } from "./transaction-response.ami.types";
 
-export type TransactionHistory = {
-	id: number;
-	reference_no: string;
-	customer_name: string;
-	investment_offer: string;
-	asset_class: AssetClass;
-	alt_bank_used: string;
-	principal_amount: string;
-	status: TransactionStatus;
-	transaction_date: string;
-};
-
-export type TransactionHistoryTableType = {
-	[K in keyof TransactionHistory]: string;
+export type TransactionAmiTableType = {
+	[K in keyof GetAllTransactionsResponseAmi]: GetAllTransactionsResponseAmi[K];
 } & {
 	action?: string;
+	booking_reference?: string;
+	customer_no?: string;
+	customer_name?: string;
+	customer_email?: string;
+	customer_contact?: string;
+	booking_total_price?: string;
+	booking_id_string?: string;
 };

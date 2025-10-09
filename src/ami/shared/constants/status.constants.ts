@@ -3,6 +3,7 @@ import {
 	AvailabilityStatus,
 	BookingStatus,
 	ForApprovalStatus,
+	TransactionStatus,
 } from "../types/status.types";
 
 export const FOR_APPROVAL_STATUSES_FILTER_OPTIONS: FilterOptions<{
@@ -29,4 +30,10 @@ export const BOOKING_STATUSES_FILTER_OPTIONS: FilterOptions<{
 		"Cancelled",
 		"Rescheduled",
 	],
+} as const;
+
+export const TRANSACTION_STATUSES_FILTER_OPTIONS: FilterOptions<{
+	status: TransactionStatus[];
+}> = {
+	status: ["Pending", "Completed", "Failed", "Refunded", "Cancelled"],
 } as const;

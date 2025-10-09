@@ -9,3 +9,10 @@ export type BookingStatus =
 	| "Completed"
 	| "Cancelled"
 	| "Rescheduled";
+
+export type TransactionStatus =
+	| "Pending"
+	| "Completed"
+	| "Failed"
+	| "Refunded"
+	| "Cancelled";

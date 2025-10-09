@@ -7,9 +7,9 @@ export const useGetAllBookingQuery = () => {
 		queryKey: ["bookings"],
 		queryFn: () => amiBookingApi.get(),
 		select: (data): GetAllBookingsResponseAmi[] => {
-			const customerArray = data.data ?? [];
+			const bookingsArray = data.data ?? [];
 
-			return customerArray;
+			return bookingsArray;
 		},
 	});
 };

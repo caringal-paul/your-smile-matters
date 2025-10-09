@@ -1,78 +1,73 @@
-// import SectionHeader from "@/ami/shared/components/header/SectionHeader";
-// import DataTable from "@/ami/shared/components/table/DataTable";
-// import transactionsArray from "../mock/temp-transactions.json";
-// import { Button } from "@/core/components/base/button";
-// import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
-// import TableSearch from "@/ami/shared/components/filter/TableSearch";
-// import ExportIcon from "@/ami/shared/assets/icons/ExportIcon";
-// import { TransactionHistoryTableType } from "../utils/types/transaction-history-table.types";
-// import { useTransactionColumns } from "../utils/columns/transaction.columns";
-// import TableFilter from "@/ami/shared/components/filter/TableFilter";
-// import { TRANSACTION_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
-// import { ASSET_CLASSES_FILTER_OPTIONS } from "@/ami/shared/constants/asset-classes.constants";
+import DataTable from "@/ami/shared/components/table/DataTable";
 
-// const TRANSACTIONS_TABLE_SEARCH_KEYS: (keyof TransactionHistoryTableType)[] = [
-// 	"reference_no",
-// 	"customer_name",
-// 	"investment_offer",
-// 	"asset_class",
-// 	"alt_bank_used",
-// 	"principal_amount",
-// 	"status",
-// 	"transaction_date",
-// ];
+import TableFilter from "@/ami/shared/components/filter/TableFilter";
+import SectionHeader from "@/ami/shared/components/header/SectionHeader";
+import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
+import TableSearch from "@/ami/shared/components/filter/TableSearch";
 
-// const TransactionTable = () => {
-// 	const transactions = transactionsArray as unknown;
-// 	const transactionsData = transactions as TransactionHistoryTableType[];
+import { TRANSACTION_TABLE_SEARCH_KEYS } from "../constants/transaction.constants";
+import { useGetAllTransactionsQuery } from "../queries/getTransactions.ami.query";
+import { useTransactionColumns } from "../utils/columns/transaction.columns";
+import { TransactionAmiTableType } from "../utils/types/transaction-history-table.types";
+import { TRANSACTION_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
 
-// 	const { columns } = useTransactionColumns();
+const TransactionTable = () => {
+	const { data: transactions = [], isLoading } = useGetAllTransactionsQuery();
 
-// 	const {
-// 		searchText,
-// 		setSearchText,
-// 		filtersDraft,
-// 		setFiltersDraft,
-// 		dateFilterDraft,
-// 		setDateFilterDraft,
-// 		applyFilters,
-// 		filteredData,
-// 	} = useFilteredTableData<TransactionHistoryTableType>({
-// 		data: transactionsData,
-// 		keys: TRANSACTIONS_TABLE_SEARCH_KEYS,
-// 	});
+	const columns = useTransactionColumns();
 
-// 	return (
-// 		<div className="relative pb-4">
-// 			<SectionHeader hasSeparator={true} className="mt-4">
-// 				<div className="flex gap-2 items-center h-9 w-full sm:w-fit">
-// 					<TableSearch value={searchText} onChange={setSearchText} />
-// 					<TableFilter
-// 						hasDateFilter
-// 						filters={filtersDraft}
-// 						setFilters={setFiltersDraft}
-// 						filterOptions={{
-// 							...TRANSACTION_STATUSES_FILTER_OPTIONS,
-// 							...ASSET_CLASSES_FILTER_OPTIONS,
-// 						}}
-// 						dateFilter={dateFilterDraft}
-// 						setDateFilter={setDateFilterDraft}
-// 						onApply={applyFilters}
-// 					/>
-// 				</div>
-// 				<div className="w-full flex flex-col sm:flex-row justify-end">
-// 					<Button className="bg-primary w-full sm:w-fit border-none [&_svg]:size-5 [&_svg]:shrink-0">
-// 						Export Log <ExportIcon className="h-5 w-5" />
-// 					</Button>
-// 				</div>
-// 			</SectionHeader>
-// 			<DataTable
-// 				data={filteredData}
-// 				columns={columns}
-// 				descriptionPriorityKey="reference_no"
-// 			/>
-// 		</div>
-// 	);
-// };
+	console.log(transactions);
 
-// export default TransactionTable;
+	const {
+		searchText,
+		setSearchText,
+		filtersDraft,
+		setFiltersDraft,
+		dateFilterDraft,
+		applyFilters,
+		setDateFilterDraft,
+		filteredData,
+	} = useFilteredTableData<TransactionAmiTableType>({
+		data: transactions.map((transaction) => {
+			return {
+				...transaction,
+				booking_reference: transaction.booking_id.booking_reference,
+				customer_no: transaction.customer_id.customer_no,
+				customer_name: `${transaction.customer_id.first_name} ${transaction.customer_id.last_name}`,
+				customer_email: transaction.customer_id.email,
+				customer_contact: transaction.customer_id.mobile_number,
+				booking_total_price: String(transaction.booking_id.final_amount),
+				booking_id_string: transaction.booking_id._id,
+			};
+		}),
+		keys: TRANSACTION_TABLE_SEARCH_KEYS,
+		// dateFields: ["Transaction_date"],
+	});
+
+	if (isLoading) {
+		return <>Loading</>;
+	}
+
+	return (
+		<div className="relative pb-4">
+			<SectionHeader hasSeparator={true}>
+				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
+					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableFilter
+						filters={filtersDraft}
+						hasDateFilter
+						dateFilter={dateFilterDraft}
+						setDateFilter={setDateFilterDraft}
+						setFilters={setFiltersDraft}
+						filterOptions={TRANSACTION_STATUSES_FILTER_OPTIONS}
+						onApply={applyFilters}
+					/>
+				</div>
+			</SectionHeader>
+
+			<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+		</div>
+	);
+};
+
+export default TransactionTable;

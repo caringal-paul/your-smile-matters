@@ -23,6 +23,10 @@ const buttonVariants = cva(
 					"bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
 				sidebar:
 					"h-fit py-1 px-2 justify-start rounded-md hover:bg-primary-foreground [&_svg]:size-3 [&_svg]:shrink-0",
+
+				link: "truncate flex flex-row items-center gap-1 hover:text-primary hover:underline",
+
+				// NOT USED?
 				icon: "bg-transparent hover:bg-accent text-foreground border-none disabled:bg-transparent",
 				role: "w-full justify-between rounded-[13px] shadow-none border-2 bg-white hover:bg-white-foreground",
 				roleSelected:
@@ -35,6 +39,8 @@ const buttonVariants = cva(
 					"border-2 border-dismiss-border bg-dismiss text-dismiss-secondary rounded-2xl",
 				confirm:
 					"bg-primary text-primary-button-text rounded-2xl hover:bg-primary-hover disabled:bg-primary disabled:text-white disabled:opacity-20 shadow-md [&_svg]:size-4 [&_svg]:shrink-0",
+
+				undefined: "",
 			},
 			size: {
 				default: "h-9 px-4 py-2",
@@ -44,6 +50,8 @@ const buttonVariants = cva(
 				edit: "h-5 w-fit p-0",
 				confirm: "h-14 w-full px-4",
 				dismiss: "h-14 w-fit px-4",
+				undefined: "",
+				link: "font-normal text-2xs 2xl:text-xs w-fit p-0",
 			},
 		},
 		defaultVariants: {

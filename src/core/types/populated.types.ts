@@ -2,6 +2,7 @@ import { Gender } from "./base.types";
 
 export type PopulatedCustomer = {
 	_id: string;
+	customer_no: string;
 	first_name: string;
 	last_name: string;
 	email: string;
@@ -16,16 +17,17 @@ export type PopulatedPackage = {
 	package_price: number;
 	description?: string;
 	is_available: boolean;
+	image?: string | null;
 };
 
 export type PopulatedPhotographer = {
 	_id: string;
 	name: string;
 	email: string;
-	specialties?: string;
+	mobile_number?: string | null;
 	bio?: string;
 	profile_image?: string | null;
-	mobile_number?: string | null;
+	specialties?: string;
 };
 
 export type PopulatedPromo = {
@@ -38,18 +40,35 @@ export type PopulatedPromo = {
 export type PopulatedService = {
 	_id: string;
 	name: string;
+	description?: string;
 	category: string;
 	price: number;
+	old_price?: number;
 	duration_minutes?: number;
+	is_available: boolean;
 };
 
 export type PopulatedBookingService = {
+	_id: string;
 	service_id: PopulatedService;
 	quantity: number;
 	price_per_unit: number;
 	total_price: number;
 	duration_minutes?: number | null;
+};
+
+export type PopulatedBooking = {
 	_id: string;
+	booking_reference: string;
+	final_amount: number;
+	customer_id: PopulatedCustomer;
+	package_id?: PopulatedPackage;
+	photographer_id?: PopulatedPhotographer;
+	promo_id?: unknown;
+	status: string;
+	booking_date: Date;
+	location?: string;
+	services?: { service_id: PopulatedService }[];
 };
 
 // Transaction populated export type

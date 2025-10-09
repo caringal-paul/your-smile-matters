@@ -115,7 +115,7 @@ const ResponsiveSidebar = () => {
 		{
 			id: 6,
 			name: "Transaction History",
-			path: "transaction-history",
+			path: "transaction-history/transactions",
 			icon: BookCopy,
 		},
 		{

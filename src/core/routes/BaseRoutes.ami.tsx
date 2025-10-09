@@ -55,6 +55,11 @@ import BookingPage from "@/ami/features/booking-management/pages/BookingPage";
 import BookingTable from "@/ami/features/booking-management/components/BookingTable";
 import BookingBreadcrumbs from "@/ami/features/booking-management/components/BookingBreadcrumbs";
 import ViewBookingForm from "@/ami/features/booking-management/components/ViewBookingForm";
+import TransactionLayout from "@/ami/features/transaction-history/layout/TransactionLayout";
+import TransactionPage from "@/ami/features/transaction-history/pages/TransactionPage";
+import TransactionTable from "@/ami/features/transaction-history/components/TransactionTable";
+import TransactionBreadcrumbs from "@/ami/features/transaction-history/components/TransactionBreadcrumbs";
+import ViewTransactionForm from "@/ami/features/transaction-history/components/ViewTransactionForm";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -198,9 +203,18 @@ const baseRoutes = (
 		</Route>
 
 		{/* TRANSACTION MODULE */}
-		<Route path="transaction-history" element={<div />}>
-			<Route element={<div />}>
-				<Route index element={<div />} />
+		<Route path="transaction-history" element={<TransactionLayout />}>
+			<Route path="transactions" element={<TransactionPage />}>
+				<Route index element={<TransactionTable />} />
+			</Route>
+
+			<Route element={<TransactionBreadcrumbs />}>
+				<Route path="transactions/create/transaction" element={<div />} />
+				<Route
+					path="transactions/view/transaction/:id"
+					element={<ViewTransactionForm />}
+				/>
+				<Route path="transactions/edit/transaction/:id" element={<div />} />
 			</Route>
 		</Route>
 

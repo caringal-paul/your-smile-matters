@@ -53,7 +53,7 @@ const ViewBookingForm = () => {
 		<div className="pb-8 grid grid-cols-1 xl:grid-cols-3 gap-4">
 			<FormCard className="col-span-1 xl:col-span-3 w-full h-full">
 				<FormCard.Title className="flex flex-row items-center justify-between gap-2">
-					<span>
+					<span className="flex flex-row gap-2">
 						Reference No:
 						<strong className="text-primary font-bold">
 							{booking?.booking_reference}

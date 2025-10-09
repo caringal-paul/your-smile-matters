@@ -3,10 +3,10 @@ import { Outlet } from "react-router-dom";
 
 const TransactionLayout = () => {
 	return (
-		<div className="flex flex-col h-full w-full space-y-4 sm:space-y-0">
+		<div className="flex flex-col h-full w-full space-y-20 xl:space-y-4">
 			<PageHeader pageTitle="Transaction History" />
 
-			<div className="flex-1 overflow-y-auto scrollbar-hidden">
+			<div className="flex-1 overflow-y-auto scrollbar-hidden mt-20 xl:mt-4">
 				<Outlet />
 			</div>
 		</div>
