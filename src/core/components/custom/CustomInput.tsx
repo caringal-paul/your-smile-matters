@@ -385,7 +385,7 @@ const PricingInput: React.FC<PricingInputProps> = ({
 			className={`
 		  flex items-center h-[32px] rounded-md border-[1px] border-input-border 
 		  bg-input-background text-sm text-input font-medium
-		  focus-within:outline-2 focus-within:outline focus-within:outline-blue-700
+		  focus-within:outline-[1px] focus-within:outline focus-within:outline-primary
 		  ${disabled ? "opacity-50 cursor-not-allowed" : ""}
 		  ${className}
 		`}

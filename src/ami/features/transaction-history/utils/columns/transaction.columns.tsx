@@ -1,5 +1,5 @@
 import { TransactionAmiTableType } from "../types/transaction-history-table.types";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
@@ -7,8 +7,8 @@ import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithInd
 import { TransactionStatus } from "@/ami/shared/types/status.types";
 import { TRANSACTION_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
-import { Label } from "recharts";
-import { Coins, HandCoins, SmartphoneNfc } from "lucide-react";
+
+import { HandCoins, SmartphoneNfc } from "lucide-react";
 import { Button } from "@/core/components/base/button";
 import {
 	Tooltip,

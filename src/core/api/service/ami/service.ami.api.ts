@@ -1,6 +1,6 @@
 import { BaseResponseDto } from "@/core/types/base.types";
 import { handleError } from "@/core/helpers/handleError";
-import { apiClient } from "@/core/lib/axios/api-client";
+import { adminApiClient } from "@/core/lib/axios/api-client.ami";
 
 import {
 	CreateServiceResponseAmi,
@@ -21,7 +21,7 @@ const ENDPOINT = "/admin/services";
 const amiServiceApi = {
 	async get(): Promise<BaseResponseDto<GetAllServiceResponseAmi[]>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetAllServiceResponseAmi[]>
 			>(`${ENDPOINT}?sort_by=created_at&sort_order=desc`);
 
@@ -37,7 +37,7 @@ const amiServiceApi = {
 		id: string
 	): Promise<BaseResponseDto<GetByIdServiceResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdServiceResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -53,7 +53,7 @@ const amiServiceApi = {
 		data: ServiceAmiUpdate
 	): Promise<BaseResponseDto<UpdateServiceResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<UpdateServiceResponseAmi>
 			>(`${ENDPOINT}/${id}`, data);
 			return response;
@@ -68,7 +68,7 @@ const amiServiceApi = {
 		data: ServiceAmiCreate
 	): Promise<BaseResponseDto<CreateServiceResponseAmi>> {
 		try {
-			const response = await apiClient.post<
+			const response = await adminApiClient.post<
 				BaseResponseDto<CreateServiceResponseAmi>
 			>(ENDPOINT, data);
 			return response;
@@ -83,7 +83,7 @@ const amiServiceApi = {
 		id: string
 	): Promise<BaseResponseDto<DeactivateServiceResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<DeactivateServiceResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -98,7 +98,7 @@ const amiServiceApi = {
 		id: string
 	): Promise<BaseResponseDto<ReactivateServiceResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<ReactivateServiceResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 
@@ -114,7 +114,7 @@ const amiServiceApi = {
 		id: string
 	): Promise<BaseResponseDto<ToggleAvailabilityResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<ToggleAvailabilityResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 

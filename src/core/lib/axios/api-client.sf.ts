@@ -16,19 +16,22 @@ let isRefreshing = false;
 let refreshPromise: Promise<string> | null = null;
 
 const clearAuth = () => {
-	localStorage.removeItem("access_token");
-	localStorage.removeItem("refresh_token");
+	localStorage.removeItem("sf_access_token");
+	localStorage.removeItem("sf_refresh_token");
+	localStorage.removeItem("customer-logged-in");
 	isRefreshing = false;
 	refreshPromise = null;
 };
 
 const redirectToLogin = () => {
-	const isOnAuthPage = window.location.pathname.includes("/admin/ami/auth");
+	const isOnAuthPage = window.location.pathname.includes("/auth");
 	if (!isOnAuthPage) {
 		toast.error("Session expired. Please log in again.");
+
+		localStorage.removeItem("customer-logged-in");
 		setTimeout(() => {
-			window.location.href = "/admin/ami/auth";
-		}, 100);
+			window.location.href = "/";
+		}, 2000);
 	}
 };
 
@@ -37,7 +40,7 @@ const refreshAccessToken = async (
 	refreshToken: string
 ): Promise<string> => {
 	const response = await axios.post<BaseResponseDto<RefreshTokenData>>(
-		`${baseURL}/admin/auth/refresh`,
+		`${baseURL}/client/auth/refresh`,
 		{ refresh_token: refreshToken }
 	);
 
@@ -46,7 +49,7 @@ const refreshAccessToken = async (
 		throw new Error("No access token in refresh response");
 	}
 
-	localStorage.setItem("access_token", newAccessToken);
+	localStorage.setItem("sf_access_token", newAccessToken);
 	return newAccessToken;
 };
 
@@ -58,7 +61,7 @@ const createApiClient = (baseURL: string) => {
 
 	// Add token to requests
 	client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-		const token = localStorage.getItem("access_token");
+		const token = localStorage.getItem("sf_access_token");
 		if (token && config.headers) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
@@ -94,7 +97,7 @@ const createApiClient = (baseURL: string) => {
 			}
 
 			// Get refresh token
-			const refreshToken = localStorage.getItem("refresh_token");
+			const refreshToken = localStorage.getItem("sf_refresh_token");
 			if (!refreshToken) {
 				clearAuth();
 				redirectToLogin();
@@ -138,11 +141,11 @@ const createApiClient = (baseURL: string) => {
 	return client;
 };
 
-// Create the client
+// Create the customer client
 const client = createApiClient(import.meta.env.VITE_API_URL);
 
 // Export simple methods
-export const apiClient = {
+export const customerApiClient = {
 	get: <T>(url: string, config?: AxiosRequestConfig) =>
 		client.get<T>(url, config).then((res) => res.data),
 

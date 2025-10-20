@@ -11,10 +11,16 @@ const labelVariants = cva(
 			variant: {
 				gradient:
 					"text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80",
+
+				sf: "text-foreground",
+
 				undefined: "",
 			},
 			size: {
 				undefined: "",
+
+				"sf-normal": "text-sm font-light",
+
 				default: "text-sm font-medium",
 			},
 		},

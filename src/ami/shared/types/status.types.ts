@@ -6,6 +6,7 @@ export type BookingStatus =
 	| "Pending"
 	| "Confirmed"
 	| "Ongoing"
+	| "Waiting"
 	| "Completed"
 	| "Cancelled"
 	| "Rescheduled";

@@ -9,7 +9,7 @@ import { Label } from "@/core/components/base/label";
 interface ServiceCardProps {
 	category: string;
 	title: string;
-	duration_minutes: number | null;
+	duration_minutes?: number;
 	price: number;
 	oldPrice?: number;
 	image: string;
@@ -28,8 +28,7 @@ export function ServiceCard({
 	onView,
 }: ServiceCardProps) {
 	return (
-		<Card className="max-w-xs overflow-hidden transition shadow-md rounded-2xl hover:shadow-lg">
-			{/* Image */}
+		<Card className="max-w-xs overflow-hidden transition shadow-md rounded-2xl hover:shadow-lg flex flex-col">
 			<CardHeader className="relative p-0">
 				<img
 					src={image || "/sf/ysm-card-fallback.png"}
@@ -44,34 +43,35 @@ export function ServiceCard({
 				</button>
 			</CardHeader>
 
-			{/* Content */}
-			<CardContent className="p-4 pb-6 space-y-1 ">
-				<Label className="text-2xl font-bold tracking-normal">{title}</Label>
-				<div className="flex gap-2 items-center">
-					<Badge className="hover:bg-secondary bg-secondary">{category}</Badge>
+			<CardContent className="p-4 pb-6 flex flex-col flex-1">
+				<div className="space-y-1">
+					<Label className="text-2xl font-bold tracking-normal">{title}</Label>
+					<div className="flex gap-2 items-center">
+						<Badge className="hover:bg-secondary bg-secondary">
+							{category}
+						</Badge>
 
-					{/* duration_minutes */}
-					<div className="flex items-center gap-1 text-2xs text-gray-400">
-						<Clock size={12} className="shrink-0" />
-						<span className="truncate">
-							{formatDurationByMinutes(duration_minutes ?? 120)}
+						<div className="flex items-center gap-1 text-2xs text-gray-400">
+							<Clock size={12} className="shrink-0" />
+							<span className="truncate">
+								{formatDurationByMinutes(duration_minutes ?? 120)}
+							</span>
+						</div>
+					</div>
+
+					<div className="flex flex-row items-center justify-start gap-2 tracking-tight">
+						<span className="text-lg font-semibold ">
+							{formatToPeso(price.toFixed(2))}
 						</span>
+						{oldPrice && (
+							<span className="text-sm text-gray-400 line-through">
+								{formatToPeso(oldPrice.toFixed(2))}
+							</span>
+						)}
 					</div>
 				</div>
 
-				<div className="flex flex-row items-center justify-start gap-2 tracking-tight">
-					<span className="text-lg font-semibold ">
-						{formatToPeso(price.toFixed(2))}
-					</span>
-					{oldPrice && (
-						<span className="text-sm text-gray-400 line-through">
-							{formatToPeso(oldPrice.toFixed(2))}
-						</span>
-					)}
-				</div>
-
-				{/* Price + Button */}
-				<div className="flex items-center justify-between pt-3">
+				<div className="flex items-center justify-between pt-3 mt-auto">
 					<Button
 						onClick={onBook}
 						className="text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"

@@ -177,12 +177,12 @@
 }
 
 .scrollbar-small::-webkit-scrollbar-thumb {
-	background: #f58735;
+	background: #846e62;
 	border-radius: 3px;
 }
 
 .scrollbar-small::-webkit-scrollbar-thumb:hover {
-	background: #f58735;
+	background: #846e62;
 }
 
 .scrollbar-hidden {

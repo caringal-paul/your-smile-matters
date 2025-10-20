@@ -3,14 +3,12 @@ import { Label } from "@/core/components/base/label";
 import { useParams } from "react-router-dom";
 import FormCard from "@/ami/shared/components/card/FormCard";
 import {
-	formatDateToTextMonth,
 	formatToNormalDate,
 	formatToNormalTime,
 } from "@/ami/shared/helpers/formatDate";
 
-import { Check, X, Calendar, Play, CheckCircle2, Undo2 } from "lucide-react";
+import { Check, X, CheckCircle2 } from "lucide-react";
 
-import image from "/profile-avatar.jpg";
 import { Badge } from "@/core/components/base/badge";
 import { useGetBookingByIdQuery } from "../queries/getBookingById.ami.query";
 import { formatDurationByMinutes } from "@/store-front/shared/helpers/formatDuration";
@@ -27,14 +25,27 @@ import {
 } from "@/core/components/base/item";
 import { BookingStatus } from "@/ami/shared/types/status.types";
 import { useMemo, useState } from "react";
-import { Button } from "@/core/components/base/button";
-import { queryClient } from "@/core/lib/react-query/react-query-client";
 import { useConfirmBookingMutation } from "../queries/confirmBooking.ami.mutation";
 import { useCancelBookingMutation } from "../queries/cancelBooking.ami.mutation";
 import { useRescheduleBookingMutation } from "../queries/rescheduleBooking.ami.mutation";
 import { useStartBookingMutation } from "../queries/startBooking.ami.mutation";
 import { toast } from "sonner";
 import { useCompleteBookingMutation } from "../queries/completeBooking.ami.mutation";
+import { Separator } from "@/core/components/base/separator";
+import { BookingActionModal } from "./BookingModalForms";
+import { useForm } from "react-hook-form";
+import {
+	RescheduleBookingSchema,
+	rescheduleSchema,
+} from "@/core/schemas/reschedule.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BookingRescheduleFormModal } from "./BookingRescheduleFormModal";
+import { GetByIdBookingResponseAmi } from "../utils/types/booking-response.ami.types";
+import {
+	CancelBookingSchema,
+	cancelSchema,
+} from "@/core/schemas/cancel.schema";
+import { BookingCancelFormModal } from "./BookingCancelFormModal";
 
 const ViewBookingForm = () => {
 	const { id } = useParams();
@@ -64,13 +75,16 @@ const ViewBookingForm = () => {
 								BOOKING_STATUS_COLORS[booking.status]
 							)}
 						>
-							{booking.status}
+							{booking.status === "Ongoing" &&
+							!booking.payment_status.is_payment_complete
+								? "Waiting for payment"
+								: booking.status}
 						</Badge>
 					</span>
 
 					<BookingFormButtonControls
 						status={booking.status}
-						bookingId={booking._id}
+						booking={booking as GetByIdBookingResponseAmi}
 					/>
 				</FormCard.Title>
 				<div className="flex flex-col w-full gap-2 2xl:gap-4 lg:flex-row lg:min-h-fit">
@@ -81,8 +95,7 @@ const ViewBookingForm = () => {
 								{formatToNormalDate(booking?.booking_date)} @{" "}
 								{formatToNormalTime(booking?.start_time)} -{" "}
 								{formatToNormalTime(booking?.end_time)} (
-								{formatDurationByMinutes(booking?.session_duration_minutes)}{" "}
-								minutes)
+								{formatDurationByMinutes(booking?.session_duration_minutes)})
 							</Label>
 						</FormCard.Field>
 
@@ -148,7 +161,7 @@ const ViewBookingForm = () => {
 
 						{booking.rescheduled_from && (
 							<FormCard.Field>
-								<FormCard.Label>Rescheduled at:</FormCard.Label>
+								<FormCard.Label>Original date:</FormCard.Label>
 								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
 									{formatToNormalDate(booking.rescheduled_from) || "-"}
 								</Label>
@@ -243,6 +256,12 @@ const ViewBookingForm = () => {
 				</FormCard.Title>
 				<div className="flex flex-col w-full gap-4">
 					<FormCard.Field>
+						<FormCard.Label>Customer No:</FormCard.Label>
+						<Label className="font-normal text-2xs">
+							{booking.customer_id?.customer_no}
+						</Label>
+					</FormCard.Field>
+					<FormCard.Field>
 						<FormCard.Label>Name:</FormCard.Label>
 						<Label className="font-normal text-2xs">
 							{booking.customer_id?.first_name} {booking.customer_id?.last_name}
@@ -260,26 +279,6 @@ const ViewBookingForm = () => {
 							{booking.customer_id?.mobile_number || "-"}
 						</Label>
 					</FormCard.Field>
-					{/* <FormCard.Field>
-							<FormCard.Label>Specialties:</FormCard.Label>
-							<div className="max-w-[60%] flex flex-row flex-wrap gap-2">
-								{Array.isArray(booking.customer?.specialties) &&
-								booking.photographer_id?.specialties.length > 0 ? (
-									booking.photographer_id?.specialties.map(
-										(specialty, index) => (
-											<Badge
-												key={index}
-												className="text-3xs 2xl:text-2xs mr-1 mb-1"
-											>
-												{specialty}
-											</Badge>
-										)
-									)
-								) : (
-									<Label className="font-normal text-2xs">-</Label>
-								)}
-							</div>
-						</FormCard.Field> */}
 				</div>
 			</FormCard>
 			<FormCard className="col-span-1 w-full h-full ">
@@ -310,10 +309,23 @@ const ViewBookingForm = () => {
 					</FormCard.Field>
 					<FormCard.Field>
 						<FormCard.Label>Remaining Balance:</FormCard.Label>
-						<Label className="font-normal text-2xs">
-							{formatToPeso(
-								String(booking.payment_status?.remaining_balance)
-							) || "-"}
+						<Label
+							className={`font-medium text-xs ${
+								booking.payment_status?.remaining_balance === 0
+									? "text-green-500"
+									: "text-orange-500"
+							}`}
+						>
+							{booking.payment_status?.remaining_balance === 0 ? (
+								"Paid in full"
+							) : (
+								<>
+									{" "}
+									{formatToPeso(
+										String(booking.payment_status?.remaining_balance)
+									) || "-"}
+								</>
+							)}
 						</Label>
 					</FormCard.Field>
 
@@ -332,25 +344,32 @@ const ViewBookingForm = () => {
 				<FormCard.Title>Service Details</FormCard.Title>
 
 				{booking.package_id && booking.package_id._id ? (
-					<Item variant={"outline"}>
-						<ItemContent>
+					<div className="space-y-4">
+						<Item variant={"outline"} className="mx-4">
 							<ItemContent>
-								<ItemTitle className="line-clamp-1">
-									<span className="text-muted-foreground">
-										{booking.package_id.name}
-									</span>
-								</ItemTitle>
-								<ItemDescription>
-									{booking.package_id.description}
-								</ItemDescription>
+								<ItemContent>
+									<ItemTitle className="line-clamp-1">
+										<span className="text-muted-foreground text-lg">
+											{booking.package_id.name}
+										</span>
+									</ItemTitle>
+									<ItemDescription>
+										{booking.package_id.description}
+									</ItemDescription>
+								</ItemContent>
+								<ItemContent className="flex-none ">
+									<ItemDescription>
+										Package price:{" "}
+										{booking.package_id.package_price
+											? booking.package_id.package_price
+											: "No package price set. Use services price instead."}
+									</ItemDescription>
+								</ItemContent>
 							</ItemContent>
-							<ItemContent className="flex-none text-center">
-								<ItemDescription>
-									{booking.package_id.package_price}
-								</ItemDescription>
-							</ItemContent>
-						</ItemContent>
-					</Item>
+						</Item>
+
+						<Separator />
+					</div>
 				) : null}
 
 				<ItemGroup className="flex flex-col w-full gap-4 p-4">
@@ -383,52 +402,90 @@ const ViewBookingForm = () => {
 
 type BookingFormButtonControlsProps = {
 	status: BookingStatus;
-	bookingId: string;
+	booking: GetByIdBookingResponseAmi;
 };
 
 const BookingFormButtonControls = ({
 	status,
-	bookingId: propBookingId,
+	booking,
 }: BookingFormButtonControlsProps) => {
 	const params = useParams();
-	const bookingId = propBookingId || params.id;
+	const bookingId = booking._id || params.id;
+
+	// Track which modal is open
+	const [openModal, setOpenModal] = useState<string | null>(null);
 
 	const { mutateAsync: confirmMutation, isPending: isConfirming } =
 		useConfirmBookingMutation();
+	const { mutateAsync: rescheduleMutation, isPending: isRescheduling } =
+		useRescheduleBookingMutation();
 	const { mutateAsync: cancelMutation, isPending: isCancelling } =
 		useCancelBookingMutation();
-	const { mutateAsync: rescheduleMutation, isPending: isRecheduling } =
-		useRescheduleBookingMutation();
 	const { mutateAsync: startMutation, isPending: isStarting } =
 		useStartBookingMutation();
 	const { mutateAsync: completeMutation, isPending: isCompleting } =
 		useCompleteBookingMutation();
 
-	// Handler functions
-	const handleConfirm = () => {
-		if (window.confirm("Are you sure you want to confirm this booking?")) {
-			confirmMutation(String(bookingId));
-		}
+	const [isRescheduleFormOpen, setIsRescheduleFormOpen] = useState(false);
+	const [isCancelFormOpen, setIsCancelFormOpen] = useState(false);
+
+	const rescheduleForm = useForm<RescheduleBookingSchema>({
+		resolver: zodResolver(rescheduleSchema),
+		mode: "onChange",
+		defaultValues: {
+			new_booking_date: undefined,
+			dummy_time: "",
+			new_start_time: "",
+			new_end_time: "",
+			photographer_id: "",
+		},
+	});
+
+	const cancelForm = useForm<CancelBookingSchema>({
+		resolver: zodResolver(cancelSchema),
+		mode: "onChange",
+		defaultValues: {
+			cancelled_reason: "",
+		},
+	});
+
+	const handleConfirmRescheduleForm = () => {
+		setIsRescheduleFormOpen(false);
+		setOpenModal("Reschedule");
+	};
+
+	const handleConfirmCancelForm = () => {
+		setIsCancelFormOpen(false);
+		setOpenModal("Cancel");
+	};
+
+	// === Handlers ===
+	const handleConfirm = async () => {
+		await confirmMutation(String(bookingId));
+		setOpenModal(null);
 	};
 
 	const handleCancel = () => {
-		const cancelled_reason: string = "Sample Cancel Reason";
-
+		const cancelled_reason = "Sample Cancel Reason";
 		if (cancelled_reason.trim().length < 5) {
 			toast.error("Cancellation reason must be at least 5 characters");
 			return;
 		}
 
-		cancelMutation({
-			id: String(bookingId),
-			cancelled_reason,
-		});
+		cancelMutation({ id: String(bookingId), cancelled_reason });
+		setOpenModal(null);
+	};
+
+	const handleStart = () => {
+		startMutation(String(bookingId));
+		setOpenModal(null);
 	};
 
 	const handleReschedule = () => {
-		const new_booking_date = new Date(); // For demo purposes, set to current date
-		const new_start_time = "10:00"; // For demo purposes
-		const new_end_time = "11:00"; // For demo purposes
+		const new_booking_date = rescheduleForm.getValues("new_booking_date");
+		const new_start_time = rescheduleForm.getValues("new_start_time");
+		const new_end_time = rescheduleForm.getValues("new_end_time");
+		const new_photographer_id = rescheduleForm.getValues("photographer_id");
 
 		if (!new_booking_date || !new_start_time) {
 			toast.error("Date and start time are required");
@@ -441,220 +498,162 @@ const BookingFormButtonControls = ({
 				new_booking_date,
 				new_start_time,
 				new_end_time,
+				new_photographer_id,
 			},
 		});
-	};
 
-	const handleStart = () => {
-		if (
-			window.confirm("Are you sure you want to start this booking session?")
-		) {
-			startMutation(String(bookingId));
-		}
+		setOpenModal(null);
 	};
 
 	const handleComplete = () => {
-		if (
-			window.confirm(
-				"Are you sure you want to complete this booking? Payment must be complete."
-			)
-		) {
-			completeMutation(String(bookingId));
-		}
+		completeMutation(String(bookingId));
+		setOpenModal(null);
 	};
 
-	const isMutating =
-		isConfirming || isCancelling || isRecheduling || isStarting || isCompleting;
-
-	// Memoized UI based on status
+	// === Memoized UI ===
 	const buttonControls = useMemo(() => {
-		// Pending Status: Can Confirm, Cancel, or Reschedule
-		if (status === "Pending") {
-			return (
-				<div className="flex flex-row gap-2">
-					<Button
-						onClick={handleConfirm}
-						disabled={isMutating}
-						variant="default"
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Confirmed"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Confirmed"]
-						)}
-					>
-						<Check className="size-4" />
-						Confirm Booking
-					</Button>
-					<Button
-						onClick={handleReschedule}
-						disabled={isMutating}
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Rescheduled"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Rescheduled"]
-						)}
-					>
-						<Calendar className="size-4" />
-						Reschedule
-					</Button>
-					<Button
-						onClick={handleCancel}
-						disabled={isMutating}
-						variant="destructive"
-						size="sm"
-						className={cn(
-							"gap-2 text-white",
-							BOOKING_STATUS_COLORS["Cancelled"]
-						)}
-					>
-						<X className="size-4" />
-						Cancel
-					</Button>
-				</div>
-			);
-		}
+		const renderButtonGroup = (...modals: React.ReactNode[]) => (
+			<div className="flex flex-row gap-2">{modals}</div>
+		);
 
-		// Confirmed Status: Can Start (on booking date), Reschedule, or Cancel
-		if (status === "Confirmed") {
-			return (
-				<div className="flex flex-row gap-2">
-					<Button
-						onClick={handleStart}
-						disabled={isMutating}
-						variant="default"
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Ongoing"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Ongoing"]
-						)}
-					>
-						<Play className="size-4" />
-						Start Session
-					</Button>
-					<Button
-						onClick={handleReschedule}
-						disabled={isMutating}
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Rescheduled"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Rescheduled"]
-						)}
-					>
-						<Calendar className="size-4" />
-						Reschedule
-					</Button>
-					<Button
-						onClick={handleCancel}
-						disabled={isMutating}
-						variant="destructive"
-						size="sm"
-						className={cn(
-							"gap-2 text-white",
-							BOOKING_STATUS_COLORS["Cancelled"]
-						)}
-					>
-						<X className="size-4" />
-						Cancel
-					</Button>
-				</div>
-			);
-		}
+		switch (status) {
+			case "Pending":
+				return renderButtonGroup(
+					<BookingActionModal
+						actionType="Confirm"
+						isLoading={isConfirming}
+						onAction={handleConfirm}
+						open={openModal === "Confirm"}
+						onOpenChange={(open) => setOpenModal(open ? "Confirm" : null)}
+					/>,
+					<BookingActionModal
+						actionType="Reschedule"
+						isLoading={isRescheduling}
+						onAction={handleReschedule}
+						open={openModal === "Reschedule"}
+						onOpenChange={() => {
+							setIsRescheduleFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>,
+					<BookingActionModal
+						actionType="Cancel"
+						isLoading={isCancelling}
+						onAction={handleCancel}
+						disabled={
+							booking.status === "Ongoing" &&
+							!booking.payment_status.is_payment_complete
+						}
+						open={openModal === "Cancel"}
+						onOpenChange={() => {
+							setIsCancelFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>
+				);
 
-		// Rescheduled Status: Can Start (on booking date), Reschedule again, or Cancel
-		if (status === "Rescheduled") {
-			return (
-				<div className="flex flex-row gap-2">
-					<Button
-						onClick={handleStart}
-						disabled={isMutating}
-						variant="default"
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Ongoing"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Ongoing"]
-						)}
-					>
-						<Play className="size-4" />
-						Start Session
-					</Button>
-					<Button
-						onClick={handleReschedule}
-						disabled={isMutating}
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Rescheduled"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Rescheduled"]
-						)}
-					>
-						<Calendar className="size-4" />
-						Reschedule Again
-					</Button>
-					<Button
-						onClick={handleCancel}
-						disabled={isMutating}
-						variant="destructive"
-						size="sm"
-						className={cn(
-							"gap-2 text-white",
-							BOOKING_STATUS_COLORS["Cancelled"]
-						)}
-					>
-						<X className="size-4" />
-						Cancel
-					</Button>
-				</div>
-			);
-		}
+			case "Confirmed":
+			case "Rescheduled":
+				return renderButtonGroup(
+					<BookingActionModal
+						actionType="Start"
+						isLoading={isStarting}
+						onAction={handleStart}
+						open={openModal === "Start"}
+						onOpenChange={(open) => setOpenModal(open ? "Start" : null)}
+					/>,
+					<BookingActionModal
+						actionType="Reschedule"
+						isLoading={isRescheduling}
+						onAction={handleReschedule}
+						open={openModal === "Reschedule"}
+						onOpenChange={() => {
+							setIsRescheduleFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>,
+					<BookingActionModal
+						actionType="Cancel"
+						isLoading={isCancelling}
+						onAction={handleCancel}
+						disabled={
+							booking.status === "Ongoing" &&
+							!booking.payment_status.is_payment_complete
+						}
+						open={openModal === "Cancel"}
+						onOpenChange={() => {
+							setIsCancelFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>
+				);
 
-		// Ongoing Status: Can only Complete
-		if (status === "Ongoing") {
-			return (
-				<div className="flex flex-row gap-2">
-					<Button
-						onClick={handleComplete}
-						disabled={isMutating}
-						variant="default"
-						size="sm"
-						className={cn(
-							`hover:bg-[${BOOKING_STATUS_COLORS["Completed"]}] gap-2`,
-							BOOKING_STATUS_COLORS["Completed"]
-						)}
-					>
-						<CheckCircle2 className="size-4" />
-						Complete Booking
-					</Button>
-				</div>
-			);
-		}
+			case "Ongoing":
+				return renderButtonGroup(
+					<BookingActionModal
+						actionType="Complete"
+						isLoading={isCompleting}
+						onAction={handleComplete}
+						open={openModal === "Complete"}
+						onOpenChange={(open) => setOpenModal(open ? "Complete" : null)}
+					/>,
 
-		// Completed Status: No actions available
-		if (status === "Completed") {
-			return (
-				<div className="flex flex-row gap-2">
+					<BookingActionModal
+						actionType="Cancel"
+						isLoading={isCancelling}
+						onAction={handleCancel}
+						disabled={
+							booking.status === "Ongoing" &&
+							!booking.payment_status.is_payment_complete
+						}
+						open={openModal === "Cancel"}
+						onOpenChange={() => {
+							setIsCancelFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>
+				);
+
+			case "Completed":
+				return (
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<CheckCircle2 className="size-4 text-green-600" />
 						<span>Booking completed</span>
 					</div>
-				</div>
-			);
-		}
+				);
 
-		// Cancelled Status: No actions available
-		if (status === "Cancelled") {
-			return (
-				<div className="flex flex-row gap-2">
+			case "Cancelled":
+				return (
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<X className="size-4 text-destructive" />
 						<span>Booking cancelled</span>
 					</div>
-				</div>
-			);
+				);
+
+			default:
+				return null;
 		}
+	}, [status, openModal]);
 
-		return null;
-	}, [status, isMutating]);
+	return (
+		<>
+			{buttonControls}
 
-	return buttonControls;
+			<BookingRescheduleFormModal
+				open={isRescheduleFormOpen}
+				onOpenChange={setIsRescheduleFormOpen}
+				onSubmit={handleConfirmRescheduleForm}
+				form={rescheduleForm}
+				selectedBooking={booking}
+			/>
+			<BookingCancelFormModal
+				open={isCancelFormOpen}
+				onOpenChange={setIsCancelFormOpen}
+				onSubmit={handleConfirmCancelForm}
+				form={cancelForm}
+			/>
+		</>
+	);
 };
 
 export default ViewBookingForm;

@@ -13,8 +13,8 @@ import { Label } from "@/core/components/base/label";
 interface PackageAccordionCardProps {
 	id: string;
 	name: string;
-	description: string;
-	image: string;
+	description?: string;
+	image?: string;
 	status: "available" | "unavailable";
 	services: string[];
 	price: number;
@@ -89,7 +89,7 @@ export const PackageAccordionCard = ({
 										</h3>
 
 										<p className="text-sm text-gray-500 font-light mt-1 line-clamp-4 text-left">
-											{description}
+											{description ?? "-"}
 										</p>
 									</div>
 									<Badge className="text-xs text-white bg-sf-dark-bg tracking-tight font-light italic">

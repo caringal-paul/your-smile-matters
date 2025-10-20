@@ -1,4 +1,3 @@
-import VerifyCodeForm from "@/ami/features/auth/components/VerifyCodeForm.ami";
 import CustomerLoginForm from "@/store-front/features/auth/components/CustomerLoginForm";
 import CustomerRegisterForm from "@/store-front/features/auth/components/CustomerRegisterForm";
 import CustomerAuthLayout from "@/store-front/layouts/AuthLayout.sf";

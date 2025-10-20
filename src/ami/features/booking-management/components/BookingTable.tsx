@@ -6,7 +6,7 @@ import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
 import TableSearch from "@/ami/shared/components/filter/TableSearch";
 
 import { useGetAllBookingQuery } from "../queries/getBookings.ami.query";
-import { BookingAmiTableType } from "../utils/types/booking-table.types";
+import { BookingAmiTableType } from "../utils/types/booking-table.ami.types";
 import { BOOKING_TABLE_SEARCH_KEYS } from "../constants/booking.constants";
 import { useBookingColumns } from "../utils/columns/booking.columns";
 import { BOOKING_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";

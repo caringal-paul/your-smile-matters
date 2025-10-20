@@ -17,8 +17,10 @@ import {
 import DateInput from "../input/DateInput";
 import { getFormattedToday } from "@/ami/shared/helpers/formatDate";
 import { useState } from "react";
+import { cn } from "@/core/lib/utils";
 
 type TableFilterProps<T> = {
+	className?: string;
 	filters: T;
 	setFilters: React.Dispatch<React.SetStateAction<T>>;
 	filterOptions?: FilterOptions<T>;
@@ -39,6 +41,7 @@ type TableFilterProps<T> = {
 };
 
 const TableFilter = <T extends Record<string, string[]>>({
+	className,
 	filters,
 	setFilters,
 	filterOptions,
@@ -59,7 +62,10 @@ const TableFilter = <T extends Record<string, string[]>>({
 			<PopoverTrigger className="h-fit">
 				<Button
 					variant="ghost"
-					className="hover:bg-none hover:text-foreground disabled:bg-red-500"
+					className={cn(
+						"hover:bg-none hover:text-foreground disabled:bg-red-500",
+						className
+					)}
 				>
 					<FilterIcon fill="#2D2F2F" className="w-4 h-4" />
 					<span className="hidden sm:inline">Filter</span>

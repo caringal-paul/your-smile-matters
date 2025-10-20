@@ -1,6 +1,6 @@
 import { BaseResponseDto } from "@/core/types/base.types";
 import { handleError } from "@/core/helpers/handleError";
-import { apiClient } from "@/core/lib/axios/api-client";
+import { adminApiClient } from "@/core/lib/axios/api-client.ami";
 
 import {
 	GetAllCustomerResponseAmi,
@@ -14,7 +14,7 @@ const ENDPOINT = "/admin/auth";
 const amiAuthApi = {
 	async me(): Promise<BaseResponseDto<GetAllCustomerResponseAmi[]>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetAllCustomerResponseAmi[]>
 			>(ENDPOINT);
 
@@ -30,10 +30,9 @@ const amiAuthApi = {
 		payload: AuthAmiLogin
 	): Promise<BaseResponseDto<LoginResponseAmi>> {
 		try {
-			const response = await apiClient.post<BaseResponseDto<LoginResponseAmi>>(
-				`${ENDPOINT}/login`,
-				payload
-			);
+			const response = await adminApiClient.post<
+				BaseResponseDto<LoginResponseAmi>
+			>(`${ENDPOINT}/login`, payload);
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
@@ -46,7 +45,7 @@ const amiAuthApi = {
 		id: string
 	): Promise<BaseResponseDto<GetByIdCustomerResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdCustomerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -61,7 +60,7 @@ const amiAuthApi = {
 		id: string
 	): Promise<BaseResponseDto<GetByIdCustomerResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdCustomerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;

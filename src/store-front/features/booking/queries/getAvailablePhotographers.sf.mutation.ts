@@ -1,0 +1,41 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import sfPhotographerApi from "@/core/api/photographer/store-front/photographer.sf.api";
+import { BaseResponseDto } from "@/core/types/base.types";
+import { toast } from "sonner";
+import { PhotographerModel } from "@/core/models/photographer.model";
+import { GetAvailablePhotographersByTimeRangeResponseSf } from "../utils/types/booking-response.sf.types";
+
+export const useGetAvailablePhotographersMutation = () => {
+	return useMutation({
+		mutationFn: async (payload: {
+			date: string;
+			start_time: string;
+			end_time: string;
+			session_duration_minutes: number;
+		}) => {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			const res: BaseResponseDto<
+				GetAvailablePhotographersByTimeRangeResponseSf[]
+			> = await sfPhotographerApi.getPhotographersByTimeRange(payload);
+
+			if (res.error || !res.status) {
+				throw new Error(res.message || "Failed to fetch time availability");
+			}
+
+			return res.data;
+		},
+
+		onSuccess: (data) => {
+			console.log("Success");
+		},
+
+		onError: (error) => {
+			toast.error(error.message);
+		},
+
+		onSettled: () => {
+			console.log("ℹ️ Mutation finished (success or error)");
+		},
+	});
+};

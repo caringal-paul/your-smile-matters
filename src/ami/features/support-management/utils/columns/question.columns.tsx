@@ -1,6 +1,6 @@
 import { Checkbox } from "@/core/components/base/checkbox";
 import { FAQTableType } from "../types/support-table.types";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
 import { Button } from "@/core/components/base/button";

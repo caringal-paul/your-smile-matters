@@ -24,7 +24,6 @@ export const BOOKING_STATUSES_FILTER_OPTIONS: FilterOptions<{
 	status: [
 		"Pending",
 		"Confirmed",
-		"Assigned",
 		"Ongoing",
 		"Completed",
 		"Cancelled",

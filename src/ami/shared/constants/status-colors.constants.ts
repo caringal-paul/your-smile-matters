@@ -20,8 +20,9 @@ export const BOOKING_STATUS_COLORS: Record<BookingStatus, string> = {
 	Pending: "bg-[#facc15]",
 	Cancelled: "bg-[#ef4444]",
 	Completed: "bg-[#22c55e]",
-	Confirmed: "bg-[#10b981]",
+	Confirmed: "bg-[#60a5fa]",
 	Ongoing: "bg-[#f97316]",
+	Waiting: "bg-[#f97316]",
 	Rescheduled: "bg-[#a855f7]",
 };
 

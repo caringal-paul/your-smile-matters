@@ -1,6 +1,5 @@
 import { cn } from "@/core/lib/utils";
 import { PropsWithChildren } from "react";
-import FooterSection from "../components/FooterSection";
 import LandingSection from "../components/LandingSection";
 import PromoSection from "../components/PromoSection";
 import CategoriesSection from "../components/CategoriesSection";

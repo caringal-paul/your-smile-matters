@@ -2,11 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import debounce from "lodash/debounce";
 import { formatToUtc } from "@/ami/shared/helpers/formatDate";
+import { BookingStatus } from "@/ami/shared/types/status.types";
 
 type StepKey = "step1" | "step2" | "step3" | "step4";
 
 // Types based on your booking schema
-export type BookingService = {
+export type BookingFormService = {
 	_id: string;
 	quantity: number;
 	price_per_unit: number;
@@ -14,11 +15,9 @@ export type BookingService = {
 	duration_minutes?: number | null;
 };
 
-export type PaymentMethod = "Cash" | "GCash";
-
 export type BookingFormData = {
 	// Step 1: Services & Customization
-	services: BookingService[];
+	services: BookingFormService[];
 	is_customized: boolean;
 	customization_notes?: string | null;
 	customer_id?: string;
@@ -38,17 +37,15 @@ export type BookingFormData = {
 	special_requests?: string | null;
 
 	// Step 4: Payment & Pricing
+	old_amount?: number;
 	total_amount: number;
 	discount_amount: number;
 	promo_id?: string | null;
 	final_amount: number;
-	amount_paid: number;
-	method_of_payment?: PaymentMethod | null;
-	payment_images: string[];
 
 	// Metadata
 	is_booking_sent: boolean;
-	status: "Pending";
+	status: BookingStatus;
 	booking_reference: string;
 };
 
@@ -61,6 +58,12 @@ type BookingState = {
 	formData: BookingFormData;
 	originalFormData: BookingFormData | null;
 
+	draft: BookingFormData | null;
+
+	saveDraft: () => void;
+	loadDraft: () => void;
+	clearDraft: () => void;
+
 	// Form Validation State
 	stepValidation: {
 		step1: boolean;
@@ -71,7 +74,7 @@ type BookingState = {
 
 	loading: boolean;
 	// Actions
-	openModal: () => void;
+	openModal: (step?: number) => void;
 	closeModal: () => void;
 	setLoading: (loading: boolean) => void;
 	// Debounced field updates
@@ -87,12 +90,13 @@ type BookingState = {
 	) => void;
 
 	// Service management
-	addService: (service: BookingService) => void;
-	updateService: (index: number, service: BookingService) => void;
+	addService: (service: BookingFormService) => void;
+	updateService: (index: number, service: BookingFormService) => void;
 
 	updateServiceQuantity: (_id: string, quantity: number) => void;
 
 	removeService: (index: number) => void;
+	gotoStep: (index: number) => void;
 
 	// Step validation
 	setStepValid: (
@@ -135,9 +139,6 @@ const initialFormData: BookingFormData = {
 	discount_amount: 0,
 	promo_id: null,
 	final_amount: 0,
-	amount_paid: 0,
-	method_of_payment: null,
-	payment_images: [],
 
 	is_booking_sent: false,
 	status: "Pending",
@@ -186,6 +187,7 @@ export const useBookingFormStore = create<BookingState>()(
 
 						return {
 							formData: updatedFormData,
+							draft: updatedFormData,
 						};
 					});
 				},
@@ -197,6 +199,7 @@ export const useBookingFormStore = create<BookingState>()(
 				currentStep: 1,
 				loading: false,
 				formData: initialFormData,
+				draft: null,
 				originalFormData: null,
 				stepValidation: {
 					step1: false,
@@ -205,7 +208,7 @@ export const useBookingFormStore = create<BookingState>()(
 					step4: false,
 				},
 
-				openModal: () => set({ modalOpen: true }),
+				openModal: (step = 1) => set({ modalOpen: true, currentStep: step }),
 
 				closeModal: () => set({ modalOpen: false }),
 
@@ -241,11 +244,12 @@ export const useBookingFormStore = create<BookingState>()(
 
 						return {
 							formData: updatedFormData,
+							draft: updatedFormData,
 						};
 					});
 				},
 
-				addService: (service: BookingService) => {
+				addService: (service: BookingFormService) => {
 					set((state) => {
 						const updatedServices = [...state.formData.services, service];
 						const total = calculateTotalAmount(updatedServices);
@@ -264,7 +268,7 @@ export const useBookingFormStore = create<BookingState>()(
 					});
 				},
 
-				updateService: (index: number, service: BookingService) => {
+				updateService: (index: number, service: BookingFormService) => {
 					set((state) => {
 						const updatedServices = [...state.formData.services];
 						updatedServices[index] = service;
@@ -330,6 +334,12 @@ export const useBookingFormStore = create<BookingState>()(
 					});
 				},
 
+				gotoStep: (step: number) => {
+					set((state) => ({
+						currentStep: step,
+					}));
+				},
+
 				setStepValid: (step, isValid) => {
 					set((state) => ({
 						stepValidation: {
@@ -348,6 +358,25 @@ export const useBookingFormStore = create<BookingState>()(
 						originalFormData: { ...formData, session_duration_minutes },
 						formData: { ...formData, session_duration_minutes },
 					}));
+				},
+
+				saveDraft: () => {
+					set((state) => ({
+						draft: { ...state.formData },
+					}));
+				},
+
+				loadDraft: () => {
+					set((state) => {
+						if (!state.draft) return state;
+						return {
+							formData: { ...state.draft },
+						};
+					});
+				},
+
+				clearDraft: () => {
+					set({ draft: null });
 				},
 
 				resetForm: () => {
@@ -437,9 +466,6 @@ export const useBookingFormStore = create<BookingState>()(
 							if (formData.final_amount <= 0) {
 								errors.push("Final amount must be greater than zero.");
 							}
-							if (!formData.method_of_payment) {
-								errors.push("Payment method is required.");
-							}
 
 							break;
 					}
@@ -451,8 +477,6 @@ export const useBookingFormStore = create<BookingState>()(
 						newValidation[`step${step}` as StepKey] = isValid;
 
 						let newFormData = { ...state.formData };
-
-						console.log(state.formData);
 
 						if (!isValid) {
 							console.log(
@@ -503,6 +527,7 @@ export const useBookingFormStore = create<BookingState>()(
 				currentStep: state.currentStep,
 				formData: state.formData,
 				stepValidation: state.stepValidation,
+				draft: state.draft,
 			}),
 		}
 	)
@@ -525,9 +550,6 @@ const clearDependentData = (
 			newFormData.theme = null;
 			newFormData.special_requests = null;
 			newFormData.final_amount = 0;
-			newFormData.amount_paid = 0;
-			newFormData.method_of_payment = null;
-			newFormData.payment_images = [];
 			break;
 
 		case 2: // Step 2 fail clears Step 3
@@ -535,8 +557,6 @@ const clearDependentData = (
 			newFormData.photographer_name = null;
 			newFormData.theme = null;
 			newFormData.special_requests = null;
-			newFormData.method_of_payment = null;
-			newFormData.payment_images = [];
 			break;
 
 		case 3: // Step 3 fail does nothing
@@ -547,11 +567,11 @@ const clearDependentData = (
 };
 
 // Helper functions
-const calculateTotalAmount = (services: BookingService[]): number => {
+const calculateTotalAmount = (services: BookingFormService[]): number => {
 	return services.reduce((total, service) => total + service.total_price, 0);
 };
 
-const calculateTotalDuration = (services: BookingService[]): number => {
+const calculateTotalDuration = (services: BookingFormService[]): number => {
 	return services.reduce((total, service) => {
 		const serviceDuration = service.duration_minutes ?? 120; // ✅ changed to 120
 

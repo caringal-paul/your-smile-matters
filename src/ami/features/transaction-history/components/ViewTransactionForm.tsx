@@ -45,23 +45,30 @@ import {
 import { useMemo, useState } from "react";
 import { Button } from "@/core/components/base/button";
 import { toast } from "sonner";
-import { BOOKING_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
+import {
+	BOOKING_STATUS_COLORS,
+	TRANSACTION_STATUS_COLORS,
+} from "@/ami/shared/constants/status-colors.constants";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from "@/core/components/base/tooltip";
 import { TransactionType } from "@/core/models/transaction.model";
+import { TransactionActionModal } from "./TransactionModalForms";
+import {
+	refundSchema,
+	RefundTransactionSchema,
+} from "../utils/schema/refund.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TransactionRefundFormModal } from "./RefundTransactionFormModal";
+import { useRejectTransactionMutation } from "../queries/rejectTransaction.ami.query";
+import { useRefundTransactionMutation } from "../queries/refundTransaction.ami.mutation";
+import { Separator } from "@/core/components/base/separator";
+import { useApproveTransactionMutation } from "../queries/approveTransaction.ami.query";
 
 // Transaction status colors (add this to your constants if not exists)
-const TRANSACTION_STATUS_COLORS = {
-	Pending: "bg-yellow-500 text-white",
-	Processing: "bg-blue-500 text-white",
-	Completed: "bg-green-500 text-white",
-	Failed: "bg-red-500 text-white",
-	Refunded: "bg-purple-500 text-white",
-	Cancelled: "bg-gray-500 text-white",
-};
 
 const ViewTransactionForm = () => {
 	const navigate = useNavigate();
@@ -88,6 +95,8 @@ const ViewTransactionForm = () => {
 	if (!transaction) {
 		return <>Transaction Not Found</>;
 	}
+
+	console.log(transaction);
 
 	return (
 		<div className="pb-8 grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -156,11 +165,20 @@ const ViewTransactionForm = () => {
 							</FormCard.Field>
 						)}
 
-						{transaction.processed_at && (
+						{transaction.refunded_at && (
 							<FormCard.Field>
-								<FormCard.Label>Processed Date:</FormCard.Label>
+								<FormCard.Label>Refunded Date:</FormCard.Label>
 								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
-									{formatToNormalDate(transaction.processed_at)}
+									{formatToNormalDate(transaction.refunded_at)}
+								</Label>
+							</FormCard.Field>
+						)}
+
+						{transaction.refund_reason && (
+							<FormCard.Field>
+								<FormCard.Label>Refund Reason:</FormCard.Label>
+								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
+									{transaction.refund_reason}
 								</Label>
 							</FormCard.Field>
 						)}
@@ -174,15 +192,6 @@ const ViewTransactionForm = () => {
 							</FormCard.Field>
 						)}
 
-						{transaction.refunded_at && (
-							<FormCard.Field>
-								<FormCard.Label>Refunded Date:</FormCard.Label>
-								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
-									{formatToNormalDate(transaction.refunded_at)}
-								</Label>
-							</FormCard.Field>
-						)}
-
 						{transaction.status === "Failed" && transaction.failure_reason && (
 							<FormCard.Field>
 								<FormCard.Label>Failure Reason:</FormCard.Label>
@@ -192,40 +201,70 @@ const ViewTransactionForm = () => {
 							</FormCard.Field>
 						)}
 
-						{transaction.status === "Refunded" && transaction.refund_reason && (
+						{transaction.processed_at && (
 							<FormCard.Field>
-								<FormCard.Label>Refund Reason:</FormCard.Label>
+								<FormCard.Label>Processed Date:</FormCard.Label>
 								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
-									{transaction.refund_reason}
+									{formatToNormalDate(transaction.processed_at)}
 								</Label>
 							</FormCard.Field>
 						)}
 
-						{transaction.booking_id?.final_amount - transaction?.amount != 0 &&
-						transaction.transaction_type != "Refund" ? (
-							<FormCard.Field>
-								<FormCard.Label>Remaining Balance:</FormCard.Label>
-								<Label className="text-secondary font-normal text-2xs">
-									{formatToPeso(
-										String(
-											transaction.booking_id?.final_amount - transaction?.amount
-										)
-									)}
-								</Label>
-							</FormCard.Field>
-						) : null}
-
 						<FormCard.Field>
-							<FormCard.Label>Amount:</FormCard.Label>
+							<FormCard.Label>Booking Total Price:</FormCard.Label>
+							<Label className="text-secondary font-normal text-2xs">
+								{formatToPeso(String(transaction.booking_id?.final_amount))}
+							</Label>
+						</FormCard.Field>
+
+						<FormCard.Field className="items-start">
+							<FormCard.Label>Amount transacted:</FormCard.Label>
+
 							<Label
-								className={`text-primary font-bold text-sm ${
+								className={`font-bold text-sm ${
 									transaction.transaction_type === "Refund"
 										? "text-destructive"
-										: ""
+										: "text-primary"
 								}`}
 							>
-								{transaction.transaction_type === "Refund" && "-"}{" "}
-								{formatToPeso(String(transaction?.amount))}
+								<div className="flex flex-col gap-1 w-fit">
+									{transaction.refund_transaction_id &&
+									typeof transaction.refund_transaction_id === "object" ? (
+										<div className="grid grid-cols-2 gap-x-8">
+											<span className="text-xs font-normal">Original:</span>
+
+											<span className="text-xs font-normal">
+												{formatToPeso(String(transaction.amount))}
+											</span>
+
+											<span className="text-xs font-normal">Refunded: </span>
+
+											<span className="text-xs font-normal">
+												-{" "}
+												{formatToPeso(
+													String(
+														(transaction.refund_transaction_id as any).amount ||
+															0
+													)
+												)}
+											</span>
+											<Separator className="col-span-2 my-1 bg-primary" />
+											<span className="text-xs font-semibold">Total:</span>
+
+											<span className="text-xs font-semibold">
+												{formatToPeso(
+													String(
+														transaction.amount -
+															((transaction.refund_transaction_id as any)
+																.amount || 0)
+													)
+												)}
+											</span>
+										</div>
+									) : (
+										<span>{formatToPeso(String(transaction.amount))}</span>
+									)}
+								</div>
 							</Label>
 						</FormCard.Field>
 					</div>
@@ -356,10 +395,33 @@ const ViewTransactionForm = () => {
 
 					{transaction.refund_transaction_id && (
 						<FormCard.Field>
-							<FormCard.Label>Refund Transaction:</FormCard.Label>
-							<Label className="font-normal text-2xs">
-								{transaction.refund_transaction_id.transaction_reference}
-							</Label>
+							<FormCard.Label>Refund Transaction Ref.:</FormCard.Label>
+
+							<Tooltip delayDuration={200}>
+								<TooltipTrigger asChild className="cursor-pointer">
+									<Button
+										variant="link"
+										size="link"
+										className="font-normal text-2xs"
+										onClick={() => {
+											navigate(
+												`/admin/ami/transaction-history/transactions/view/transaction/${transaction.refund_transaction_id?._id}`
+											);
+										}}
+									>
+										{transaction.refund_transaction_id.transaction_reference}
+									</Button>
+								</TooltipTrigger>
+								<TooltipContent
+									className="text-white bg-admin-secondary text-3xs"
+									side="right"
+									sideOffset={5}
+									align="end"
+									alignOffset={10}
+								>
+									<p>View refund transaction details</p>
+								</TooltipContent>
+							</Tooltip>
 						</FormCard.Field>
 					)}
 
@@ -471,116 +533,269 @@ const TransactionFormButtonControls = ({
 	const params = useParams();
 	const transactionId = propTransactionId || params.id;
 
-	// Add your transaction mutation hooks here when available
-	// const { mutateAsync: processTransactionMutation, isPending: isProcessing } = useProcessTransactionMutation();
-	// const { mutateAsync: refundTransactionMutation, isPending: isRefunding } = useRefundTransactionMutation();
+	// Track which modal is open
+	const [openModal, setOpenModal] = useState<string | null>(null);
+	const [isRefundFormOpen, setIsRefundFormOpen] = useState(false);
 
-	const isMutating = false; // Update this when you add mutations
+	const { mutateAsync: approveTransaction, isPending: isApprovingTransaction } =
+		useApproveTransactionMutation();
+	const { mutateAsync: rejectTransaction, isPending: isRejectingTransaction } =
+		useRejectTransactionMutation();
+	const { mutateAsync: refundTransaction, isPending: isRefundingTransaction } =
+		useRefundTransactionMutation();
 
-	// Handler functions (implement these based on your transaction mutations)
-	const handleProcess = () => {
-		if (window.confirm("Are you sure you want to process this transaction?")) {
-			// processTransactionMutation(String(transactionId));
-			toast.info("Process functionality not implemented yet");
-		}
+	const refundForm = useForm<RefundTransactionSchema>({
+		resolver: zodResolver(refundSchema),
+		mode: "onChange",
+		defaultValues: {
+			refund_amount: 0,
+			refund_reason: "",
+			notes: "",
+			payment_proof_images: [],
+		},
+	});
+
+	const handleConfirmRefundForm = () => {
+		setIsRefundFormOpen(false);
+		setOpenModal("Refund");
 	};
 
-	const handleRefund = () => {
-		const refund_reason = prompt("Please enter refund reason:");
-
-		if (!refund_reason || refund_reason.trim().length < 5) {
-			toast.error("Refund reason must be at least 5 characters");
-			return;
-		}
-
-		// refundTransactionMutation({
-		//     id: String(transactionId),
-		//     refund_reason,
-		// });
-		toast.info("Refund functionality not implemented yet");
+	// === Handlers ===
+	const handleApprove = async () => {
+		await approveTransaction(String(transactionId));
+		setOpenModal(null);
 	};
 
-	// Memoized UI based on status
+	const handleReject = async () => {
+		await rejectTransaction(String(transactionId));
+		setOpenModal(null);
+	};
+
+	const handleRefund = async () => {
+		await refundTransaction({
+			id: String(transactionId),
+			payload: refundForm.getValues(),
+		}).then(() => setOpenModal(null));
+	};
+
+	// === Memoized UI ===
 	const buttonControls = useMemo(() => {
-		// Pending Status: Can Process or Cancel
-		if (status === "Pending") {
-			return (
-				<div className="flex flex-row gap-2">
-					<Button
-						onClick={handleProcess}
-						disabled={isMutating}
-						variant="default"
-						size="sm"
-						className="gap-2"
-					>
-						<CreditCard className="size-4" />
-						Process Payment
-					</Button>
-				</div>
-			);
-		}
+		const renderButtonGroup = (...modals: React.ReactNode[]) => (
+			<div className="flex flex-row gap-2">{modals}</div>
+		);
 
-		// Completed Status: Can Refund
-		if (status === "Completed" && transactionType != "Refund") {
-			return (
-				<div className="flex flex-row gap-2">
+		switch (status) {
+			case "Pending":
+				return renderButtonGroup(
+					<TransactionActionModal
+						actionType="Approve"
+						isLoading={isApprovingTransaction}
+						onAction={handleApprove}
+						open={openModal === "Approve"}
+						onOpenChange={(open) => setOpenModal(open ? "Approve" : null)}
+					/>,
+					<TransactionActionModal
+						actionType="Reject"
+						isLoading={isRejectingTransaction}
+						onAction={handleReject}
+						open={openModal === "Reject"}
+						onOpenChange={(open) => setOpenModal(open ? "Reject" : null)}
+					/>
+				);
+
+			case "Completed":
+				if (transactionType === "Refund") {
+					return (
+						<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<Undo2 className="size-4 text-blue-500" />
+							<span>Payment refunded</span>
+						</div>
+					);
+				}
+
+				return renderButtonGroup(
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<CheckCircle2 className="size-4 text-green-600" />
 						<span>Payment completed</span>
-					</div>
-					<Button
-						onClick={handleRefund}
-						disabled={isMutating}
-						size="sm"
-						className="gap-2"
-					>
-						<Undo2 className="size-4" />
-						Refund
-					</Button>
-				</div>
-			);
-		}
+					</div>,
+					<TransactionActionModal
+						actionType="Refund"
+						isLoading={isRefundingTransaction}
+						onAction={handleRefund}
+						open={openModal === "Refund"}
+						onOpenChange={() => {
+							setIsRefundFormOpen(true);
+							setOpenModal(null);
+						}}
+					/>
+				);
 
-		// Failed Status: No actions available
-		if (status === "Failed") {
-			return (
-				<div className="flex flex-row gap-2">
+			case "Failed":
+				return (
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<X className="size-4 text-destructive" />
 						<span>Payment failed</span>
 					</div>
-				</div>
-			);
-		}
+				);
 
-		// Refunded Status: No actions available
-		if (status === "Refunded") {
-			return (
-				<div className="flex flex-row gap-2">
+			case "Refunded":
+				return (
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
-						<Undo2 className="size-4 text-purple-600" />
+						<Undo2 className="size-4  text-blue-500" />
 						<span>Payment refunded</span>
 					</div>
-				</div>
-			);
-		}
+				);
 
-		// Cancelled Status: No actions available
-		if (status === "Cancelled") {
-			return (
-				<div className="flex flex-row gap-2">
+			case "Cancelled":
+				return (
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<X className="size-4 text-destructive" />
 						<span>Transaction cancelled</span>
 					</div>
-				</div>
-			);
+				);
+
+			default:
+				return null;
 		}
+	}, [status, openModal, transactionType]);
 
-		return null;
-	}, [status, isMutating]);
+	return (
+		<>
+			{buttonControls}
 
-	return buttonControls;
+			<TransactionRefundFormModal
+				open={isRefundFormOpen}
+				onOpenChange={setIsRefundFormOpen}
+				onSubmit={handleConfirmRefundForm}
+				form={refundForm}
+			/>
+		</>
+	);
 };
+
+// type TransactionFormButtonControlsProps = {
+// 	status: TransactionStatus;
+// 	transactionId: string;
+// 	transactionType: TransactionType;
+// };
+
+// const TransactionFormButtonControls = ({
+// 	status,
+// 	transactionId: propTransactionId,
+// 	transactionType,
+// }: TransactionFormButtonControlsProps) => {
+// 	const params = useParams();
+// 	const transactionId = propTransactionId || params.id;
+
+// 	const { mutateAsync: approveTransaction, isPending: isApprovingTransaction } =
+// 		useApproveTransactionMutation();
+// 	const { mutateAsync: rejectTransaction, isPending: isRejectingTransaction } =
+// 		useRejectTransactionMutation();
+
+// 	const isMutating = false;
+
+// 	const handleProcess = () => {
+// 		if (window.confirm("Are you sure you want to process this transaction?")) {
+// 			toast.info("Process functionality not implemented yet");
+// 		}
+// 	};
+
+// 	const handleRefund = () => {
+// 		const refund_reason = prompt("Please enter refund reason:");
+
+// 		if (!refund_reason || refund_reason.trim().length < 5) {
+// 			toast.error("Refund reason must be at least 5 characters");
+// 			return;
+// 		}
+
+// 		// refundTransactionMutation({
+// 		//     id: String(transactionId),
+// 		//     refund_reason,
+// 		// });
+// 		toast.info("Refund functionality not implemented yet");
+// 	};
+
+// 	// Memoized UI based on status
+// 	const buttonControls = useMemo(() => {
+// 		// Pending Status: Can Process or Cancel
+// 		if (status === "Pending") {
+// 			return (
+// 				<div className="flex flex-row gap-2">
+// 					<Button
+// 						onClick={handleProcess}
+// 						disabled={isMutating}
+// 						variant="default"
+// 						size="sm"
+// 						className="gap-2"
+// 					>
+// 						<CreditCard className="size-4" />
+// 						Process Payment
+// 					</Button>
+// 				</div>
+// 			);
+// 		}
+
+// 		// Completed Status: Can Refund
+// 		if (status === "Completed" && transactionType != "Refund") {
+// 			return (
+// 				<div className="flex flex-row gap-2">
+// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
+// 						<CheckCircle2 className="size-4 text-green-600" />
+// 						<span>Payment completed</span>
+// 					</div>
+// 					<Button
+// 						onClick={handleRefund}
+// 						disabled={isMutating}
+// 						size="sm"
+// 						className="gap-2"
+// 					>
+// 						<Undo2 className="size-4" />
+// 						Refund
+// 					</Button>
+// 				</div>
+// 			);
+// 		}
+
+// 		// Failed Status: No actions available
+// 		if (status === "Failed") {
+// 			return (
+// 				<div className="flex flex-row gap-2">
+// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
+// 						<X className="size-4 text-destructive" />
+// 						<span>Payment failed</span>
+// 					</div>
+// 				</div>
+// 			);
+// 		}
+
+// 		// Refunded Status: No actions available
+// 		if (status === "Refunded") {
+// 			return (
+// 				<div className="flex flex-row gap-2">
+// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
+// 						<Undo2 className="size-4 text-purple-600" />
+// 						<span>Payment refunded</span>
+// 					</div>
+// 				</div>
+// 			);
+// 		}
+
+// 		// Cancelled Status: No actions available
+// 		if (status === "Cancelled") {
+// 			return (
+// 				<div className="flex flex-row gap-2">
+// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
+// 						<X className="size-4 text-destructive" />
+// 						<span>Transaction cancelled</span>
+// 					</div>
+// 				</div>
+// 			);
+// 		}
+
+// 		return null;
+// 	}, [status, isMutating]);
+
+// 	return buttonControls;
+// };
 
 export default ViewTransactionForm;

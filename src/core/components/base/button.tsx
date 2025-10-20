@@ -25,6 +25,7 @@ const buttonVariants = cva(
 					"h-fit py-1 px-2 justify-start rounded-md hover:bg-primary-foreground [&_svg]:size-3 [&_svg]:shrink-0",
 
 				link: "truncate flex flex-row items-center gap-1 hover:text-primary hover:underline",
+				outline: "bg-transpartent border border-border hover:bg-accent",
 
 				// NOT USED?
 				icon: "bg-transparent hover:bg-accent text-foreground border-none disabled:bg-transparent",

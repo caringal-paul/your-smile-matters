@@ -1,7 +1,7 @@
 import { UserLogsTableType } from "../types/user-logs-table.types";
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 export const useUserLogsColumns = (): Column<UserLogsTableType>[] => {
 	const columns: Column<UserLogsTableType>[] = [

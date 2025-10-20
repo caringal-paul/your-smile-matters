@@ -34,6 +34,10 @@ type TransactionsResponseAmi = Pick<
 	original_transaction_id?: PopulatedTransaction | null;
 };
 
+export type RefundTransactionResponseAmi = TransactionsResponseAmi & {
+	original_transaction_id?: PopulatedTransaction | null;
+};
+
 export type GetAllTransactionsResponseAmi = TransactionsResponseAmi & {};
 
 export type GetByIdTransactionResponseAmi = TransactionsResponseAmi & {};

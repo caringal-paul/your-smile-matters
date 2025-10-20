@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import FormCard from "@/ami/shared/components/card/FormCard";
 import { Button } from "@/core/components/base/button";
@@ -7,20 +7,10 @@ import { Switch } from "@/core/components/base/switch";
 
 import { Form, FormField, FormMessage } from "@/core/components/base/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	UserAmiCreate,
-	UserAmiUpdate,
-	userCreateSchema,
-	userUpdateSchema,
-} from "../utils/schemas/user.schema";
+import { UserAmiCreate, userCreateSchema } from "../utils/schemas/user.schema";
 import { useForm } from "react-hook-form";
 import { Input } from "@/core/components/base/input";
 
-import usersArray from "../mock/temp-user.json";
-import roleArray from "@/ami/features/role-and-permission/mock/temp-roles.json";
-
-import { UserModel } from "@/core/models/user.model";
-import { RoleModel } from "@/core/models/role.model";
 import { SelectOptions } from "@/core/types/option.types";
 import {
 	Select,

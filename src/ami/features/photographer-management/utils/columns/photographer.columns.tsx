@@ -1,7 +1,7 @@
 import { Button } from "@/core/components/base/button";
 import EditIcon from "@/ami/shared/assets/icons/EditIcon";
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
@@ -34,6 +34,7 @@ export const usePhotographerColumns =
 						<AvatarImage
 							src={row.profile_image || "/sf/ysm-profile-fallback.jpg"}
 							alt="@shadcn"
+							className="size-6 bg-red-500"
 						/>
 						<AvatarFallback>{getInitials(row.name)}</AvatarFallback>
 					</Avatar>

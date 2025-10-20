@@ -16,8 +16,6 @@ const TransactionTable = () => {
 
 	const columns = useTransactionColumns();
 
-	console.log(transactions);
-
 	const {
 		searchText,
 		setSearchText,

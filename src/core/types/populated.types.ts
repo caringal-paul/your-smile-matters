@@ -46,6 +46,10 @@ export type PopulatedService = {
 	old_price?: number;
 	duration_minutes?: number;
 	is_available: boolean;
+	service_gallery: string[];
+	is_active: boolean;
+	created_at?: Date;
+	updated_at?: Date;
 };
 
 export type PopulatedBookingService = {

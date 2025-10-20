@@ -11,7 +11,7 @@ export type IncludedService = {
 export type PackageModel = MetaData & {
 	name: string;
 	description?: string;
-	image?: string | null;
+	image?: string;
 	package_price: number;
 	services: IncludedService[];
 	looks: number;

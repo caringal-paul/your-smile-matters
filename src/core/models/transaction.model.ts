@@ -1,6 +1,6 @@
 import { TransactionStatus } from "@/ami/shared/types/status.types";
 import { MetaData } from "../types/base.types";
-import { PaymentMethod } from "@/store-front/store/useBookingFormStore";
+import { PaymentMethod } from "@/ami/shared/types/payment-method.types";
 
 export type TransactionType = "Payment" | "Refund" | "Partial" | "Balance";
 

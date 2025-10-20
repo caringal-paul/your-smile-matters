@@ -18,13 +18,16 @@ import StepThreeForm from "./StepThreeForm";
 import StepFourForm from "./StepFourForm";
 import StepFiveForm from "./StepFiveForm";
 import BookingFormStepsHeader from "./BookingFormStepsHeader";
-import { Loader, Loader2, X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { useGetAllServicesQuerySf } from "../../service/queries/getServices.sf.query";
 
 const BookingFormModal = () => {
 	const { modalOpen, closeModal, formData, clearForm, loading } =
 		useBookingFormStore();
 
 	const [currentTab, setCurrentTab] = useState("service");
+
+	const { data: allServices = [], isPending } = useGetAllServicesQuerySf();
 
 	const manualClose = useRef(false);
 
@@ -47,6 +50,10 @@ const BookingFormModal = () => {
 		closeModal();
 		setCurrentTab("service");
 	};
+
+	if (isPending) {
+		return <>Loading</>;
+	}
 
 	return (
 		<Dialog
@@ -75,14 +82,14 @@ const BookingFormModal = () => {
 						</DialogClose>
 
 						<Tabs
-							value={currentTab} // controlled value
-							onValueChange={(val) => setCurrentTab(val)} // gets the current value
+							value={currentTab}
+							onValueChange={(val) => setCurrentTab(val)}
 							className="space-y-4"
 						>
 							<BookingFormStepsHeader currentTab={currentTab} />
 
 							<TabsContent value="service">
-								<StepOneForm />
+								<StepOneForm allServices={allServices} isPending={isPending} />
 							</TabsContent>
 
 							<TabsContent value="time">
@@ -94,7 +101,7 @@ const BookingFormModal = () => {
 							</TabsContent>
 
 							<TabsContent value="summary">
-								<StepFourForm />
+								<StepFourForm allServices={allServices} />
 							</TabsContent>
 
 							<TabsContent value="status">

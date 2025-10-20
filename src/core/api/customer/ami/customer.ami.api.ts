@@ -1,6 +1,6 @@
 import { BaseResponseDto } from "@/core/types/base.types";
 import { handleError } from "@/core/helpers/handleError";
-import { apiClient } from "@/core/lib/axios/api-client";
+import { adminApiClient } from "@/core/lib/axios/api-client.ami";
 
 import {
 	GetAllCustomerResponseAmi,
@@ -12,7 +12,7 @@ const ENDPOINT = "/admin/customers";
 const amiCustomerApi = {
 	async get(): Promise<BaseResponseDto<GetAllCustomerResponseAmi[]>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetAllCustomerResponseAmi[]>
 			>(ENDPOINT);
 
@@ -28,7 +28,7 @@ const amiCustomerApi = {
 		id: string
 	): Promise<BaseResponseDto<GetByIdCustomerResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdCustomerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;

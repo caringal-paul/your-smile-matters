@@ -19,11 +19,9 @@ export const useLoginAmiUserMutation = () => {
 			return res.data;
 		},
 		onSuccess: (data) => {
-			console.log(data?.access_token);
-
 			if (data?.access_token) {
-				localStorage.setItem("access_token", data?.access_token);
-				localStorage.setItem("refresh_token", data?.refresh_token);
+				localStorage.setItem("ami_access_token", data?.access_token);
+				localStorage.setItem("ami_refresh_token", data?.refresh_token);
 			} else {
 				throw new Error(
 					"Internal Server Error! Please contact your administrator!"

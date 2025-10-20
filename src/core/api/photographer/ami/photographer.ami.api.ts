@@ -1,10 +1,7 @@
 import { BaseResponseDto } from "@/core/types/base.types";
 import { handleError } from "@/core/helpers/handleError";
-import { apiClient } from "@/core/lib/axios/api-client";
-import {
-	UserAmiCreate,
-	UserAmiUpdate,
-} from "@/ami/features/user-management/utils/schemas/user.schema";
+import { adminApiClient } from "@/core/lib/axios/api-client.ami";
+
 import {
 	CreatePhotographerResponseAmi,
 	DeactivatePhotographerResponseAmi,
@@ -23,7 +20,7 @@ const ENDPOINT = "/admin/photographers";
 const amiPhotographerApi = {
 	async get(): Promise<BaseResponseDto<GetAllPhotographerResponseAmi[]>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetAllPhotographerResponseAmi[]>
 			>(ENDPOINT);
 
@@ -39,7 +36,7 @@ const amiPhotographerApi = {
 		id: string
 	): Promise<BaseResponseDto<GetByIdPhotographerResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdPhotographerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -55,7 +52,7 @@ const amiPhotographerApi = {
 		data: PhotographerAmiUpdate
 	): Promise<BaseResponseDto<UpdatePhotographerResponseAmi>> {
 		try {
-			const response = await apiClient.put<
+			const response = await adminApiClient.put<
 				BaseResponseDto<UpdatePhotographerResponseAmi>
 			>(`${ENDPOINT}/${id}`, data);
 			return response;
@@ -70,7 +67,7 @@ const amiPhotographerApi = {
 		data: PhotographerAmiCreate
 	): Promise<BaseResponseDto<CreatePhotographerResponseAmi>> {
 		try {
-			const response = await apiClient.post<
+			const response = await adminApiClient.post<
 				BaseResponseDto<CreatePhotographerResponseAmi>
 			>(ENDPOINT, data);
 			return response;
@@ -85,7 +82,7 @@ const amiPhotographerApi = {
 		id: string
 	): Promise<BaseResponseDto<DeactivatePhotographerResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<DeactivatePhotographerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -100,7 +97,7 @@ const amiPhotographerApi = {
 		id: string
 	): Promise<BaseResponseDto<ReactivatePhotographerResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<ReactivatePhotographerResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 

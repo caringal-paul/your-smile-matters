@@ -3,7 +3,7 @@ import EditIcon from "@/ami/shared/assets/icons/EditIcon";
 import { UserAmiTableType } from "../types/users-table.ami.types";
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 import { formatToTableDate } from "@/ami/shared/helpers/formatDate";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";

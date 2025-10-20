@@ -1,5 +1,3 @@
-import DataTable from "@/ami/shared/components/table/DataTable";
-
 import customersArray from "../mock/temp-customers.json";
 
 import TableFilter from "@/ami/shared/components/filter/TableFilter";
@@ -13,6 +11,7 @@ import {
 	CUSTOMER_TABLE_SEARCH_KEYS,
 } from "../constants/customer-constants";
 import { useGetAllCustomersQuery } from "../queries/getCustomers.ami.query";
+import DataTable from "@/ami/shared/components/table/DataTable";
 
 const CustomerTable = () => {
 	const { data: customers = [], isLoading } = useGetAllCustomersQuery();

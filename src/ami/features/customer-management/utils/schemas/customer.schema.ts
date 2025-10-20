@@ -45,7 +45,7 @@ export const customerCreateSchema = z.object({
 	city: z.string().max(50).trim().optional(),
 	province: z.string().max(50).trim().optional(),
 	postal_code: z.string().max(10).trim().optional(),
-	country: z.string().max(50).trim().default("Philippines"),
+	country: z.string().max(50).trim().optional(),
 
 	// Profile fields
 	birth_date: z.string().optional(),
@@ -69,6 +69,19 @@ export const customerCreateSchema = z.object({
 
 // For update operations
 export const customerUpdateSchema = customerCreateSchema.partial();
+
+export const customerCreateSchemaExtended = customerCreateSchema
+	.extend({
+		confirm_password: z.string().min(1, "Please confirm your password"),
+	})
+	.refine((data) => data.password === data.confirm_password, {
+		message: "Passwords don't match",
+		path: ["confirm_password"],
+	});
+
+export type CustomerAmiCreateWithConfirm = z.infer<
+	typeof customerCreateSchemaExtended
+>;
 
 // Type inference for TS
 export type CustomerAmiCreate = z.infer<typeof customerCreateSchema>;

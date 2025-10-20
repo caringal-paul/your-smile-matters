@@ -1,4 +1,4 @@
-import { SortOrder } from "./sort.types";
+import { SortOrder } from "../../ami/shared/types/sort.types";
 
 export type Column<T> = {
 	key: keyof T;

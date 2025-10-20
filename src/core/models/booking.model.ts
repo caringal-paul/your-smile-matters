@@ -46,5 +46,4 @@ export type BookingModel = MetaData & {
 
 	// Virtuals / computed from backend
 	amount_paid?: number;
-	is_payment_complete?: boolean;
 };

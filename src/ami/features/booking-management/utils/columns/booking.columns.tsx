@@ -5,7 +5,7 @@ import {
 	formatToNormalDate,
 	formatToTableDate,
 } from "@/ami/shared/helpers/formatDate";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { useNavigate } from "react-router-dom";
 import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
@@ -20,7 +20,7 @@ import {
 	AvailabilityStatus,
 	BookingStatus,
 } from "@/ami/shared/types/status.types";
-import { BookingAmiTableType } from "../types/booking-table.types";
+import { BookingAmiTableType } from "../types/booking-table.ami.types";
 
 export const useBookingColumns = (): Column<BookingAmiTableType>[] => {
 	const navigate = useNavigate();
@@ -92,10 +92,14 @@ export const useBookingColumns = (): Column<BookingAmiTableType>[] => {
 			key: "status",
 			label: "Status",
 			sortable: true,
-			render: (value) => {
+			render: (_, row) => {
+				const status =
+					row.status === "Ongoing" && !row.is_payment_complete
+						? "Waiting"
+						: row.status;
 				return (
 					<StatusWithIndicator
-						value={value as BookingStatus}
+						value={status as BookingStatus}
 						colorMap={BOOKING_STATUS_COLORS}
 					/>
 				);

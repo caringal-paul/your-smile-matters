@@ -59,8 +59,8 @@ export const handleError = (error: unknown): BaseAppError => {
 
 		// Try to extract server message from common response structures
 		const serverMessage =
-			responseData?.message ||
 			responseData?.error ||
+			responseData?.message ||
 			responseData?.detail ||
 			responseData?.title ||
 			error.message;

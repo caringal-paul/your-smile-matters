@@ -37,7 +37,7 @@ export type GetByIdBookingResponseAmi = {
 	customer_id: PopulatedCustomer;
 	package_id?: PopulatedPackage | null;
 	photographer_id?: PopulatedPhotographer | null;
-	promo_id?: PopulatedPromo | null;
+	promo_id?: PopulatedPromo;
 	services: PopulatedBookingService[];
 	is_customized: boolean;
 	customization_notes?: string | null;

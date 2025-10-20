@@ -18,304 +18,23 @@ import { Badge } from "@/core/components/base/badge";
 import { Button } from "@/core/components/base/button";
 import { useParams } from "react-router-dom";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
+import { useGetServiceByIdQuerySf } from "../queries/getServiceById.sf.query";
 
-interface Review {
+type Review = {
 	id: string;
 	author: string;
 	avatar: string;
 	rating: number;
 	date: string;
 	text: string;
-}
-
-export type Service = {
-	_id: string;
-	name: string;
-	description: string;
-	category: string;
-	price: number;
-	old_price?: number; // optional, not always present
-	duration_minutes: number | null;
-	is_available: boolean;
-	service_gallery: string[];
-	is_active: boolean;
-	created_by: string;
-	updated_by: string;
-	deleted_by: string | null;
-	retrieved_by: string | null;
-	deleted_at: string | null;
-	retrieved_at: string | null;
-	__v: number;
-	created_at: string; // ISO date string
-	updated_at: string; // ISO date string
 };
-
-export const ALL_SERVICES: Service[] = [
-	{
-		_id: "68db7cd6a46929dc4e9479f0",
-		name: "Bridal Makeup",
-		description: `
-			<p><b>💄 Bridal Makeup</b> includes a <i>trial session</i> to perfect your look before the big day. 
-			We use ✨ <b>waterproof, long-lasting products</b> to keep you glowing all day.</p>
-			<ul>
-				<li>✅ Personalized consultation</li>
-				<li>✅ Trial makeup session</li>
-				<li>✅ Premium branded products</li>
-			</ul>
-			<p><s>Old price: ₱3000</s> 👉 <b>Now only ₱2500!</b></p>
-		`,
-		category: "Beauty",
-		price: 2500,
-		old_price: 3000,
-		duration_minutes: 120,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2",
-			"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
-			"https://images.unsplash.com/photo-1516975080664-ed2fc6a32937",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479f1",
-		name: "Party Makeup",
-		description: `
-			<p>✨ Look <b>fabulous</b> at your next party with our <i>customized</i> glam looks.</p>
-			<ol>
-				<li>🎨 Smokey eyes</li>
-				<li>💎 Glitter highlights</li>
-				<li>🌟 Natural glowing finish</li>
-			</ol>
-			<p><s>Regular ₱1500</s> 👉 <b>Now only ₱1200!</b></p>
-		`,
-		category: "Beauty",
-		price: 1200,
-		duration_minutes: 90,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1560066984-138dadb4c035",
-			"https://images.unsplash.com/photo-1583001809809-a2b0c6e3f22f",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479f2",
-		name: "Hair Styling",
-		description: `
-			<p>💇 Get a <i>professional</i> hairstyle tailored to your event. Perfect for <b>weddings</b>, parties, or casual outings.</p>
-			<ul>
-				<li>🌹 Elegant updos</li>
-				<li>🌊 Beach waves</li>
-				<li>✨ Sleek straightening</li>
-			</ul>
-			<p><b>Pro tip:</b> Book with makeup for a <s>10% discount</s> 🎁 <i>(limited time)</i>.</p>
-		`,
-		category: "Styling",
-		price: 800,
-		duration_minutes: 60,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1562322140-8baeececf3df",
-			"https://images.unsplash.com/photo-1605497788044-5a32c7078486",
-			"https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479ed",
-		name: "Photo Editing",
-		description: `
-			<p>📸 Enhance your photos with <b>professional editing</b>. We make your shots <i>magazine-ready</i>!</p>
-			<ol>
-				<li>✨ Skin smoothing</li>
-				<li>💡 Lighting adjustments</li>
-				<li>🖼 Background cleanup</li>
-			</ol>
-			<p><s>₱500</s> 👉 <b>Now ₱400 per photo!</b></p>
-		`,
-		category: "Editing",
-		price: 400,
-		duration_minutes: 30,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1504203700686-0f3ec2a5dd12",
-			"https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479ed",
-		name: "Portrait Photography",
-		description: `
-			<p>📷 Get timeless <b>portrait photos</b> with our expert photographers. Perfect for <i>branding</i> or family shoots.</p>
-			<ul>
-				<li>🏢 Studio setup</li>
-				<li>🌳 Outdoor natural light</li>
-				<li>🖼 Up to 20 edited shots</li>
-			</ul>
-			<p><b>Special:</b> Free <i>framed print</i> 🎁 this month only!</p>
-		`,
-		category: "Photography",
-		price: 2000,
-		duration_minutes: 90,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
-			"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479ef",
-		name: "Event Photography",
-		description: `
-			<p>🎉 Our <b>Event Photography</b> captures <i>every important moment</i> of your gathering. Perfect for corporate & social occasions.</p>
-			<ol>
-				<li>📌 Coverage of highlights</li>
-				<li>🤩 Candid moments</li>
-				<li>👥 Group portraits</li>
-			</ol>
-			<p><b>Deal:</b> Free <i>editing</i> on 10 selected photos 🎁</p>
-		`,
-		category: "Photography",
-		price: 3500,
-		duration_minutes: 240,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
-			"https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479ed",
-		name: "Videography",
-		description: `
-			<p>🎥 <b>Videography</b> that brings your story to life. From <i>weddings</i> to launches, we create unforgettable films.</p>
-			<ul>
-				<li>📹 HD & 4K recording</li>
-				<li>🎬 Professional editing</li>
-				<li>🌟 Highlight reel included</li>
-			</ul>
-			<p><s>₱5000</s> 👉 <b>Now ₱4500</b> (early bookings) 🎁</p>
-		`,
-		category: "Video",
-		price: 4500,
-		duration_minutes: 300,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
-			"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-	{
-		_id: "68db7cd6a46929dc4e9479f7",
-		name: "Wedding Photography",
-		description: `
-			<p>💍 Make your <b>wedding day</b> unforgettable with our <i>full-coverage</i> photography service.</p>
-			<ol>
-				<li>📸 Pre-wedding shoot</li>
-				<li>💒 Ceremony coverage</li>
-				<li>🎉 Reception highlights</li>
-			</ol>
-			<p><b>Bonus:</b> Free <i>engagement shoot</i> included 💝</p>
-		`,
-		category: "Photography",
-		price: 6000,
-		duration_minutes: 480,
-		is_available: true,
-		service_gallery: [
-			"https://images.unsplash.com/photo-1529634893481-bd1c1c8f84b0",
-			"https://images.unsplash.com/photo-1524504388940-b1c1722653e1",
-		],
-		is_active: true,
-		created_by: "68b4fc3b0d4b7f4b17d0054a",
-		updated_by: "68b4fc3b0d4b7f4b17d0054a",
-		deleted_by: null,
-		retrieved_by: null,
-		deleted_at: null,
-		retrieved_at: null,
-		__v: 0,
-		created_at: "2025-09-30T06:46:46.083Z",
-		updated_at: "2025-09-30T06:46:46.083Z",
-	},
-];
 
 const ServiceDetailsPage = () => {
 	const { id } = useParams();
 
-	const selectedService = ALL_SERVICES.find((service) => service._id == id);
+	const { data: selectedService, isPending } = useGetServiceByIdQuerySf(id!);
 
-	const serviceImages = [
-		"/sf/sf-service-1.jpg",
-		"/sf/sf-service-2.jpg",
-		"/sf/sf-service-3.jpg",
-		"/sf/sf-service-4.jpg",
-	];
+	const serviceImages = selectedService?.service_gallery || [];
 
 	const reviews: Review[] = [
 		{
@@ -349,6 +68,10 @@ const ServiceDetailsPage = () => {
 		return () => clearInterval(timer);
 	}, [serviceImages.length]);
 
+	if (isPending) {
+		return <>Loading</>;
+	}
+
 	return (
 		<div className="min-h-screen bg-sf-background">
 			<div className="max-w-7xl mx-auto p-6 bg-white">
@@ -357,7 +80,7 @@ const ServiceDetailsPage = () => {
 						<div className="flex flex-col lg:flex-row gap-4">
 							{/* Main Image (fills entire div) */}
 							<div className="flex-1 relative">
-								<div className="relative w-full h-full rounded-xl overflow-hidden border-2 border-border ring-2 ring-primary">
+								<div className="relative w-full h-[16em] aspect-square xl:aspect-auto xl:h-full rounded-xl overflow-hidden border-2 border-border ring-2 ring-primary">
 									<AnimatePresence mode="wait">
 										<motion.img
 											key={current}

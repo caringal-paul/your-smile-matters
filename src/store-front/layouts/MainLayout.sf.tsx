@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../shared/components/Navbar";
 import FooterSection from "../features/home/components/FooterSection";
+import { useMyCredentials } from "../store/useMyCredentials";
 
 const MainLayout = () => {
 	const [isScrolled, setIsScrolled] = useState(false);
+
+	const myCredentials = useMyCredentials((state) => state.myCredentials);
 
 	useEffect(() => {
 		const handleScroll = () => {

@@ -1,6 +1,12 @@
 "use client";
 
-import { ArrowRightFromLine } from "lucide-react";
+import {
+	ArrowRightFromLine,
+	CalendarDaysIcon,
+	CircleUserRound,
+	LogOutIcon,
+	WalletIcon,
+} from "lucide-react";
 
 import {
 	NavigationMenu,
@@ -14,6 +20,20 @@ import {
 import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
 import { Separator } from "@/core/components/base/separator";
+import { useMyCredentials } from "@/store-front/store/useMyCredentials";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/core/components/base/popover";
+import { Label } from "@/core/components/base/label";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/core/components/base/avatar";
+import { getInitials } from "@/core/helpers/getInitials";
+import { useLogoutCustomerMutation } from "@/store-front/features/auth/queries/customerLogout.mutation";
 
 type NavLinkProps = {
 	path: string;
@@ -81,6 +101,9 @@ const NavLinkWithSublink = ({ title, subLinks }: NavLinkWithSublinkProps) => {
 
 const Navbar = () => {
 	const navigate = useNavigate();
+	const myCredentials = useMyCredentials((state) => state.myCredentials);
+
+	const { mutateAsync: logoutCustomer } = useLogoutCustomerMutation();
 
 	return (
 		<div className="flex items-center justify-between">
@@ -146,13 +169,81 @@ const Navbar = () => {
 				</NavigationMenuList>
 			</NavigationMenu>
 
-			<Button
-				className="z-20 p-5 text-base transition-all duration-300 rounded-lg shadow-lg shadow-primary/80 hover:shadow-primary/40 hover:bg-primary/80"
-				onClick={() => navigate("auth/login")}
-			>
-				<ArrowRightFromLine />
-				Login
-			</Button>
+			{!myCredentials ? (
+				<Button
+					className="z-20 p-5 text-base transition-all duration-300 rounded-lg shadow-lg shadow-primary/80 hover:shadow-primary/40 hover:bg-primary/80"
+					onClick={() => navigate("auth/login")}
+				>
+					<ArrowRightFromLine />
+					Login
+				</Button>
+			) : (
+				<div>
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button className="bg-transparent flex flex-row gap-2 text-foreground shadow-none hover:bg-inherit focus-visible:ring-0">
+								<Avatar>
+									<AvatarImage
+										src={myCredentials.profile_image || ""}
+										alt="@ysm-profile"
+										className="object-cover"
+									/>
+									<AvatarFallback>
+										{getInitials(
+											`${myCredentials.first_name} ${myCredentials.last_name}`
+										)}
+									</AvatarFallback>
+								</Avatar>
+								<Label>
+									{myCredentials.first_name} {myCredentials.last_name}
+								</Label>
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							className="w-fit p-0 min-w-[10em] max-w-[12em] mt-1"
+							align="end"
+							alignOffset={5}
+						>
+							<Button
+								variant="undefined"
+								className="text-foreground w-full text-start justify-start hover:bg-accent rounded-none"
+								onClick={() => navigate("profile/edit")}
+							>
+								<CircleUserRound className="size-4" />
+								Profile
+							</Button>
+							<Button
+								variant="undefined"
+								className="text-foreground w-full text-start justify-start hover:bg-accent rounded-none"
+								onClick={() => navigate("profile/my-bookings")}
+							>
+								<CalendarDaysIcon className="size-4" />
+								Bookings
+							</Button>
+							<Button
+								variant="undefined"
+								className="text-foreground w-full text-start justify-start hover:bg-accent rounded-none"
+								onClick={() => navigate("profile/my-transactions")}
+							>
+								<WalletIcon className="size-4" />
+								Transactions
+							</Button>
+							<Button
+								variant="undefined"
+								className="text-foreground w-full text-start justify-start hover:bg-accent rounded-none"
+								onClick={async () => {
+									await logoutCustomer().then(() => {
+										navigate("/auth/login");
+									});
+								}}
+							>
+								<LogOutIcon className="size-4" />
+								Logout
+							</Button>
+						</PopoverContent>
+					</Popover>
+				</div>
+			)}
 		</div>
 	);
 };

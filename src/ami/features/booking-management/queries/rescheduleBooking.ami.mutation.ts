@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/core/types/base.types";
 import { toast } from "sonner";
 import amiBookingApi from "@/core/api/booking/ami/booking.ami.api";
+import { queryClient } from "@/core/lib/react-query/react-query-client";
 
 type RescheduleMutationProps = {
 	id: string;
@@ -9,6 +10,7 @@ type RescheduleMutationProps = {
 		new_booking_date: Date;
 		new_start_time: string;
 		new_end_time: string;
+		new_photographer_id: string;
 	};
 };
 
@@ -24,7 +26,18 @@ export const useRescheduleBookingMutation = () => {
 				throw new Error(res.message || "Failed to reschedule booking!");
 			}
 
-			return res.data;
+			return id;
+		},
+		onSuccess: (data) => {
+			const id = data;
+
+			toast.success("Booking rescheduled!");
+
+			queryClient.invalidateQueries({
+				queryKey: ["bookings"],
+				refetchType: "all",
+			});
+			queryClient.invalidateQueries({ queryKey: ["booking", id] });
 		},
 		onError: (error) => {
 			toast.error(error.message);

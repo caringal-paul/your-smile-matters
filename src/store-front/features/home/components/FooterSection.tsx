@@ -120,7 +120,7 @@ const Copyright = () => {
 
 const FooterSection = () => {
 	return (
-		<div className="relative flex flex-col gap-2 justify-center items-center h-[500px] w-full bg-sf-dark-bg">
+		<div className="relative flex flex-col gap-2 justify-center items-center h-[500px] w-full bg-sf-dark-bg mt-8">
 			<LogoAndButton />
 			<Contacts />
 			<SocialMediaIcons />

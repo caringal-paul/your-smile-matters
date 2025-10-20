@@ -1,6 +1,6 @@
 import { BaseResponseDto } from "@/core/types/base.types";
 import { handleError } from "@/core/helpers/handleError";
-import { apiClient } from "@/core/lib/axios/api-client";
+import { adminApiClient } from "@/core/lib/axios/api-client.ami";
 import {
 	CreateUserResponseAmi,
 	DeactivateUserResponseAmi,
@@ -19,7 +19,7 @@ const ENDPOINT = "/admin/users";
 const amiUserApi = {
 	async get(): Promise<BaseResponseDto<GetAllUserResponseAmi[]>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetAllUserResponseAmi[]>
 			>(ENDPOINT);
 
@@ -33,7 +33,7 @@ const amiUserApi = {
 
 	async getById(id: string): Promise<BaseResponseDto<GetByIdUserResponseAmi>> {
 		try {
-			const response = await apiClient.get<
+			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdUserResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -49,7 +49,7 @@ const amiUserApi = {
 		data: UserAmiUpdate
 	): Promise<BaseResponseDto<UpdateUserResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<UpdateUserResponseAmi>
 			>(`${ENDPOINT}/${id}`, data);
 			return response;
@@ -64,7 +64,7 @@ const amiUserApi = {
 		data: UserAmiCreate
 	): Promise<BaseResponseDto<CreateUserResponseAmi>> {
 		try {
-			const response = await apiClient.post<
+			const response = await adminApiClient.post<
 				BaseResponseDto<CreateUserResponseAmi>
 			>(ENDPOINT, data);
 			return response;
@@ -79,7 +79,7 @@ const amiUserApi = {
 		id: string
 	): Promise<BaseResponseDto<DeactivateUserResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<DeactivateUserResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 			return response;
@@ -94,7 +94,7 @@ const amiUserApi = {
 		id: string
 	): Promise<BaseResponseDto<ReactivateUserResponseAmi>> {
 		try {
-			const response = await apiClient.patch<
+			const response = await adminApiClient.patch<
 				BaseResponseDto<ReactivateUserResponseAmi>
 			>(`${ENDPOINT}/${id}`);
 

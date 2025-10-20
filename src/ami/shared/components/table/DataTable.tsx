@@ -15,7 +15,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/core/components/base/select";
-import { Column } from "@/ami/shared/types/column.types";
+import { Column } from "@/core/types/column.types";
 
 import { SortOrder } from "@/ami/shared/types/sort.types";
 import { Button } from "../../../../core/components/base/button";

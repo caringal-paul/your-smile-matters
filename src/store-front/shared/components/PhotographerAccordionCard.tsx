@@ -93,8 +93,8 @@ const PhotographerAccordionCard = React.memo(
 						disabled ? "opacity-65" : "opacity-100"
 					} ${
 						isSelected
-							? "border-primary border-2 shadow-md shadow-primary/80"
-							: "border-border border-[1px] shadow-md"
+							? "border-primary border-2 shadow-sm shadow-primary/80"
+							: "border-border border-[1px] shadow-sm"
 					}`}
 				>
 					<AccordionTrigger

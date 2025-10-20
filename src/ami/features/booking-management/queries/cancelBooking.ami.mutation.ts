@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/core/types/base.types";
 import { toast } from "sonner";
 import amiBookingApi from "@/core/api/booking/ami/booking.ami.api";
+import { queryClient } from "@/core/lib/react-query/react-query-client";
 
 type CancelMutationProps = {
 	id: string;
@@ -20,7 +21,18 @@ export const useCancelBookingMutation = () => {
 				throw new Error(res.message || "Failed to cancel booking!");
 			}
 
-			return res.data;
+			return id;
+		},
+		onSuccess: (data) => {
+			const id = data;
+
+			toast.success("Booking cancelled successfully!");
+
+			queryClient.invalidateQueries({
+				queryKey: ["bookings"],
+				refetchType: "all",
+			});
+			queryClient.invalidateQueries({ queryKey: ["booking", id] });
 		},
 		onError: (error) => {
 			toast.error(error.message);
