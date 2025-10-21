@@ -1,5 +1,5 @@
 const SearchIcon = ({
-	fill = "none",
+	fill = "#2d2d2d",
 	className,
 }: {
 	fill?: string;

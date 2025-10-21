@@ -8,6 +8,9 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/core/components/base/tooltip";
+import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
+import { HandCoins, SmartphoneNfc } from "lucide-react";
+import { formatToNormalDate } from "@/ami/shared/helpers/formatDate";
 
 export const useMyTransactionsColumns =
 	(): Column<MyTransactionsSfTableType>[] => {
@@ -32,7 +35,9 @@ export const useMyTransactionsColumns =
 								variant="link"
 								size="link"
 								onClick={() => {
-									navigate(`my-bookings/booking/${row.booking_id._id}/details`);
+									navigate(
+										`/profile/my-bookings/booking/${row.booking_id._id}/details`
+									);
 								}}
 							>
 								{row.booking_reference}
@@ -90,8 +95,8 @@ export const useMyTransactionsColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={value}
-						className="line-clamp-4 text-ellipsis overflow-hidden font-light"
+						value={formatToPeso(String(value))}
+						className="line-clamp-4 text-ellipsis overflow-hidden font-light whitespace-nowrap"
 					/>
 				),
 			},
@@ -99,11 +104,23 @@ export const useMyTransactionsColumns =
 				key: "payment_method",
 				label: "Payment Method",
 				sortable: true,
-				render: (value) => (
-					<DataTableRow
-						value={value}
-						className="line-clamp-4 text-ellipsis overflow-hidden font-light"
-					/>
+				render: (_, row) => (
+					// <DataTableRow
+					// 	value={value}
+					// 	className="line-clamp-4 text-ellipsis overflow-hidden font-light"
+					// />
+					<div
+						className={
+							"font-normal text-2xs 2xl:text-xs truncate flex flex-row items-center gap-1"
+						}
+					>
+						{row.payment_method == "Cash" ? (
+							<HandCoins className="size-3 2xl:size-4" />
+						) : (
+							<SmartphoneNfc className="size-3 2xl:size-4" />
+						)}
+						{row.payment_method}
+					</div>
 				),
 			},
 			{
@@ -112,7 +129,7 @@ export const useMyTransactionsColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={value ?? "N/A"}
+						value={!value ? "N/A" : value}
 						className="line-clamp-4 text-ellipsis overflow-hidden font-light"
 					/>
 				),
@@ -123,8 +140,8 @@ export const useMyTransactionsColumns =
 				sortable: true,
 				render: (value) => (
 					<DataTableRow
-						value={value ?? "N/A"}
-						className="line-clamp-4 text-ellipsis overflow-hidden font-light"
+						value={value ? formatToNormalDate(String(value)) : "N/A"}
+						className="line-clamp-4 text-ellipsis overflow-hidden font-light whitespace-nowrap"
 					/>
 				),
 			},

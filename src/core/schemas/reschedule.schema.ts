@@ -16,9 +16,16 @@ export const rescheduleSchema = z.object({
 		.date()
 		.refine(
 			(val) => {
-				return val.getTime() > Date.now();
+				// Normalize both dates to midnight (remove time part)
+				const selectedDate = new Date(val);
+				selectedDate.setHours(0, 0, 0, 0);
+
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+
+				return selectedDate.getTime() >= today.getTime();
 			},
-			{ message: "New booking date must be in the future" }
+			{ message: "New booking date must be today or in the future" }
 		)
 		.optional(),
 

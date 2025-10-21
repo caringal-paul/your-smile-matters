@@ -147,7 +147,6 @@ const ViewPhotographerForm = () => {
 						</div>
 					</FormCard.Field>
 					<FormCard.Field>
-						{/* TODO ADD CONDITION TO GET BY ID */}
 						<FormCard.Label>Total Bookings</FormCard.Label>
 						<Label className="font-normal text-xs 2xl:text-2xs">
 							{!foundPhotographer?.total_bookings

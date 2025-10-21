@@ -59,7 +59,7 @@ export function formatToNormalDate(utcDate: string | Date): string {
 	const day = String(date.getDate()).padStart(2, "0");
 	const year = date.getFullYear();
 
-	return `${month}, ${day}, ${year}`;
+	return `${month} ${day}, ${year}`;
 }
 
 /**

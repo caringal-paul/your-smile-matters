@@ -31,6 +31,13 @@ export const useApproveTransactionMutation = () => {
 					queryKey: ["transaction", data!._id],
 				});
 			}
+
+			if (data?.booking_id?._id) {
+				await queryClient.invalidateQueries({
+					queryKey: ["booking", data.booking_id._id!],
+					refetchType: "all",
+				});
+			}
 		},
 		onError: (error) => {
 			toast.error(error.message);

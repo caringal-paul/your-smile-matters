@@ -1,5 +1,6 @@
 import { BookingStatus } from "@/ami/shared/types/status.types";
 import { BookingModel } from "@/core/models/booking.model";
+import { TransactionModel } from "@/core/models/transaction.model";
 import {
 	PopulatedBookingService,
 	PopulatedCustomer,
@@ -31,6 +32,40 @@ type BookingListItem = Pick<
 
 export type GetAllBookingsResponseAmi = BookingListItem & {};
 
+export type PaymentScenario =
+	| "fully_paid_no_refund"
+	| "fully_paid_with_refund"
+	| "partially_paid_no_refund"
+	| "partially_paid_with_refund"
+	| "refund_only"
+	| "no_payment";
+
+// Enhanced payment status interface
+export type EnhancedPaymentStatus = {
+	// Amounts
+	total_price: number; // Final booking amount (after discount)
+	total_refunded: number; // Total refunded amount
+	amount_paid: number; // Actual revenue (payments - refunds)
+	remaining_balance: number; // Outstanding balance to be paid
+
+	// Status flags
+	is_payment_complete: boolean; // Based on amount_paid
+	is_partially_paid: boolean; // Based on amount_paid
+	has_refund: boolean; // Quick check if there are any refunds
+
+	// Payment scenario for UI logic
+	payment_scenario: PaymentScenario;
+	isBookingFinalized: boolean;
+
+	// Transaction counts
+	payment_count: number; // Number of completed payment transactions
+	refund_count: number; // Number of completed refund transactions
+
+	// All transactions for detailed view
+	transactions: TransactionModel[];
+};
+
+// Booking with enhanced payment status
 export type GetByIdBookingResponseAmi = {
 	_id: string;
 	booking_reference: string;
@@ -68,11 +103,5 @@ export type GetByIdBookingResponseAmi = {
 	retrieved_at?: Date | null;
 	created_at: Date;
 	updated_at: Date;
-	payment_status: {
-		amount_paid: number;
-		remaining_balance: number;
-		is_partially_paid: boolean;
-		is_payment_complete: boolean;
-		transactions: PopulatedTransaction[];
-	};
+	payment_status: EnhancedPaymentStatus;
 };

@@ -90,7 +90,10 @@ const StepTwoForm = () => {
 						Choose a date
 					</h3>
 					<Calendar
-						disabled={formData.is_booking_sent}
+						disabled={(date) =>
+							formData.is_booking_sent ||
+							date < new Date(new Date().setHours(0, 0, 0, 0))
+						}
 						mode="single"
 						selected={formData.booking_date}
 						onDayClick={handleDateSelect}

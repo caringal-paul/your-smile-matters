@@ -774,17 +774,6 @@ const UpdatePhotographerForm = () => {
 					</FormCard.Body>
 
 					<FormCard.Footer className="flex justify-end gap-2 border-dashed border-t-[1px] pt-4">
-						{Object.keys(form.formState.errors).length > 0 && (
-							<div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm">
-								<p className="font-semibold text-red-800 mb-2">
-									Validation Errors:
-								</p>
-								<pre className="text-red-600 whitespace-pre-wrap overflow-auto max-h-40">
-									{JSON.stringify(form.formState.errors, null, 2)}
-								</pre>
-							</div>
-						)}
-
 						<Button
 							variant="secondary"
 							type="button"

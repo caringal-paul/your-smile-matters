@@ -52,6 +52,8 @@ const ViewBookingForm = () => {
 
 	const { data: booking, isLoading } = useGetBookingByIdQuery(id!);
 
+	console.log(booking?.payment_status);
+
 	if (isLoading) {
 		return <>Loading</>;
 	}
@@ -281,7 +283,8 @@ const ViewBookingForm = () => {
 					</FormCard.Field>
 				</div>
 			</FormCard>
-			<FormCard className="col-span-1 w-full h-full ">
+
+			{/* <FormCard className="col-span-1 w-full h-full ">
 				<FormCard.Title className="flex flex-row items-center gap-2">
 					Payment Details
 				</FormCard.Title>
@@ -329,6 +332,136 @@ const ViewBookingForm = () => {
 						</Label>
 					</FormCard.Field>
 
+					{booking.discount_amount && booking.promo_id?.promo_code ? (
+						<FormCard.Field>
+							<FormCard.Label>Promo code used:</FormCard.Label>
+							<Label className="font-normal text-2xs flex flex-row items-center gap-2">
+								{booking.promo_id?.promo_code}
+							</Label>
+						</FormCard.Field>
+					) : null}
+				</div>
+			</FormCard> */}
+
+			<FormCard className="col-span-1 w-full h-full">
+				<FormCard.Title className="flex flex-row items-center gap-2">
+					Payment Details
+				</FormCard.Title>
+
+				<div className="flex flex-col w-full gap-4">
+					{/* Total / Final Price */}
+					<FormCard.Field>
+						<FormCard.Label>Total Price:</FormCard.Label>
+						<Label className="font-normal text-2xs flex flex-row items-center gap-2">
+							{booking.discount_amount && booking.promo_id?.promo_code ? (
+								<span className="text-xs font-normal text-foreground">
+									{formatToPeso(String(booking.total_amount))} -{" "}
+									{formatToPeso(String(booking.discount_amount))} =
+								</span>
+							) : null}
+							<span className="text-primary font-bold text-sm">
+								{formatToPeso(String(booking.payment_status?.total_price || 0))}
+							</span>
+						</Label>
+					</FormCard.Field>
+
+					{/* Refund section if applicable */}
+					{booking.payment_status?.has_refund && (
+						<>
+							<FormCard.Field>
+								<FormCard.Label>Refunded Amount:</FormCard.Label>
+								<Label className="font-medium text-xs text-red-500">
+									-{" "}
+									{formatToPeso(
+										String(booking.payment_status.total_refunded || 0)
+									)}
+								</Label>
+							</FormCard.Field>
+
+							<FormCard.Field>
+								<FormCard.Label>Net Amount Received:</FormCard.Label>
+								<Label className="font-bold text-sm text-green-600">
+									{formatToPeso(
+										String(booking.payment_status.amount_paid || 0)
+									)}
+								</Label>
+							</FormCard.Field>
+						</>
+					)}
+
+					{/* Remaining balance (only if not finished) */}
+					{!booking.payment_status.isBookingFinalized && (
+						<FormCard.Field>
+							<FormCard.Label>Remaining Balance:</FormCard.Label>
+							<Label
+								className={`font-medium text-xs ${
+									booking.payment_status?.remaining_balance === 0
+										? "text-green-500"
+										: "text-orange-500"
+								}`}
+							>
+								{booking.payment_status?.remaining_balance === 0
+									? "Paid in full"
+									: formatToPeso(
+											String(booking.payment_status?.remaining_balance || 0)
+									  )}
+							</Label>
+						</FormCard.Field>
+					)}
+
+					{/* Payment status summary */}
+					{booking.payment_status.isBookingFinalized && (
+						<FormCard.Field>
+							<FormCard.Label>Payment Status:</FormCard.Label>
+							<Label
+								className={`font-medium text-xs ${
+									booking.payment_status?.has_refund
+										? "text-red-600"
+										: booking.payment_status?.is_payment_complete
+										? "text-green-600"
+										: booking.payment_status?.is_partially_paid
+										? "text-orange-600"
+										: "text-muted-foreground"
+								}`}
+							>
+								{(() => {
+									const ps = booking.payment_status;
+
+									if (!ps) return "No payment info";
+
+									switch (ps.payment_scenario) {
+										case "no_payment":
+											return "No Payment Received";
+										case "partially_paid_no_refund":
+											return "Partially Paid";
+										case "fully_paid_no_refund":
+											return "Fully Paid";
+										case "fully_paid_with_refund":
+											return ps.amount_paid === 0
+												? "Fully Refunded"
+												: `Refunded (${formatToPeso(
+														String(ps.total_refunded)
+												  )} refunded, ${formatToPeso(
+														String(ps.amount_paid)
+												  )} retained)`;
+										case "refund_only":
+											return "Refund Issued";
+										default:
+											// Fallback if backend didn't assign a scenario
+											if (ps.has_refund && ps.amount_paid === 0)
+												return "Fully Refunded";
+											if (ps.has_refund && ps.amount_paid > 0)
+												return "Refunded";
+											if (ps.is_payment_complete) return "Fully Paid";
+											if (ps.is_partially_paid) return "Partially Paid";
+											return "No Payment Received";
+									}
+								})()}
+							</Label>
+						</FormCard.Field>
+					)}
+
+					{/* Promo code */}
 					{booking.discount_amount && booking.promo_id?.promo_code ? (
 						<FormCard.Field>
 							<FormCard.Label>Promo code used:</FormCard.Label>

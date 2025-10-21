@@ -185,7 +185,11 @@ export const BookingRescheduleFormModal = ({
 														}
 													}
 												}}
-												disabled={(date) => date < new Date()}
+												disabled={(date) => {
+													const today = new Date();
+													today.setHours(0, 0, 0, 0); // reset to start of day
+													return date < today; // disables only dates before today
+												}}
 												captionLayout="dropdown"
 											/>
 										</PopoverContent>
