@@ -5,7 +5,10 @@ import SectionHeader from "@/ami/shared/components/header/SectionHeader";
 import { useFilteredTableData } from "@/ami/shared/hooks/useFilterTableData";
 import TableSearch from "@/ami/shared/components/filter/TableSearch";
 
-import { TRANSACTION_TABLE_SEARCH_KEYS } from "../constants/transaction.constants";
+import {
+	TRANSACTION_TABLE_AMI_FILTER_OPTIONS,
+	TRANSACTION_TABLE_SEARCH_KEYS,
+} from "../constants/transaction.constants";
 import { useGetAllTransactionsQuery } from "../queries/getTransactions.ami.query";
 import { useTransactionColumns } from "../utils/columns/transaction.columns";
 import { TransactionAmiTableType } from "../utils/types/transaction-history-table.types";
@@ -57,7 +60,7 @@ const TransactionTable = () => {
 						dateFilter={dateFilterDraft}
 						setDateFilter={setDateFilterDraft}
 						setFilters={setFiltersDraft}
-						filterOptions={TRANSACTION_STATUSES_FILTER_OPTIONS}
+						filterOptions={TRANSACTION_TABLE_AMI_FILTER_OPTIONS}
 						onApply={applyFilters}
 					/>
 				</div>

@@ -26,15 +26,21 @@ const BookingTable = () => {
 		setDateFilterDraft,
 		filteredData,
 	} = useFilteredTableData<BookingAmiTableType>({
-		data: bookings.map((booking) => {
-			return {
+		data: bookings
+			.sort(
+				(a, b) =>
+					new Date(String(b.updated_at)).getTime() -
+					new Date(String(a.updated_at)).getTime()
+			)
+			.map((booking) => ({
 				...booking,
 				booking_duration: `${booking.start_time} - ${booking.end_time}`,
-			};
-		}),
+			})),
 		keys: BOOKING_TABLE_SEARCH_KEYS,
 		dateFields: ["booking_date"],
 	});
+
+	console.log(filteredData);
 
 	if (isLoading) {
 		return <>Loading</>;

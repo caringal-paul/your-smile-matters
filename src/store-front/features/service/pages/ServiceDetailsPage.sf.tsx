@@ -19,6 +19,9 @@ import { Button } from "@/core/components/base/button";
 import { useParams } from "react-router-dom";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { useGetServiceByIdQuerySf } from "../queries/getServiceById.sf.query";
+import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
+import { formatToUtc } from "@/ami/shared/helpers/formatDate";
+import { useMyCredentials } from "@/store-front/store/useMyCredentials";
 
 type Review = {
 	id: string;
@@ -31,6 +34,8 @@ type Review = {
 
 const ServiceDetailsPage = () => {
 	const { id } = useParams();
+	const { openModal, saveOriginalForm } = useBookingFormStore();
+	const { myCredentials } = useMyCredentials();
 
 	const { data: selectedService, isPending } = useGetServiceByIdQuerySf(id!);
 
@@ -68,7 +73,7 @@ const ServiceDetailsPage = () => {
 		return () => clearInterval(timer);
 	}, [serviceImages.length]);
 
-	if (isPending) {
+	if (isPending || !selectedService) {
 		return <>Loading</>;
 	}
 
@@ -333,7 +338,48 @@ const ServiceDetailsPage = () => {
 					<div className="space-y-6 ">
 						<Button
 							onClick={() => {
-								console.log("Book now!");
+								const initialData = {
+									services: [
+										{
+											_id: selectedService._id,
+											quantity: 1,
+											price_per_unit: selectedService.price,
+											total_price: selectedService.price,
+											duration_minutes: selectedService.duration_minutes,
+										},
+									],
+
+									is_customized: false,
+									customer_id: myCredentials?._id,
+									customization_notes: null,
+									package_id: null,
+
+									booking_date: formatToUtc(new Date()),
+									start_time: "",
+									end_time: "",
+									session_duration_minutes: 0,
+									location: "",
+
+									photographer_id: "",
+									photographer_name: null,
+									theme: null,
+									special_requests: null,
+
+									total_amount: selectedService.price,
+									discount_amount: 0,
+									promo_id: null,
+									final_amount: selectedService.price,
+									amount_paid: 0,
+									method_of_payment: null,
+									payment_images: [],
+
+									is_booking_sent: false,
+									status: "Pending" as const,
+									booking_reference: "",
+								};
+
+								openModal();
+								saveOriginalForm(initialData);
 							}}
 							variant="sf"
 							className="w-full text-2xl py-8 px-6"

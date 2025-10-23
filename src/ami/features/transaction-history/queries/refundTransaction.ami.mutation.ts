@@ -41,6 +41,13 @@ export const useRefundTransactionMutation = () => {
 					queryKey: ["transaction", data.original_transaction_id._id],
 				});
 			}
+
+			if (data?.booking_id?._id) {
+				queryClient.invalidateQueries({
+					queryKey: ["booking", data.booking_id._id],
+					refetchType: "all",
+				});
+			}
 		},
 		onError: (error) => {
 			console.error("❌ Failed to create user:");

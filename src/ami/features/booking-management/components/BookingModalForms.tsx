@@ -13,6 +13,7 @@ import {
 import { cn } from "@/core/lib/utils";
 import { BOOKING_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { Calendar, Check, CheckCircle2, Play, X } from "lucide-react";
+import { Spinner } from "@/core/components/base/spinner";
 
 type BookingActionType =
 	| "Confirm"
@@ -24,7 +25,7 @@ type BookingActionType =
 interface BookingActionModalProps {
 	actionType: BookingActionType;
 	onAction: () => void;
-	isLoading: boolean;
+	isLoading?: boolean;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	disabled?: boolean;
@@ -33,7 +34,7 @@ interface BookingActionModalProps {
 export const BookingActionModal = ({
 	actionType,
 	onAction,
-	isLoading,
+	isLoading = false,
 	open,
 	onOpenChange,
 	disabled,
@@ -99,7 +100,8 @@ export const BookingActionModal = ({
 	return (
 		<Dialog onOpenChange={onOpenChange} open={open}>
 			<Button
-				disabled={isLoading || disabled}
+				// isLoading ||
+				disabled={disabled}
 				variant={config.variant}
 				size="sm"
 				onClick={() => onOpenChange(true)}
@@ -125,12 +127,22 @@ export const BookingActionModal = ({
 					<Button
 						type="submit"
 						onClick={onAction}
+						disabled={isLoading}
 						className="bg-primary py-6 w-full"
 					>
-						{config.actionLabel}
+						{isLoading ? (
+							<p className="flex flex-row gap-1">
+								<Spinner /> Please wait...
+							</p>
+						) : (
+							config.actionLabel
+						)}
 					</Button>
 					<DialogClose asChild>
-						<Button className="bg-secondary py-6 px-8 hover:bg-secondary hover:opacity-90">
+						<Button
+							className="bg-secondary py-6 px-8 hover:bg-secondary hover:opacity-90"
+							disabled={isLoading}
+						>
 							{config.cancelLabel}
 						</Button>
 					</DialogClose>

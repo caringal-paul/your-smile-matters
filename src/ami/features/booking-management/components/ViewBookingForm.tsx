@@ -13,7 +13,10 @@ import { Badge } from "@/core/components/base/badge";
 import { useGetBookingByIdQuery } from "../queries/getBookingById.ami.query";
 import { formatDurationByMinutes } from "@/store-front/shared/helpers/formatDuration";
 import { cn } from "@/core/lib/utils";
-import { BOOKING_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
+import {
+	BOOKING_STATUS_COLORS,
+	TRANSACTION_STATUS_COLORS,
+} from "@/ami/shared/constants/status-colors.constants";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import parse from "html-react-parser";
 import {
@@ -61,6 +64,8 @@ const ViewBookingForm = () => {
 	if (!booking) {
 		return <>Booking Not Found</>;
 	}
+
+	console.log(booking);
 
 	return (
 		<div className="pb-8 grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -163,7 +168,9 @@ const ViewBookingForm = () => {
 
 						{booking.rescheduled_from && (
 							<FormCard.Field>
-								<FormCard.Label>Original date:</FormCard.Label>
+								<FormCard.Label>
+									Original date before reschedule:
+								</FormCard.Label>
 								<Label className="font-normal text-2xs line-clamp-4 max-w-[40em]">
 									{formatToNormalDate(booking.rescheduled_from) || "-"}
 								</Label>
@@ -473,6 +480,193 @@ const ViewBookingForm = () => {
 				</div>
 			</FormCard>
 
+			{/* TRANSACTIONS */}
+			{booking.payment_status?.transactions &&
+				booking.payment_status.transactions.length > 0 && (
+					<FormCard className="col-span-1 xl:col-span-3 w-full h-full">
+						<FormCard.Title className="flex flex-row items-center gap-2">
+							Transaction History
+							<Badge className="text-2xs">
+								{booking.payment_status.transactions.length} transaction
+								{booking.payment_status.transactions.length !== 1 ? "s" : ""}
+							</Badge>
+						</FormCard.Title>
+
+						<ItemGroup className="flex flex-col w-full gap-4 p-4">
+							{booking.payment_status.transactions
+								.filter((t) => t.transaction_type !== "Refund")
+								.map((transaction) => {
+									const hasBeenRefunded = transaction.status === "Refunded";
+									const refundTransaction = hasBeenRefunded
+										? booking.payment_status.transactions.find(
+												(t) => t.original_transaction_id === transaction._id
+										  )
+										: null;
+
+									return (
+										<div key={transaction._id} className="space-y-2">
+											<Item role="listitem" variant="outline">
+												<ItemContent className="gap-4">
+													<div className="flex-1 space-y-2">
+														<div className="flex items-center gap-2 flex-wrap">
+															<Label className="text-xs 2xl:text-sm font-semibold">
+																{transaction.transaction_reference}
+															</Label>
+															<Badge
+																className={cn(
+																	"text-2xs",
+																	TRANSACTION_STATUS_COLORS[transaction.status]
+																)}
+															>
+																{transaction.status}
+															</Badge>
+														</div>
+
+														<div className="text-2xs 2xl:text-xs space-y-1 text-muted-foreground">
+															<div>
+																<span className="font-medium">Type:</span>{" "}
+																{transaction.transaction_type}
+															</div>
+															<div>
+																<span className="font-medium">Method:</span>{" "}
+																{transaction.payment_method}
+															</div>
+															<div>
+																<span className="font-medium">Date:</span>{" "}
+																{formatToNormalDate(
+																	transaction.transaction_date
+																)}{" "}
+																@{" "}
+																{formatToNormalTime(
+																	transaction.transaction_date
+																)}
+															</div>
+
+															{transaction.notes && (
+																<div>
+																	<span className="font-medium">Notes:</span>{" "}
+																	{transaction.notes}
+																</div>
+															)}
+
+															{transaction.refund_reason && (
+																<div>
+																	<span className="font-medium text-red-600">
+																		Refund Reason:
+																	</span>{" "}
+																	{transaction.refund_reason}
+																</div>
+															)}
+														</div>
+													</div>
+
+													<ItemContent className="flex-none text-right">
+														<ItemDescription
+															className={cn(
+																"font-bold text-sm 2xl:text-base",
+																transaction.transaction_type === "Refund"
+																	? "text-red-600"
+																	: hasBeenRefunded
+																	? "text-red-600 line-through"
+																	: "text-green-600"
+															)}
+														>
+															{transaction.transaction_type === "Refund"
+																? "-"
+																: "+"}
+															{formatToPeso(String(transaction.amount))}
+														</ItemDescription>
+
+														{transaction.processed_at && (
+															<ItemDescription className="text-2xs text-muted-foreground">
+																Processed:{" "}
+																{formatToNormalDate(transaction.processed_at)}
+															</ItemDescription>
+														)}
+													</ItemContent>
+												</ItemContent>
+
+												{/* Linked refund transaction (indented) */}
+												{hasBeenRefunded && refundTransaction && (
+													<div className="ml-8 pl-4 border-l-2 border-red-400 w-1/2">
+														<Item
+															role="listitem"
+															variant="outline"
+															className="bg-red-50/50"
+														>
+															<ItemContent className="gap-4">
+																<div className="flex-1 space-y-2">
+																	<div className="flex items-center gap-2 flex-wrap">
+																		<Label className="text-xs 2xl:text-sm font-semibold text-red-700">
+																			{refundTransaction.transaction_reference}
+																		</Label>
+																		<Badge className="text-2xs bg-red-100 text-red-700">
+																			{refundTransaction.status}
+																		</Badge>
+																	</div>
+
+																	<div className="text-2xs 2xl:text-xs space-y-1 text-muted-foreground">
+																		<div>
+																			<span className="font-medium">Type:</span>{" "}
+																			Refund
+																		</div>
+																		<div>
+																			<span className="font-medium">
+																				Method:
+																			</span>{" "}
+																			{refundTransaction.payment_method}
+																		</div>
+																		<div>
+																			<span className="font-medium">Date:</span>{" "}
+																			{formatToNormalDate(
+																				refundTransaction.transaction_date
+																			)}{" "}
+																			@{" "}
+																			{formatToNormalTime(
+																				refundTransaction.transaction_date
+																			)}
+																		</div>
+
+																		{refundTransaction.refund_reason && (
+																			<div>
+																				<span className="font-medium text-red-600">
+																					Refund Reason:
+																				</span>{" "}
+																				{refundTransaction.refund_reason}
+																			</div>
+																		)}
+																	</div>
+																</div>
+
+																<ItemContent className="flex-none text-right">
+																	<ItemDescription className="font-bold text-sm 2xl:text-base text-red-600">
+																		-
+																		{formatToPeso(
+																			String(refundTransaction.amount)
+																		)}
+																	</ItemDescription>
+
+																	{refundTransaction.processed_at && (
+																		<ItemDescription className="text-2xs text-muted-foreground">
+																			Processed:{" "}
+																			{formatToNormalDate(
+																				refundTransaction.processed_at
+																			)}
+																		</ItemDescription>
+																	)}
+																</ItemContent>
+															</ItemContent>
+														</Item>
+													</div>
+												)}
+											</Item>
+										</div>
+									);
+								})}
+						</ItemGroup>
+					</FormCard>
+				)}
+
 			<FormCard className="col-span-1 xl:col-span-3 w-full h-full">
 				<FormCard.Title>Service Details</FormCard.Title>
 
@@ -599,13 +793,10 @@ const BookingFormButtonControls = ({
 	};
 
 	const handleCancel = () => {
-		const cancelled_reason = "Sample Cancel Reason";
-		if (cancelled_reason.trim().length < 5) {
-			toast.error("Cancellation reason must be at least 5 characters");
-			return;
-		}
-
-		cancelMutation({ id: String(bookingId), cancelled_reason });
+		cancelMutation({
+			id: String(bookingId),
+			cancelled_reason: cancelForm.getValues("cancelled_reason")!,
+		});
 		setOpenModal(null);
 	};
 
@@ -638,8 +829,8 @@ const BookingFormButtonControls = ({
 		setOpenModal(null);
 	};
 
-	const handleComplete = () => {
-		completeMutation(String(bookingId));
+	const handleComplete = async () => {
+		await completeMutation(String(bookingId));
 		setOpenModal(null);
 	};
 
@@ -729,21 +920,6 @@ const BookingFormButtonControls = ({
 						onAction={handleComplete}
 						open={openModal === "Complete"}
 						onOpenChange={(open) => setOpenModal(open ? "Complete" : null)}
-					/>,
-
-					<BookingActionModal
-						actionType="Cancel"
-						isLoading={isCancelling}
-						onAction={handleCancel}
-						disabled={
-							booking.status === "Ongoing" &&
-							!booking.payment_status.is_payment_complete
-						}
-						open={openModal === "Cancel"}
-						onOpenChange={() => {
-							setIsCancelFormOpen(true);
-							setOpenModal(null);
-						}}
 					/>
 				);
 

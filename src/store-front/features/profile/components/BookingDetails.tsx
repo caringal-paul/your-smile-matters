@@ -289,100 +289,97 @@ const BookingDetails = () => {
 				<Separator />
 
 				<CardFooter className="mx-0 px-0">
-					{booking?.payment_status.transactions.length === 0 ? (
-						<div>No transactions found.</div>
-					) : (
-						<div className="w-full space-y-3">
-							<div className="font-semibold text-base text-slate-800 tracking-tighter">
-								TRANSACTIONS:
-							</div>
-
-							{booking?.payment_status.transactions.length === 0 ? (
-								<div className="text-gray-500 text-sm py-4">
-									No transactions found.
-								</div>
-							) : (
-								<div className="border border-gray-300 rounded overflow-hidden">
-									{/* Header Row */}
-									<div className="grid grid-cols-12 bg-secondary/30 border-b border-gray-300">
-										<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700">
-											Reference
-										</div>
-										<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700 text-right">
-											Date
-										</div>
-										<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700 text-right">
-											Amount
-										</div>
-										<div className="col-span-3 px-4 py-3 text-sm font-medium text-gray-700 text-center">
-											Status
-										</div>
-									</div>
-
-									{booking?.payment_status.transactions.map(
-										(transaction, idx) => (
-											<div
-												key={transaction._id}
-												className={`grid grid-cols-12 bg-white items-center ${
-													idx !==
-													booking?.payment_status.transactions.length - 1
-														? "border-b border-gray-300"
-														: ""
-												}`}
-											>
-												<div className="col-span-3 px-4 py-3 border-r border-gray-300">
-													<Tooltip delayDuration={200}>
-														<TooltipTrigger asChild className="cursor-pointer">
-															<Button
-																variant="link"
-																size="link"
-																className="text-sm"
-																onClick={() => {
-																	navigate(
-																		`/profile/my-transactions/transaction/${transaction._id}/details`
-																	);
-																}}
-															>
-																{transaction?.transaction_reference}
-															</Button>
-														</TooltipTrigger>
-														<TooltipContent
-															className="text-white bg-admin-secondary text-3xs"
-															side="right"
-															sideOffset={5}
-															align="end"
-															alignOffset={10}
-														>
-															<p>View Transaction?</p>
-														</TooltipContent>
-													</Tooltip>
-												</div>
-												<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm text-gray-800 text-right font-light">
-													{formatToNormalDate(transaction?.transaction_date)}
-												</div>
-												<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm text-gray-800 text-right font-light">
-													{formatToPeso(String(transaction?.amount))}
-												</div>
-												<div className="col-span-3 px-4 py-3 text-sm flex justify-center">
-													<Badge
-														className={cn(
-															`px-2 py-1 rounded text-xs font-semibold`,
-															TRANSACTION_STATUS_COLORS[
-																transaction?.status as TransactionStatus
-															]
-														)}
-													>
-														{transaction?.status.charAt(0).toUpperCase() +
-															transaction?.status.slice(1)}
-													</Badge>
-												</div>
-											</div>
-										)
-									)}
-								</div>
-							)}
+					<div className="w-full space-y-3">
+						<div className="font-semibold text-base text-slate-800 tracking-tighter">
+							TRANSACTIONS:
 						</div>
-					)}
+
+						{booking?.payment_status.transactions.length === 0 ? (
+							<div className="bg-secondary/20 border border-secondary/70 rounded-lg p-4">
+								<p className="text-sm text-secondary-foreground font-light w-full text-center">
+									No transactions found.
+								</p>
+							</div>
+						) : (
+							<div className="border border-gray-300 rounded overflow-hidden">
+								{/* Header Row */}
+								<div className="grid grid-cols-12 bg-secondary/30 border-b border-gray-300">
+									<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700">
+										Reference
+									</div>
+									<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700 text-right">
+										Date
+									</div>
+									<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm font-medium text-gray-700 text-right">
+										Amount
+									</div>
+									<div className="col-span-3 px-4 py-3 text-sm font-medium text-gray-700 text-center">
+										Status
+									</div>
+								</div>
+
+								{booking?.payment_status.transactions.map(
+									(transaction, idx) => (
+										<div
+											key={transaction._id}
+											className={`grid grid-cols-12 bg-white items-center ${
+												idx !== booking?.payment_status.transactions.length - 1
+													? "border-b border-gray-300"
+													: ""
+											}`}
+										>
+											<div className="col-span-3 px-4 py-3 border-r border-gray-300">
+												<Tooltip delayDuration={200}>
+													<TooltipTrigger asChild className="cursor-pointer">
+														<Button
+															variant="link"
+															size="link"
+															className="text-sm"
+															onClick={() => {
+																navigate(
+																	`/profile/my-transactions/transaction/${transaction._id}/details`
+																);
+															}}
+														>
+															{transaction?.transaction_reference}
+														</Button>
+													</TooltipTrigger>
+													<TooltipContent
+														className="text-white bg-admin-secondary text-3xs"
+														side="right"
+														sideOffset={5}
+														align="end"
+														alignOffset={10}
+													>
+														<p>View Transaction?</p>
+													</TooltipContent>
+												</Tooltip>
+											</div>
+											<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm text-gray-800 text-right font-light">
+												{formatToNormalDate(transaction?.transaction_date)}
+											</div>
+											<div className="col-span-3 px-4 py-3 border-r border-gray-300 text-sm text-gray-800 text-right font-light">
+												{formatToPeso(String(transaction?.amount))}
+											</div>
+											<div className="col-span-3 px-4 py-3 text-sm flex justify-center">
+												<Badge
+													className={cn(
+														`px-2 py-1 rounded text-xs font-semibold`,
+														TRANSACTION_STATUS_COLORS[
+															transaction?.status as TransactionStatus
+														]
+													)}
+												>
+													{transaction?.status.charAt(0).toUpperCase() +
+														transaction?.status.slice(1)}
+												</Badge>
+											</div>
+										</div>
+									)
+								)}
+							</div>
+						)}
+					</div>
 				</CardFooter>
 
 				<Separator />
@@ -475,14 +472,13 @@ const BookingDetails = () => {
 										</p>
 									) : (
 										<p className="text-primary/80 text-sm font-light">
-											Your booking requires full payment of{" "}
+											Please settle the full payment of{" "}
 											<span className="font-medium text-primary">
 												{formatToPeso(
 													String(booking?.payment_status.remaining_balance)
 												)}
 											</span>{" "}
-											to be confirmed. Please complete payment to secure your
-											booking date.
+											to confirm and secure your booking date.
 										</p>
 									)}
 								</div>

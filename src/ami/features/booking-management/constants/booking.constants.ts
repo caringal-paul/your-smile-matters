@@ -1,6 +1,6 @@
-import { MyBookingsSfTableType } from "@/store-front/features/profile/utils/types/my-bookings-table.sf.types";
+import { BookingAmiTableType } from "../utils/types/booking-table.ami.types";
 
-export const BOOKING_TABLE_SEARCH_KEYS: (keyof MyBookingsSfTableType)[] = [
+export const BOOKING_TABLE_SEARCH_KEYS: (keyof BookingAmiTableType)[] = [
 	"_id",
 	"booking_date",
 	"booking_reference",

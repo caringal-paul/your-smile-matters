@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { Label } from "@/core/components/base/label";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import PhotographerAccordionCard from "@/store-front/shared/components/PhotographerAccordionCard";
 import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
 import { Textarea } from "@/core/components/base/textarea";
 import { Separator } from "@/core/components/base/separator";
 import { useGetAvailablePhotographersMutation } from "../queries/getAvailablePhotographers.sf.mutation";
 import { format } from "date-fns";
-import { PhotographerModel } from "@/core/models/photographer.model";
 import { Spinner } from "@/core/components/base/spinner";
 import { GetAvailablePhotographersByTimeRangeResponseSf } from "../utils/types/booking-response.sf.types";
 

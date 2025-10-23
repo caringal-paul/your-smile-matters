@@ -121,26 +121,28 @@ const Navbar = () => {
 					<NavLinkWithSublink
 						title="Booking"
 						subLinks={[
-							{
-								description: "View your own list of package wishlist.",
-								subTitle: "My wishlist",
-								onClick: () => {
-									console.log(
-										"Show wishlist, and if not logged in redirect to login"
-									);
-								},
-							},
+							// TODO BRING ME BACK
+							// {
+							// 	description: "View your own list of package wishlist.",
+							// 	subTitle: "My wishlist",
+							// 	onClick: () => {
+							// 		console.log(
+							// 			"Show wishlist, and if not logged in redirect to login"
+							// 		);
+							// 	},
+							// },
 							{
 								description: "Check packages and services and book now",
 								subTitle: "Book appointment now",
 								onClick: () => {
-									console.log("Show packages page as well.");
+									window.location.href = "/packages";
 								},
 							},
 						]}
 					/>
 
-					<NavLinkWithSublink
+					{/* TODO BpING ME BACK */}
+					{/* <NavLinkWithSublink
 						title="Deals & History"
 						subLinks={[
 							{
@@ -162,7 +164,7 @@ const Navbar = () => {
 								},
 							},
 						]}
-					/>
+					/> */}
 
 					<NavLink path="/support" title="Support" />
 					<NavLink path="/about" title="About" />

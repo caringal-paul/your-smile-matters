@@ -1,3 +1,4 @@
+import { TransactionType } from "@/core/models/transaction.model";
 import { FilterOptions } from "../types/filter.types";
 import {
 	AvailabilityStatus,

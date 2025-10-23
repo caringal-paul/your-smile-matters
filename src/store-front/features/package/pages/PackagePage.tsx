@@ -15,10 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { PackageAccordionCard } from "../components/PackageAccordionCard";
 import PackageCustomizationCard from "../components/PackageCustomizationCard";
-import {
-	PaymentMethod,
-	useBookingFormStore,
-} from "@/store-front/store/useBookingFormStore";
+import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
 import { formatToUtc } from "@/ami/shared/helpers/formatDate";
 import { useGetAllPackagesQuerySf } from "../queries/getPackages.sf.query";
 import { GetAllPackageResponseSf } from "../utils/types/package-response.sf.types";
@@ -222,8 +219,41 @@ const PackagePage = () => {
 					<PackageCustomizationCard
 						onCustomize={() => {
 							clearForm();
-							setFieldImmediate("is_customized", true);
 
+							const initialData = {
+								services: [],
+
+								is_customized: true,
+								customer_id: myCredentials?._id,
+								customization_notes: null,
+								package_id: null,
+
+								booking_date: formatToUtc(new Date()),
+								start_time: "",
+								end_time: "",
+								session_duration_minutes: 0,
+								location: "",
+
+								photographer_id: "",
+								photographer_name: null,
+								theme: null,
+								special_requests: null,
+
+								old_amount: undefined,
+								total_amount: 0,
+								discount_amount: 0,
+								promo_id: null,
+								final_amount: 0,
+								amount_paid: 0,
+								method_of_payment: null,
+								payment_images: [],
+
+								is_booking_sent: false,
+								status: "Pending" as const,
+								booking_reference: "",
+							};
+
+							saveOriginalForm(initialData);
 							openModal();
 						}}
 					/>

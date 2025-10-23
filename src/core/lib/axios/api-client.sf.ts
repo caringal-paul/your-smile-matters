@@ -26,8 +26,6 @@ const clearAuth = () => {
 const redirectToLogin = () => {
 	const isOnAuthPage = window.location.pathname.includes("/auth");
 	if (!isOnAuthPage) {
-		toast.error("Session expired. Please log in again.");
-
 		localStorage.removeItem("customer-logged-in");
 		setTimeout(() => {
 			window.location.href = "/";

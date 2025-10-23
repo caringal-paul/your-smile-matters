@@ -7,7 +7,14 @@ import {
 } from "@/core/components/base/card";
 import { useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/core/components/base/badge";
-import { Calendar, Clock, CreditCard, Download, MapPin } from "lucide-react";
+import {
+	Barcode,
+	Calendar,
+	Clock,
+	CreditCard,
+	Download,
+	MapPin,
+} from "lucide-react";
 import { Separator } from "@/core/components/base/separator";
 import { cn } from "@/core/lib/utils";
 import { TRANSACTION_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
@@ -182,7 +189,7 @@ const TransactionDetails = () => {
 						</div>
 
 						<div className="flex items-center gap-3">
-							<MapPin className="w-4 h-4 text-primary mt-[1px]" />
+							<Barcode className="w-4 h-4 text-primary mt-[1px]" />
 							<Label
 								variant="sf"
 								size="sf-normal"
@@ -246,7 +253,11 @@ const TransactionDetails = () => {
 						<div className="border-t-2 border-dashed border-gray-400"></div>
 
 						<div className="flex justify-between items-start">
-							<span className="text-foreground">Amount Paid</span>
+							<span className="text-foreground">
+								{transaction?.transaction_type == "Refund"
+									? "Amount Received"
+									: "Amount Paid"}
+							</span>
 							<span className="font-medium text-lg">
 								{formatToPeso(String(transaction?.amount))}
 							</span>
@@ -347,8 +358,8 @@ const TransactionDetails = () => {
 								REFUND REASON:
 							</Label>
 
-							<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-								<p className="text-sm text-yellow-700 font-light">
+							<div className="bg-secondary/20 border border-secondary/70 rounded-lg p-4">
+								<p className="text-sm text-secondary-foreground font-light">
 									{transaction.refund_reason}
 								</p>
 							</div>

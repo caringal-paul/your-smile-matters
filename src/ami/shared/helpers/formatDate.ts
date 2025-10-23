@@ -102,14 +102,37 @@ export function formatTo24HourTime(time12h: string): string {
 /**
  *  @returns format: 05:00 AM || 06:30 PM
  */
+// OLD
+// export function formatToNormalTime(time24: string): string {
+// 	if (!time24) return "";
+
+// 	const [hourStr, minute] = time24.split(":");
+// 	let hour = parseInt(hourStr, 10);
+
+// 	const period = hour >= 12 ? "PM" : "AM";
+// 	hour = hour % 12 || 12; // convert 0 → 12 for AM, 13 → 1 for PM
+
+// 	return `${hour.toString().padStart(2, "0")}:${minute} ${period}`;
+// }
+
+// * NEW
 export function formatToNormalTime(time24: string): string {
 	if (!time24) return "";
 
+	// Detect if ISO string
+	if (time24.includes("T")) {
+		const date = new Date(time24);
+		const hour = date.getHours();
+		const minute = date.getMinutes().toString().padStart(2, "0");
+		const period = hour >= 12 ? "PM" : "AM";
+		const hour12 = hour % 12 || 12;
+		return `${hour12.toString().padStart(2, "0")}:${minute} ${period}`;
+	}
+
+	// Handle simple "HH:mm"
 	const [hourStr, minute] = time24.split(":");
 	let hour = parseInt(hourStr, 10);
-
 	const period = hour >= 12 ? "PM" : "AM";
-	hour = hour % 12 || 12; // convert 0 → 12 for AM, 13 → 1 for PM
-
+	hour = hour % 12 || 12;
 	return `${hour.toString().padStart(2, "0")}:${minute} ${period}`;
 }

@@ -21,6 +21,7 @@ type BookingListItem = Pick<
 	| "status"
 	| "final_amount"
 	| "photographer_id"
+	| "updated_at"
 > & {
 	photographer_name: string;
 	amount_paid: number;

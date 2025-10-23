@@ -73,8 +73,12 @@ const TableFilter = <T extends Record<string, string[]>>({
 			</PopoverTrigger>
 			<PopoverContent
 				align="end"
-				className="flex flex-col gap-4 bg-white w-fit right-10"
+				className="flex flex-col gap-4 bg-white w-fit right-10 max-h-[70vh] overflow-y-auto"
 			>
+				<Label className="text-2xs">
+					Click ‘Apply Filter’ to activate the selected filter options.
+				</Label>
+				<Separator />
 				{!filterOptions ? null : (
 					<>
 						{Object.entries(filterOptions).map(

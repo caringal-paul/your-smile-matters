@@ -237,7 +237,7 @@ const PhotographerAccordionCard = React.memo(
 										</span>
 									</div>
 									<div>
-										<span className="text-gray-600">Lead Time:</span>
+										<span className="text-gray-600">Advance Notice:</span>
 										<span className="ml-2 font-medium">
 											{booking_lead_time_hours}h advance
 										</span>
