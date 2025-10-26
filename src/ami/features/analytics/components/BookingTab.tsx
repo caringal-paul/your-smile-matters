@@ -167,10 +167,35 @@ const BookingTab = () => {
 					<ResponsiveContainer width="100%" height={300}>
 						<BarChart data={cancellationData?.cancellationReasons}>
 							<CartesianGrid strokeDasharray="3 3" />
-							<XAxis dataKey="_id" />
-							<YAxis />
-							<Tooltip />
-							<Bar dataKey="count" fill="#584941" />
+							<XAxis
+								dataKey="_id"
+								tick={{ fontSize: 12, fill: "#6b7280", fontWeight: 500 }}
+							/>
+
+							<YAxis
+								tick={{ fontSize: 12, fill: "#6b7280", fontWeight: 500 }}
+							/>
+							<Tooltip
+								contentStyle={{
+									backgroundColor: "#f5f0ec",
+									border: "1px solid #a7a29c",
+									borderRadius: "8px",
+									color: "#846e62",
+									fontSize: "13px",
+								}}
+								itemStyle={{
+									color: "#846e62",
+									fontWeight: 500,
+								}}
+								labelStyle={{
+									color: "#846e62",
+									fontWeight: 600,
+								}}
+							/>
+							<Bar
+								dataKey="Shows how many bookings were cancelled for this reason"
+								fill="#584941"
+							/>
 						</BarChart>
 					</ResponsiveContainer>
 				</CardContent>

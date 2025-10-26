@@ -226,7 +226,7 @@ const CustomerTab = () => {
 				</CardContent>
 			</Card>
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 2xl:grid-cols-2 gap-6">
 				<Card>
 					<CardHeader className="pb-0">
 						<CardTitle>Revenue by Customer Booking Frequency</CardTitle>
@@ -254,12 +254,6 @@ const CustomerTab = () => {
 								<XAxis
 									dataKey="segment"
 									tick={{ fill: "#6b7280", fontSize: 12 }}
-									label={{
-										value: "Customer Segment",
-										position: "insideBottom",
-										offset: -5,
-										fill: "#6b7280",
-									}}
 								/>
 								<YAxis
 									tick={{ fill: "#6b7280", fontSize: 12 }}
@@ -317,7 +311,7 @@ const CustomerTab = () => {
 									}}
 								/>
 								<Legend
-									wrapperStyle={{ paddingTop: "20px" }}
+									wrapperStyle={{ paddingTop: "20px", fontSize: 11 }}
 									iconType="square"
 								/>
 
@@ -567,12 +561,12 @@ const CustomerTab = () => {
 				<CardContent>
 					{/* Summary Stats */}
 					<div className="grid grid-cols-3 gap-4 mb-6">
-						<div className="bg-secondary/20 border-secondary/60 border-[1px] p-3 rounded-lg">
+						<div className="flex flex-col bg-secondary/20 border-secondary/60 border-[1px] p-3 rounded-lg">
 							<div className="flex items-center gap-2 text-secondary text-xs font-medium mb-1">
 								<Calendar className="w-4 h-4" />
 								Total Bookings
 							</div>
-							<div className="text-2xl font-bold text-secondary">
+							<div className="text-2xl font-bold text-secondary mt-auto">
 								{totalPeakBookings}
 							</div>
 						</div>

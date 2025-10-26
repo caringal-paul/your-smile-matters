@@ -46,8 +46,16 @@ const PerformanceTab = () => {
 					<ResponsiveContainer width="100%" height={350}>
 						<BarChart data={topServices!}>
 							<CartesianGrid strokeDasharray="3 3" />
-							<XAxis dataKey="serviceName" />
-							<YAxis />
+							<XAxis
+								dataKey="serviceName"
+								stroke="#846e62"
+								tick={{ fill: "#846e62", fontSize: 12 }}
+							/>
+							<YAxis
+								tickFormatter={(value) => `${value.toLocaleString()}₱`}
+								stroke="#846e62"
+								tick={{ fill: "#846e62", fontSize: 12 }}
+							/>
 							<Tooltip
 								contentStyle={{
 									backgroundColor: "#f5f0ec",
@@ -64,6 +72,10 @@ const PerformanceTab = () => {
 									color: "#846e62",
 									fontWeight: 600,
 								}}
+								formatter={(value: number, name: string) => [
+									`₱${value.toLocaleString()}`,
+									name,
+								]}
 							/>
 							<Legend />
 							<Bar dataKey="totalRevenue" fill="#846e62" name="Revenue" />
