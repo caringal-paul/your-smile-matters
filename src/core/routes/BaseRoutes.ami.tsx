@@ -2,7 +2,7 @@ import AccountSettingsPage from "@/ami/features/account-settings/pages/AccountSe
 import CustomerBreadcrumbs from "@/ami/features/customer-management/components/CustomerBreadcrumbs";
 import CustomerTable from "@/ami/features/customer-management/components/CustomerTable";
 import CustomerPage from "@/ami/features/customer-management/pages/CustomerPage";
-import DashboardPage from "@/ami/features/dashboard/pages/DashboardPage";
+import DashboardPage from "@/ami/features/analytics/pages/DashboardPage";
 import FrequentlyAskedQuestionsBreadcrumbs from "@/ami/features/support-management/components/FrequentlyAskedQuestionsBreadcrumbs";
 import FrequentlyAskedQuestionsForm from "@/ami/features/support-management/components/FrequentlyAskedQuestionsForm";
 import FrequentlyAskedQuestionsTable from "@/ami/features/support-management/components/FrequentlyAskedQuestionsTable";
@@ -60,6 +60,7 @@ import TransactionPage from "@/ami/features/transaction-history/pages/Transactio
 import TransactionTable from "@/ami/features/transaction-history/components/TransactionTable";
 import TransactionBreadcrumbs from "@/ami/features/transaction-history/components/TransactionBreadcrumbs";
 import ViewTransactionForm from "@/ami/features/transaction-history/components/ViewTransactionForm";
+import DashboardLayout from "@/ami/features/analytics/layout/DashboardLayout";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -86,7 +87,7 @@ const selectedRole = {
 const baseRoutes = (
 	<Route path="ami" element={<RootLayout />}>
 		{/* DASHBOARD */}
-		<Route path="dashboard" element={<div />}>
+		<Route path="dashboard" element={<DashboardLayout />}>
 			<Route index element={<DashboardPage />} />
 		</Route>
 
