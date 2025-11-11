@@ -25,12 +25,18 @@ export const useUpdateUserMutation = () => {
 			return res.data;
 		},
 		onSuccess: async (data) => {
-			toast.success("User updated successfully!");
+			toast.success("Updated successfully!");
 
 			queryClient.invalidateQueries({
 				queryKey: ["users"],
 				refetchType: "all",
 			});
+
+			queryClient.invalidateQueries({
+				queryKey: ["me"],
+				refetchType: "all",
+			});
+
 			if (data?._id) {
 				await queryClient.invalidateQueries({
 					queryKey: ["user", data._id],

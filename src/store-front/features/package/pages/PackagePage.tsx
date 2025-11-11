@@ -354,7 +354,9 @@ const PackagePage = () => {
 									}}
 									onView={() => {
 										window.scrollTo({ top: 0, behavior: "smooth" });
-										navigate(`/packages/service/${packageItem._id}/details`);
+										navigate(
+											`/packages/package/${packageItem._id}/package-details`
+										);
 									}}
 								/>
 							);

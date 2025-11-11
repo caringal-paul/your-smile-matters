@@ -9,6 +9,7 @@ import {
 	User,
 	Clock,
 	UserCircle,
+	Loader2,
 } from "lucide-react";
 import parse from "html-react-parser";
 
@@ -20,17 +21,20 @@ import { useParams } from "react-router-dom";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { useGetServiceByIdQuerySf } from "../queries/getServiceById.sf.query";
 import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
-import { formatToUtc } from "@/ami/shared/helpers/formatDate";
+import {
+	formatToNormalDate,
+	formatToTableDate,
+	formatToUtc,
+} from "@/ami/shared/helpers/formatDate";
 import { useMyCredentials } from "@/store-front/store/useMyCredentials";
-
-type Review = {
-	id: string;
-	author: string;
-	avatar: string;
-	rating: number;
-	date: string;
-	text: string;
-};
+import { useGetServiceRatings } from "../queries/getServiceRatings.sf.query";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/core/components/base/avatar";
+import { getInitials } from "@/core/helpers/getInitials";
+import { RatingAnalytics } from "@/core/types/base-response.types";
 
 const ServiceDetailsPage = () => {
 	const { id } = useParams();
@@ -38,31 +42,48 @@ const ServiceDetailsPage = () => {
 	const { myCredentials } = useMyCredentials();
 
 	const { data: selectedService, isPending } = useGetServiceByIdQuerySf(id!);
+	const { data: serviceRatings, isPending: isRatingsLoading } =
+		useGetServiceRatings(id!);
 
+	const analytics =
+		serviceRatings?.data?.analytics ||
+		({
+			average_rating: 0,
+			total_ratings: 0,
+			rating_distribution: {
+				one_star: 0,
+				two_star: 0,
+				three_star: 0,
+				four_star: 0,
+				five_star: 0,
+			},
+			rating_distribution_percentage: {
+				one_star: 0,
+				two_star: 0,
+				three_star: 0,
+				four_star: 0,
+				five_star: 0,
+			},
+		} as RatingAnalytics);
+	const ratings = serviceRatings?.data?.ratings || [];
 	const serviceImages = selectedService?.service_gallery || [];
 
-	const reviews: Review[] = [
-		{
-			id: "1",
-			author: "John Doe",
-			avatar:
-				"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face",
-			rating: 5,
-			date: "2 days ago",
-			text: "Ace Estafic was very logical and creative at the same time",
-		},
-		{
-			id: "2",
-			author: "James San",
-			avatar:
-				"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop&crop=face",
-			rating: 5,
-			date: "1 week ago",
-			text: "Ace Estafic was very logical and creative at the same time",
-		},
-	];
-
 	const [current, setCurrent] = useState(0);
+	const [displayedCount, setDisplayedCount] = useState(5);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+	const displayedRatings = ratings.slice(0, displayedCount);
+	const hasMore = displayedCount < ratings.length;
+	const shouldShowScrollbar = displayedCount > 10;
+
+	const handleViewMore = () => {
+		setIsLoadingMore(true);
+		// Simulate loading delay for better UX
+		setTimeout(() => {
+			setDisplayedCount((prev) => prev + 5);
+			setIsLoadingMore(false);
+		}, 300);
+	};
 
 	// autoplay fade effect
 	useEffect(() => {
@@ -76,6 +97,8 @@ const ServiceDetailsPage = () => {
 	if (isPending || !selectedService) {
 		return <>Loading</>;
 	}
+
+	// TODO CREATE PACKAGE DETAILS PAGE FOR COMMENT FEATURE
 
 	return (
 		<div className="min-h-screen bg-sf-background">
@@ -166,7 +189,9 @@ const ServiceDetailsPage = () => {
 												className="w-4 h-4 fill-yellow-400 text-yellow-400"
 											/>
 										))}
-										<span className="ml-1 text-sm">5.0</span>
+										<span className="ml-1 text-sm">
+											{analytics.average_rating.toFixed(1)}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -180,69 +205,6 @@ const ServiceDetailsPage = () => {
 									{parse(String(selectedService?.description))}
 								</p>
 							</div>
-
-							{/* TODO CHANGE TO PACKAGE SUGGESTION */}
-							{/* Service Provider */}
-							{/* <div className="bg-gray-50 rounded-lg p-6">
-							<h2 className="text-xl font-semibold text-gray-900 mb-4">
-								So You Want A Best Men's Haircut At Our Hair Service?
-							</h2>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div className="space-y-3">
-									<div className="flex items-center gap-3">
-										<img
-											src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face"
-											alt="Big Times Barber Shop"
-											className="w-12 h-12 rounded-full object-cover"
-										/>
-										<div>
-											<h3 className="font-semibold text-gray-900">
-												Big Times Barber Shop
-											</h3>
-											<div className="flex items-center gap-1">
-												{[...Array(5)].map((_, i) => (
-													<Star
-														key={i}
-														className="w-4 h-4 fill-yellow-400 text-yellow-400"
-													/>
-												))}
-												<span className="text-sm text-gray-600 ml-1">4.8</span>
-											</div>
-										</div>
-									</div>
-									<p className="text-gray-600 text-sm">
-										Professional barber with 10+ years experience
-									</p>
-								</div>
-
-								<div className="space-y-3">
-									<div className="flex items-center gap-3">
-										<img
-											src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face"
-											alt="Big Times Barber Shop"
-											className="w-12 h-12 rounded-full object-cover"
-										/>
-										<div>
-											<h3 className="font-semibold text-gray-900">
-												Big Times Barber Shop
-											</h3>
-											<div className="flex items-center gap-1">
-												{[...Array(5)].map((_, i) => (
-													<Star
-														key={i}
-														className="w-4 h-4 fill-yellow-400 text-yellow-400"
-													/>
-												))}
-												<span className="text-sm text-gray-600 ml-1">4.8</span>
-											</div>
-										</div>
-									</div>
-									<p className="text-gray-600 text-sm">
-										Expert in modern and classic haircuts
-									</p>
-								</div>
-							</div>
-						</div> */}
 						</div>
 						{/* ---------------------------------------------------------------------- */}
 
@@ -251,86 +213,190 @@ const ServiceDetailsPage = () => {
 							{/* Rating Breakdown */}
 							<Card>
 								<CardContent className="py-6 space-y-4">
-									<h2 className="text-3xl font-semibold text-gray-900">
-										Reviews: 399
-									</h2>
-
-									{[
-										{ label: "Excellent", count: 285, percentage: 95 },
-										{ label: "Very Good", count: 15, percentage: 85 },
-										{ label: "Average", count: 8, percentage: 70 },
-										{ label: "Poor", count: 3, percentage: 55 },
-										{ label: "Terrible", count: 1, percentage: 40 },
-									].map((item, index) => (
-										<div key={index} className="flex items-center gap-3">
-											<span className="text-sm text-gray-700 w-20">
-												{item.label}
-											</span>
-											<div className="flex-1 bg-gray-200 rounded-full h-2">
-												<div
-													className="bg-primary h-2 rounded-full transition-all duration-300"
-													style={{ width: `${item.percentage}%` }}
-												/>
-											</div>
-											<span className="text-sm text-gray-700 w-8">
-												{item.count}
+									<div className="flex items-baseline gap-3">
+										<h2 className="text-3xl font-semibold text-gray-900">
+											{analytics.average_rating.toFixed(1)}
+										</h2>
+										<div className="flex items-center gap-1">
+											<Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+											<span className="text-sm text-gray-600">
+												({analytics.total_ratings}{" "}
+												{analytics.total_ratings === 1 ? "review" : "reviews"})
 											</span>
 										</div>
-									))}
+									</div>
+
+									<div className="space-y-3">
+										{[
+											{
+												label: "Excellent",
+												count: analytics.rating_distribution.five_star,
+												percentage:
+													analytics.rating_distribution_percentage.five_star,
+											},
+											{
+												label: "Very Good",
+												count: analytics.rating_distribution.four_star,
+												percentage:
+													analytics.rating_distribution_percentage.four_star,
+											},
+											{
+												label: "Average",
+												count: analytics.rating_distribution.three_star,
+												percentage:
+													analytics.rating_distribution_percentage.three_star,
+											},
+											{
+												label: "Poor",
+												count: analytics.rating_distribution.two_star,
+												percentage:
+													analytics.rating_distribution_percentage.two_star,
+											},
+											{
+												label: "Terrible",
+												count: analytics.rating_distribution.one_star,
+												percentage:
+													analytics.rating_distribution_percentage.one_star,
+											},
+										].map((item, index) => (
+											<div key={index} className="flex items-center gap-3">
+												<span className="text-sm text-gray-700 w-20">
+													{item.label}
+												</span>
+												<div className="flex-1 bg-gray-200 rounded-full h-2.5">
+													<div
+														className="bg-primary h-2.5 rounded-full transition-all duration-300"
+														style={{ width: `${item.percentage}%` }}
+													/>
+												</div>
+												<span className="text-sm font-medium text-gray-700 w-12 text-right">
+													{item.count}
+												</span>
+											</div>
+										))}
+									</div>
 								</CardContent>
 							</Card>
 
 							{/* Individual Reviews */}
-							<div className="space-y-2">
-								{reviews.map((review) => (
-									<Card>
+							<div
+								className={`space-y-2 ${
+									shouldShowScrollbar
+										? "max-h-[800px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+										: ""
+								}`}
+							>
+								{displayedRatings.map((rating) => (
+									<Card key={rating._id}>
 										<CardContent>
-											<div key={review.id} className="space-y-4">
+											<div className="space-y-4">
 												<div className="flex items-start gap-4">
-													<img
-														src={review.avatar}
-														alt={review.author}
-														className="w-14 h-14 rounded-full object-cover"
-													/>
+													<Avatar>
+														<AvatarImage
+															src={rating.customer_id.profile_image || ""}
+															alt="@shadcn"
+															className="size-10"
+														/>
+														<AvatarFallback>
+															{getInitials(
+																`${rating.customer_id.first_name} ${rating.customer_id.last_name}`
+															)}
+														</AvatarFallback>
+													</Avatar>
+
 													<div className="flex-1 space-y-1">
 														<div className="flex items-center justify-between">
 															<div className="flex items-center gap-1">
 																<UserCircle className="w-4 h-4 text-gray-400" />
 																<h4 className="font-semibold text-gray-900">
-																	{review.author}
+																	{rating.customer_id.first_name}{" "}
+																	{rating.customer_id.last_name}
 																</h4>
 															</div>
 															<div className="flex items-center gap-1 text-xs">
 																<Clock className="size-3 text-gray-400" />
 																<h4 className="font-light text-gray-400">
-																	{review.date}
+																	{formatToTableDate(String(rating.created_at))}
 																</h4>
 															</div>
 														</div>
 														<div className="flex items-center gap-1 leading-none">
-															{[...Array(review.rating)].map((_, i) => (
+															{[...Array(rating.rating)].map((_, i) => (
 																<Star
 																	key={i}
 																	className="w-4 h-4 fill-yellow-400 text-yellow-400"
 																/>
 															))}
-															<span className="ml-1 text-sm">5.0</span>
+															<span className="ml-1 text-sm">
+																{rating.rating}
+															</span>
 														</div>
 													</div>
 												</div>
 
-												<p className="text-foreground text-sm line-clamp-4 text-ellipsis overflow-hidden max-h-[16em]">
-													{review.text}
+												<p className="text-foreground text-sm">
+													{rating.comment}
 												</p>
+
+												{/* Business Response */}
+												{rating.response && (
+													<div className="ml-14 p-3 bg-blue-50 border-l-4 border-primary rounded">
+														<div className="flex items-center gap-2 mb-2">
+															<Badge variant="outline" className="text-xs">
+																Business Response
+															</Badge>
+															{rating.responded_at && (
+																<span className="text-xs text-gray-500">
+																	{formatToTableDate(
+																		String(rating.responded_at)
+																	)}
+																</span>
+															)}
+														</div>
+														<p className="text-sm text-gray-700">
+															{rating.response}
+														</p>
+													</div>
+												)}
 											</div>
 										</CardContent>
 									</Card>
 								))}
 							</div>
 
-							<button className="text-secondary font-medium hover:text-secondary/80 transition-colors tracking-tight text-base hover:underline flex mx-auto">
-								View More...
-							</button>
+							{/* View More Button */}
+							{hasMore && (
+								<div className="flex justify-center pt-4">
+									<Button
+										onClick={handleViewMore}
+										disabled={isLoadingMore}
+										variant="ghost"
+										className="text-secondary font-medium hover:text-secondary/80 transition-colors tracking-tight text-base hover:underline"
+									>
+										{isLoadingMore ? (
+											<>
+												<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+												Loading...
+											</>
+										) : (
+											`View More... (${
+												ratings.length - displayedCount
+											} remaining)`
+										)}
+									</Button>
+								</div>
+							)}
+
+							{/* No Reviews Message */}
+							{ratings.length === 0 && !isRatingsLoading && (
+								<div className="text-center py-12">
+									<Star className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+									<p className="text-gray-500">No reviews yet</p>
+									<p className="text-sm text-gray-400">
+										Be the first to review this service!
+									</p>
+								</div>
+							)}
 						</div>
 					</div>
 
@@ -387,58 +453,6 @@ const ServiceDetailsPage = () => {
 							<Book className="size-6" />
 							Book Now
 						</Button>
-
-						{/* <Card>
-							<CardContent className="flex flex-col gap-6 py-4 px-6">
-								<CardTitle className="text-2xl font-semibold">
-									Time Availability
-								</CardTitle>
-								<div className="grid grid-cols-2 gap-y-3 leading-none">
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Monday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										8:00-16:00
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Tuesday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										12:00-15:00
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Wednesday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										9:00-13:00
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Thursday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										8:00-16:00
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Friday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										Close
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Saturday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										8:00-16:00
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between">
-										Sunday
-									</h2>
-									<h2 className="text-base font-light tracking-tight text-gray-500 justify-between whitespace-nowrap ml-3">
-										10:00-20:00
-									</h2>
-								</div>
-							</CardContent>
-						</Card> */}
 
 						{/* Location */}
 						<Card>

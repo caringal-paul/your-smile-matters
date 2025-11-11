@@ -17,12 +17,11 @@ import CustomerDataTable from "@/store-front/shared/components/CustomerDataTable
 import { formatToNormalTime } from "@/ami/shared/helpers/formatDate";
 import BookingFormModal from "../../booking/components/BookingFormModal";
 import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
+import { MY_BOOKING_TABLE_SEARCH_KEYS } from "../constants/my-bookings.constants";
 
 const MyBookings = () => {
 	const { data: bookings = [], isPending: isBookingsFetching } =
 		useGetMyBookingsQuery();
-
-	console.log(bookings);
 
 	const columns = useMyBookingColumns();
 
@@ -45,7 +44,7 @@ const MyBookings = () => {
 				photographer_name: booking.photographer_id.name,
 			};
 		}),
-		keys: BOOKING_TABLE_SEARCH_KEYS,
+		keys: MY_BOOKING_TABLE_SEARCH_KEYS,
 		dateFields: ["booking_date"],
 	});
 

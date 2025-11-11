@@ -27,6 +27,7 @@ import { UploadCloud } from "lucide-react";
 import AddButtonIcon from "@/ami/shared/assets/icons/AddButtonIcon";
 import TrashIcon from "@/ami/shared/assets/icons/TrashIcon";
 import { useEffect } from "react";
+import { format } from "date-fns";
 
 const CreatePhotographerForm = () => {
 	const navigate = useNavigate();
@@ -76,9 +77,9 @@ const CreatePhotographerForm = () => {
 		form.setValue("weekly_schedule", DEFAULT_WEEKLY_SCHEDULE);
 	}, []);
 
-	console.log("Is valid", form.formState.isValid);
 	console.log("Values", form.getValues());
-	console.log("errors", form.formState.errors);
+	console.log("Erros", form.formState.errors);
+	console.log("Is Valid", form.formState.isValid);
 
 	return (
 		<FormCard className="mb-6">
@@ -304,45 +305,85 @@ const CreatePhotographerForm = () => {
 							>
 								<h3 className="font-semibold text-lg">{day.day_of_week}</h3>
 
-								<FormField
-									control={form.control}
-									name={`weekly_schedule.${index}.is_available`}
-									render={({ field }) => (
-										<FormCard.Field className="lg:col-span-1">
-											<div className="flex items-center space-x-2">
-												<Checkbox
-													id={`available-${index}`}
-													checked={field.value}
-													onCheckedChange={(checked) => {
-														field.onChange(checked);
+								{/* Available and Whole Day Checkboxes */}
+								<div className="flex items-center justify-start w-fit gap-6">
+									<FormField
+										control={form.control}
+										name={`weekly_schedule.${index}.is_available`}
+										render={({ field }) => (
+											<FormCard.Field className="lg:col-span-1">
+												<div className="flex items-center space-x-2">
+													<Checkbox
+														id={`available-${index}`}
+														checked={field.value}
+														onCheckedChange={(checked) => {
+															field.onChange(checked);
 
-														// Reset all fields if unchecked
-														if (!checked) {
-															form.setValue(
-																`weekly_schedule.${index}.start_time`,
-																"00:00"
-															);
-															form.setValue(
-																`weekly_schedule.${index}.end_time`,
-																"12:00"
-															);
-															form.setValue(
-																`weekly_schedule.${index}.notes`,
-																""
-															);
-														}
-													}}
-												/>
-												<FormCard.Label
-													htmlFor={`available-${index}`}
-													className="!mt-0 cursor-pointer"
-												>
-													Available
-												</FormCard.Label>
-											</div>
-										</FormCard.Field>
+															// Reset all fields if unchecked
+															if (!checked) {
+																form.setValue(
+																	`weekly_schedule.${index}.start_time`,
+																	"00:00"
+																);
+																form.setValue(
+																	`weekly_schedule.${index}.end_time`,
+																	"24:00"
+																);
+															}
+														}}
+													/>
+													<FormCard.Label
+														htmlFor={`available-${index}`}
+														className="!mt-0 cursor-pointer"
+													>
+														Available
+													</FormCard.Label>
+												</div>
+											</FormCard.Field>
+										)}
+									/>
+
+									{/* Whole Day Checkbox */}
+									{form.watch(`weekly_schedule.${index}.is_available`) && (
+										<div className="flex items-center space-x-2 w-[10em]">
+											<Checkbox
+												id={`whole-day-${index}`}
+												checked={
+													form.watch(`weekly_schedule.${index}.end_time`) ===
+													"24:00"
+												}
+												onCheckedChange={(checked) => {
+													if (checked) {
+														form.setValue(
+															`weekly_schedule.${index}.start_time`,
+															"00:00"
+														);
+														form.setValue(
+															`weekly_schedule.${index}.end_time`,
+															"24:00"
+														);
+													} else {
+														form.setValue(
+															`weekly_schedule.${index}.end_time`,
+															"23:30"
+														);
+													}
+
+													form.clearErrors(`weekly_schedule.${index}.end_time`);
+													form.clearErrors(
+														`weekly_schedule.${index}.start_time`
+													);
+												}}
+											/>
+											<FormCard.Label
+												htmlFor={`available-${index}`}
+												className="!mt-0 cursor-pointer"
+											>
+												Whole Day
+											</FormCard.Label>
+										</div>
 									)}
-								/>
+								</div>
 
 								<div className="grid lg:grid-cols-2 gap-4">
 									<FormField
@@ -353,14 +394,22 @@ const CreatePhotographerForm = () => {
 												<FormCard.Label htmlFor={`start-time-${index}`}>
 													Start Time
 												</FormCard.Label>
+
 												<Input
 													id={`start-time-${index}`}
 													type="time"
 													step="1800"
 													{...field}
-													className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+													disabled={
+														!form.watch(
+															`weekly_schedule.${index}.is_available`
+														) ||
+														form.watch(`weekly_schedule.${index}.end_time`) ===
+															"24:00"
+													}
+													className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none disabled:opacity-50"
 													onBlur={(e) => {
-														field.onBlur(); // Call original onBlur
+														field.onBlur();
 
 														const value = e.target.value;
 														if (!value) return;
@@ -369,7 +418,6 @@ const CreatePhotographerForm = () => {
 															.split(":")
 															.map(Number);
 
-														// Only round if not already a 30-minute interval
 														if (minutes % 30 !== 0) {
 															const roundedMinutes =
 																Math.round(minutes / 30) * 30;
@@ -388,6 +436,7 @@ const CreatePhotographerForm = () => {
 														}
 													}}
 												/>
+
 												<div />
 												<Label className="ml-1 text-gray-400 font-light tracking-tighter text-2xs italic">
 													Specify a time, and it will automatically be aligned
@@ -407,41 +456,56 @@ const CreatePhotographerForm = () => {
 												<FormCard.Label htmlFor={`end-time-${index}`}>
 													End Time
 												</FormCard.Label>
-												<Input
-													id={`end-time-${index}`}
-													type="time"
-													step="1800"
-													{...field}
-													className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-													onBlur={(e) => {
-														field.onBlur(); // Call original onBlur
 
-														const value = e.target.value;
-														if (!value) return;
-
-														const [hours, minutes] = value
-															.split(":")
-															.map(Number);
-
-														// Only round if not already a 30-minute interval
-														if (minutes % 30 !== 0) {
-															const roundedMinutes =
-																Math.round(minutes / 30) * 30;
-															const adjustedHours =
-																roundedMinutes === 60 ? hours + 1 : hours;
-															const finalMinutes =
-																roundedMinutes === 60 ? 0 : roundedMinutes;
-
-															const formattedTime = `${String(
-																adjustedHours % 24
-															).padStart(2, "0")}:${String(
-																finalMinutes
-															).padStart(2, "0")}`;
-
-															field.onChange(formattedTime);
+												{/* Show special display for 24:00 */}
+												{field.value === "24:00" ? (
+													<div className="flex h-7 py-1 w-full px-0 shadow-none border-none bg-transparent hover:cursor-default text-gray-500 opacity-50 font-normal text-2xs items-center">
+														<span>12:00 AM</span>
+													</div>
+												) : (
+													<Input
+														id={`end-time-${index}`}
+														type="time"
+														step="1800"
+														{...field}
+														disabled={
+															!form.watch(
+																`weekly_schedule.${index}.is_available`
+															) ||
+															form.watch(
+																`weekly_schedule.${index}.end_time`
+															) === "24:00"
 														}
-													}}
-												/>
+														className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none disabled:opacity-50"
+														onBlur={(e) => {
+															field.onBlur();
+
+															const value = e.target.value;
+															if (!value) return;
+
+															const [hours, minutes] = value
+																.split(":")
+																.map(Number);
+
+															if (minutes % 30 !== 0) {
+																const roundedMinutes =
+																	Math.round(minutes / 30) * 30;
+																const adjustedHours =
+																	roundedMinutes === 60 ? hours + 1 : hours;
+																const finalMinutes =
+																	roundedMinutes === 60 ? 0 : roundedMinutes;
+
+																const formattedTime = `${String(
+																	adjustedHours % 24
+																).padStart(2, "0")}:${String(
+																	finalMinutes
+																).padStart(2, "0")}`;
+
+																field.onChange(formattedTime);
+															}
+														}}
+													/>
+												)}
 												<div />
 												<Label className="ml-1 text-gray-400 font-light tracking-tighter text-2xs italic">
 													Specify a time, and it will automatically be aligned
@@ -466,6 +530,10 @@ const CreatePhotographerForm = () => {
 												id={`notes-${index}`}
 												placeholder="Additional notes for this day"
 												{...field}
+												disabled={
+													!form.watch(`weekly_schedule.${index}.is_available`)
+												}
+												className="disabled:opacity-50"
 											/>
 											<div />
 											<FormMessage className="ml-1" />
@@ -530,27 +598,89 @@ const CreatePhotographerForm = () => {
 									</Button>
 								</div>
 
-								<FormField
-									control={form.control}
-									name={`date_overrides.${index}.is_available`}
-									render={({ field }) => (
-										<FormCard.Field className="lg:col-span-1">
-											<div className="flex items-center space-x-2">
-												<Checkbox
-													id={`override-available-${index}`}
-													checked={field.value}
-													onCheckedChange={field.onChange}
-												/>
-												<FormCard.Label
-													htmlFor={`override-available-${index}`}
-													className="!mt-0 cursor-pointer"
-												>
-													Available on this date
-												</FormCard.Label>
-											</div>
-										</FormCard.Field>
+								{/* Available and Whole Day Checkboxes */}
+								<div className="flex items-center justify-start w-fit gap-6">
+									<FormField
+										control={form.control}
+										name={`date_overrides.${index}.is_available`}
+										render={({ field }) => (
+											<FormCard.Field className="lg:col-span-1">
+												<div className="flex items-center space-x-2">
+													<Checkbox
+														id={`override-available-${index}`}
+														checked={field.value}
+														onCheckedChange={(checked) => {
+															field.onChange(checked);
+
+															// Reset custom hours if unchecked
+															if (!checked) {
+																form.setValue(
+																	`date_overrides.${index}.custom_hours.start_time`,
+																	"00:00"
+																);
+																form.setValue(
+																	`date_overrides.${index}.custom_hours.end_time`,
+																	"12:00"
+																);
+															}
+														}}
+													/>
+													<FormCard.Label
+														htmlFor={`override-available-${index}`}
+														className="!mt-0 cursor-pointer text-2xs whitespace-nowrap"
+													>
+														Available on this date
+													</FormCard.Label>
+												</div>
+											</FormCard.Field>
+										)}
+									/>
+
+									{/* Whole Day Checkbox */}
+									{form.watch(`date_overrides.${index}.is_available`) && (
+										<div className="flex items-center space-x-2 w-[10em] justify-end">
+											<Checkbox
+												id={`override-whole-day-${index}`}
+												checked={
+													form.watch(
+														`date_overrides.${index}.custom_hours.end_time`
+													) === "24:00"
+												}
+												onCheckedChange={(checked) => {
+													if (checked) {
+														form.setValue(
+															`date_overrides.${index}.custom_hours.start_time`,
+															"00:00"
+														);
+														form.setValue(
+															`date_overrides.${index}.custom_hours.end_time`,
+															"24:00"
+														);
+													} else {
+														form.setValue(
+															`date_overrides.${index}.custom_hours.end_time`,
+															"23:30"
+														);
+													}
+
+													form.clearErrors(
+														`date_overrides.${index}.custom_hours.end_time`
+													);
+													form.clearErrors(
+														`date_overrides.${index}.custom_hours.start_time`
+													);
+												}}
+											/>
+											<FormCard.Label
+												htmlFor={`override-whole-day-${index}`}
+												className="!mt-0 cursor-pointer text-2xs whitespace-nowrap"
+											>
+												Whole Day
+											</FormCard.Label>
+										</div>
 									)}
-								/>
+								</div>
+
 								<div className="grid lg:grid-cols-2 gap-4">
 									<FormField
 										control={form.control}
@@ -608,16 +738,21 @@ const CreatePhotographerForm = () => {
 											render={({ field }) => (
 												<FormCard.Field className="lg:col-span-1">
 													<FormCard.Label htmlFor={`override-start-${index}`}>
-														Custom Start Time
+														Start Time
 													</FormCard.Label>
 													<Input
 														id={`override-start-${index}`}
 														type="time"
 														step="1800"
 														{...field}
-														className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+														disabled={
+															form.watch(
+																`date_overrides.${index}.custom_hours.end_time`
+															) === "24:00"
+														}
+														className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none disabled:opacity-50"
 														onBlur={(e) => {
-															field.onBlur(); // Call original onBlur
+															field.onBlur();
 
 															const value = e.target.value;
 															if (!value) return;
@@ -626,7 +761,6 @@ const CreatePhotographerForm = () => {
 																.split(":")
 																.map(Number);
 
-															// Only round if not already a 30-minute interval
 															if (minutes % 30 !== 0) {
 																const roundedMinutes =
 																	Math.round(minutes / 30) * 30;
@@ -662,43 +796,56 @@ const CreatePhotographerForm = () => {
 											render={({ field }) => (
 												<FormCard.Field className="lg:col-span-1">
 													<FormCard.Label htmlFor={`override-end-${index}`}>
-														Custom End Time
+														End Time
 													</FormCard.Label>
-													<Input
-														id={`override-end-${index}`}
-														type="time"
-														step="1800"
-														{...field}
-														className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-														onBlur={(e) => {
-															field.onBlur(); // Call original onBlur
 
-															const value = e.target.value;
-															if (!value) return;
-
-															const [hours, minutes] = value
-																.split(":")
-																.map(Number);
-
-															// Only round if not already a 30-minute interval
-															if (minutes % 30 !== 0) {
-																const roundedMinutes =
-																	Math.round(minutes / 30) * 30;
-																const adjustedHours =
-																	roundedMinutes === 60 ? hours + 1 : hours;
-																const finalMinutes =
-																	roundedMinutes === 60 ? 0 : roundedMinutes;
-
-																const formattedTime = `${String(
-																	adjustedHours % 24
-																).padStart(2, "0")}:${String(
-																	finalMinutes
-																).padStart(2, "0")}`;
-
-																field.onChange(formattedTime);
+													{/* Show special display for 24:00 */}
+													{field.value === "24:00" ? (
+														<div className="flex h-7 py-1 w-full px-0 shadow-none border-none bg-transparent hover:cursor-default text-gray-500 opacity-50 font-normal text-2xs items-center">
+															<span>12:00 AM</span>
+														</div>
+													) : (
+														<Input
+															id={`override-end-${index}`}
+															type="time"
+															step="1800"
+															{...field}
+															disabled={
+																form.watch(
+																	`date_overrides.${index}.custom_hours.end_time`
+																) === "24:00"
 															}
-														}}
-													/>
+															className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none disabled:opacity-50"
+															onBlur={(e) => {
+																field.onBlur();
+
+																const value = e.target.value;
+																if (!value) return;
+
+																const [hours, minutes] = value
+																	.split(":")
+																	.map(Number);
+
+																if (minutes % 30 !== 0) {
+																	const roundedMinutes =
+																		Math.round(minutes / 30) * 30;
+																	const adjustedHours =
+																		roundedMinutes === 60 ? hours + 1 : hours;
+																	const finalMinutes =
+																		roundedMinutes === 60 ? 0 : roundedMinutes;
+
+																	const formattedTime = `${String(
+																		adjustedHours % 24
+																	).padStart(2, "0")}:${String(
+																		finalMinutes
+																	).padStart(2, "0")}`;
+
+																	field.onChange(formattedTime);
+																}
+															}}
+														/>
+													)}
+
 													<div />
 													<Label className="ml-1 text-gray-400 font-light tracking-tighter text-2xs italic">
 														Specify a time, and it will automatically be aligned
@@ -724,6 +871,10 @@ const CreatePhotographerForm = () => {
 												id={`override-notes-${index}`}
 												placeholder="Additional notes"
 												{...field}
+												disabled={
+													!form.watch(`date_overrides.${index}.is_available`)
+												}
+												className="disabled:opacity-50"
 											/>
 											<div />
 											<FormMessage className="ml-1" />
@@ -770,7 +921,7 @@ const CreatePhotographerForm = () => {
 							}}
 							disabled={
 								!form.formState.isDirty ||
-								!form.formState.isValid ||
+								// !form.formState.isValid ||
 								isCreatePhotographerLoading
 							}
 						>

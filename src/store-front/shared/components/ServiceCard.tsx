@@ -63,11 +63,11 @@ export function ServiceCard({
 						<span className="text-lg font-semibold ">
 							{formatToPeso(price.toFixed(2))}
 						</span>
-						{oldPrice && (
+						{oldPrice ? (
 							<span className="text-sm text-gray-400 line-through">
 								{formatToPeso(oldPrice.toFixed(2))}
 							</span>
-						)}
+						) : null}
 					</div>
 				</div>
 

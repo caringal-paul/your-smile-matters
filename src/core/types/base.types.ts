@@ -20,3 +20,10 @@ export type BaseResponseDto<T> = {
 };
 
 export type Gender = "Male" | "Female" | "Other";
+
+export type RatableType = "Service" | "Package";
+
+export enum RatableEnum {
+	SERVICE = "Service",
+	PACKAGE = "Package",
+}

@@ -15,6 +15,7 @@ export type PackageModel = MetaData & {
 	package_price: number;
 	services: IncludedService[];
 	looks: number;
+	total_duration_minutes?: number;
 	is_available: boolean;
 	custom_duration_minutes?: number;
 };

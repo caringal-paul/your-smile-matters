@@ -163,6 +163,18 @@ export const PackageAccordionCard = ({
 									<ShoppingCart size={12} className="mr-1" />
 									{status === "unavailable" ? "Sold Out" : "Book Now"}
 								</Button>
+
+								<Button
+									size="sm"
+									onClick={(e) => {
+										e.stopPropagation();
+										onView?.();
+									}}
+									className="text-xs px-3 py-1 bg-gradient-to-r from-primary to-primary/65 hover:opacity-90"
+								>
+									<Eye size={12} className="mr-1" />
+									View Package
+								</Button>
 							</div>
 						</div>
 					</div>

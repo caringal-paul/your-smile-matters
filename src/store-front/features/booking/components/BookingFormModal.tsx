@@ -72,7 +72,7 @@ const BookingFormModal = () => {
 					</DialogContent>
 				) : (
 					<DialogContent
-						className="max-w-[80%] 2xl:max-w-[70%] max-h-[90%]"
+						className="max-w-[80%] 2xl:max-w-[70%] max-h-full pb-4 overflow-hidden"
 						onInteractOutside={(e) => {
 							e.preventDefault();
 						}}
@@ -84,7 +84,7 @@ const BookingFormModal = () => {
 						<Tabs
 							value={currentTab}
 							onValueChange={(val) => setCurrentTab(val)}
-							className="space-y-4"
+							className="space-y-4 "
 						>
 							<BookingFormStepsHeader currentTab={currentTab} />
 

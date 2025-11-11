@@ -109,7 +109,26 @@ const BookingTab = () => {
 									cx="50%"
 									cy="50%"
 									labelLine={false}
-									label={({ _id, count }) => `${_id}: ${count}`}
+									label={({ cx, cy, midAngle, outerRadius, _id, count }) => {
+										const RADIAN = Math.PI / 180;
+										const radius = outerRadius + 15; // 👈 distance from pie
+										const x = cx + radius * Math.cos(-midAngle * RADIAN);
+										const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+										return (
+											<text
+												x={x}
+												y={y}
+												fill="#846e62"
+												textAnchor={x > cx ? "start" : "end"}
+												dominantBaseline="central"
+												fontSize={12} // 👈 smaller text
+												className="text-[12px]" // optional Tailwind style
+											>
+												{`${_id}: ${count}`}
+											</text>
+										);
+									}}
 									outerRadius={100}
 									fill="#846e62"
 									dataKey="count"

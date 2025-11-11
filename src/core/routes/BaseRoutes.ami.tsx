@@ -61,6 +61,19 @@ import TransactionTable from "@/ami/features/transaction-history/components/Tran
 import TransactionBreadcrumbs from "@/ami/features/transaction-history/components/TransactionBreadcrumbs";
 import ViewTransactionForm from "@/ami/features/transaction-history/components/ViewTransactionForm";
 import DashboardLayout from "@/ami/features/analytics/layout/DashboardLayout";
+import AccountSettingsLayout from "@/ami/features/account-settings/layout/AccountSettingsLayout.ami";
+import ChangePasswordForm from "@/ami/features/account-settings/components/ChangePasswordForm.ami";
+import ChangePasswordPage from "@/ami/features/account-settings/pages/ChangePasswordPage.ami";
+import BookingRouteTabs from "@/ami/features/booking-management/components/BookingRouteTabs";
+import BookingForApprovalPage from "@/ami/features/booking-management/pages/BookingForApprovalPage";
+import BookingForApprovalTable from "@/ami/features/booking-management/components/BookingForApprovalTable";
+import ViewBookingForApproval from "@/ami/features/booking-management/components/ViewBookingForApproval";
+import BookingForApprovalBreadcrumbs from "@/ami/features/booking-management/components/BookingForApprovalBreadcrumbs";
+import TransactionRouteTabs from "@/ami/features/transaction-history/components/TransactionRouteTabs";
+import TransactionForApprovalPage from "@/ami/features/transaction-history/pages/TransactionForApprovalPage";
+import TransactionsForApprovalTable from "@/ami/features/transaction-history/components/TransactionForApprovalTable";
+import TransactionsForApprovalBreadcrumbs from "@/ami/features/transaction-history/components/TransactionForApprovalBreadcrumbs";
+import ViewTransactionForApproval from "@/ami/features/transaction-history/components/ViewTransactionForApproval";
 
 const selectedRole = {
 	_id: "68a004a613451d2e9d4cb517",
@@ -205,8 +218,17 @@ const baseRoutes = (
 
 		{/* TRANSACTION MODULE */}
 		<Route path="transaction-history" element={<TransactionLayout />}>
-			<Route path="transactions" element={<TransactionPage />}>
-				<Route index element={<TransactionTable />} />
+			<Route element={<TransactionRouteTabs />}>
+				{" "}
+				<Route path="transactions" element={<TransactionPage />}>
+					<Route index element={<TransactionTable />} />
+				</Route>{" "}
+				<Route
+					path="transactions/for-approval"
+					element={<TransactionForApprovalPage />}
+				>
+					<Route index element={<TransactionsForApprovalTable />} />
+				</Route>
 			</Route>
 
 			<Route element={<TransactionBreadcrumbs />}>
@@ -217,18 +239,38 @@ const baseRoutes = (
 				/>
 				<Route path="transactions/edit/transaction/:id" element={<div />} />
 			</Route>
+
+			<Route element={<TransactionsForApprovalBreadcrumbs />}>
+				<Route
+					path="transactions/for-approval/view/request/:id"
+					element={<ViewTransactionForApproval />}
+				/>
+			</Route>
 		</Route>
 
 		{/* BOOKING MODULE */}
 		<Route path="booking-management" element={<AmiBookingLayout />}>
-			<Route path="bookings" element={<BookingPage />}>
-				<Route index element={<BookingTable />} />
+			<Route element={<BookingRouteTabs />}>
+				<Route path="bookings" element={<BookingPage />}>
+					<Route index element={<BookingTable />} />
+				</Route>
+				<Route
+					path="bookings/for-approval"
+					element={<BookingForApprovalPage />}
+				>
+					<Route index element={<BookingForApprovalTable />} />
+				</Route>
 			</Route>
 
 			<Route element={<BookingBreadcrumbs />}>
-				<Route path="bookings/create/booking" element={<div />} />
 				<Route path="bookings/view/booking/:id" element={<ViewBookingForm />} />
-				<Route path="bookings/edit/booking/:id" element={<div />} />
+			</Route>
+
+			<Route element={<BookingForApprovalBreadcrumbs />}>
+				<Route
+					path="bookings/for-approval/view/request/:id"
+					element={<ViewBookingForApproval />}
+				/>
 			</Route>
 		</Route>
 
@@ -265,8 +307,9 @@ const baseRoutes = (
 		</Route>
 
 		{/* ACCOUNT SETTINGS */}
-		<Route path="account-settings" element={<div />}>
+		<Route path="account-settings" element={<AccountSettingsLayout />}>
 			<Route index element={<AccountSettingsPage />} />
+			<Route path="change-password" element={<ChangePasswordPage />} />
 		</Route>
 	</Route>
 );

@@ -3,10 +3,9 @@ import { Outlet } from "react-router-dom";
 
 const AccountSettingsLayout = () => {
 	return (
-		<div className="h-full w-full space-y-4 sm:space-y-8">
+		<div className="flex flex-col h-full w-full space-y-20 xl:space-y-4">
 			<PageHeader pageTitle={"Account Settings"} />
 
-			{/* COMPONENTS BASED ON CURRENT PATH */}
 			<Outlet />
 		</div>
 	);

@@ -27,13 +27,52 @@ import {
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { Button } from "@/core/components/base/button";
 import { useGetTransactionDetailsByIdQuery } from "../../transactions/queries/getTransactionDetailsById.sf.query";
+import { useState } from "react";
+import {
+	requestRefundSchema,
+	RequestRefundTransactionSchema,
+} from "../utils/schema/request-refund.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { RequestTransactionFormModal } from "./RequestRefundTransactionFormModal";
+import { useSendRefundTransactionForApproval } from "../queries/sendRefundTransactionForApproval.sf.mutation";
 
 const TransactionDetails = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
 
+	const [isRefundFormOpen, setIsRefundFormOpen] = useState(false);
+
 	const { data: transaction, isPending: isTransactionFetching } =
 		useGetTransactionDetailsByIdQuery(id!);
+
+	const {
+		mutateAsync: sendRefundTransactionForApproval,
+		isPending: isSendingRefundRequestForApproval,
+	} = useSendRefundTransactionForApproval();
+
+	const refundForm = useForm<RequestRefundTransactionSchema>({
+		resolver: zodResolver(requestRefundSchema),
+		mode: "onChange",
+		defaultValues: {
+			booking_id: "",
+			refund_amount: 0,
+			refund_reason: "",
+			transaction_id: "",
+		},
+	});
+
+	const handleSubmitRefundTransaction = async () => {
+		await sendRefundTransactionForApproval({
+			booking_id: transaction!.booking_id._id,
+			transaction_id: transaction!._id,
+			refund_amount: refundForm.getValues().refund_amount,
+			refund_reason: refundForm.getValues().refund_reason,
+		}).then(() => {
+			setIsRefundFormOpen(false);
+			refundForm.reset();
+		});
+	};
 
 	if (isTransactionFetching && !transaction) {
 		return <div>Loading...</div>;
@@ -53,7 +92,15 @@ const TransactionDetails = () => {
 			<CardHeader className="pb-3 border-gray-300 border-b-[1px] drop-shadow-sm shadow-sm">
 				<div className="flex items-start justify-between">
 					<div>
-						<CardTitle className="text-3xl">Transaction Details</CardTitle>
+						<div className="flex flex-row gap-4 items-center">
+							<CardTitle className="text-3xl">Transaction Details</CardTitle>
+							<Button
+								onClick={() => setIsRefundFormOpen(true)}
+								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${TRANSACTION_STATUS_COLORS["Refunded"]} ${TRANSACTION_STATUS_COLORS["Refunded"]}`}
+							>
+								Request for Refund
+							</Button>
+						</div>
 						<CardDescription className="text-lg">
 							Ref:{" "}
 							<span className="text-primary font-semibold">
@@ -436,6 +483,13 @@ const TransactionDetails = () => {
 					</div>
 				</div>
 			</CardContent>
+
+			<RequestTransactionFormModal
+				open={isRefundFormOpen}
+				onOpenChange={setIsRefundFormOpen}
+				onSubmit={handleSubmitRefundTransaction}
+				form={refundForm}
+			/>
 		</Card>
 	);
 };

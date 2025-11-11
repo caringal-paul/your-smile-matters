@@ -1,29 +1,13 @@
 import { Column } from "@/core/types/column.types";
 import { MyBookingsSfTableType } from "../types/my-bookings-table.sf.types";
 import { useNavigate } from "react-router-dom";
-import {
-	formatToNormalDate,
-	formatToUtc,
-} from "@/ami/shared/helpers/formatDate";
+import { formatToNormalDate } from "@/ami/shared/helpers/formatDate";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { Button } from "@/core/components/base/button";
-import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
-import {
-	BookingFormData,
-	BookingFormService,
-	useBookingFormStore,
-} from "@/store-front/store/useBookingFormStore";
 import { DataTableRow } from "@/ami/shared/components/table/DataTableRow";
 
 export const useMyBookingColumns = (): Column<MyBookingsSfTableType>[] => {
 	const navigate = useNavigate();
-
-	const openModal = useBookingFormStore((state) => state.openModal);
-	const gotoStep = useBookingFormStore((state) => state.gotoStep);
-	const setStepValid = useBookingFormStore((state) => state.setStepValid);
-	const saveOriginalForm = useBookingFormStore(
-		(state) => state.saveOriginalForm
-	);
 
 	const columns: Column<MyBookingsSfTableType>[] = [
 		{

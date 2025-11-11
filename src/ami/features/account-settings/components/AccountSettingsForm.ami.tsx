@@ -1,246 +1,245 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import FormCard from "@/ami/shared/components/card/FormCard";
-import { Label } from "@/core/components/base/label";
 import { Button } from "@/core/components/base/button";
-import EditIcon from "@/ami/shared/assets/icons/EditIcon";
 import { Input } from "@/core/components/base/input";
+import { Form, FormField, FormMessage } from "@/core/components/base/form";
 import {
-	validateFileExtension,
-	validateFileSize,
-} from "@/ami/shared/helpers/validateFileUpload";
+	UserAmiUpdate,
+	userUpdateSchema,
+} from "../../user-management/utils/schemas/user.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SelectOptions } from "@/core/types/option.types";
+import { useUpdateUserMutation } from "../../user-management/queries/updateUser.ami.mutation";
+import { useGetAllRolesQuery } from "../../role-and-permission/queries/getRoles.ami.query";
+import { useNavigate } from "react-router-dom";
+import { useGetCurrentUserLoggedInQuery } from "../queries/getCurrentUserLoggedIn.ami.query";
 
 const AccountSettingsForm = () => {
-	const [isEdit, setIsEdit] = useState(false);
-	const [firstName, setFirstName] = useState("John");
-	const [lastName, setLastName] = useState("Doe");
-	const [email, setEmail] = useState("johndoe@altinvest.com");
-	const [mobile, setMobile] = useState("+234 201 335 3131");
-	const [image, setImage] = useState("");
-	useEffect(() => {
-		if (isEdit == false) {
-			setFirstName((prev) => {
-				if (prev == "") {
-					return "John";
-				} else {
-					return prev;
-				}
-			});
-			setLastName((prev) => {
-				if (prev == "") {
-					return "Doe";
-				} else {
-					return prev;
-				}
-			});
-			setEmail((prev) => {
-				if (prev == "") {
-					return "johndoe@yopmail.com";
-				} else {
-					return prev;
-				}
-			});
-			setMobile((prev) => {
-				if (prev == "") {
-					return "+234 201 335 3131";
-				} else {
-					return prev;
-				}
-			});
+	const navigate = useNavigate();
+
+	const { data: currUserLoggedIn, isLoading: isUserDataFetching } =
+		useGetCurrentUserLoggedInQuery();
+
+	const { data: roles = [], isLoading: isRolesDataFetching } =
+		useGetAllRolesQuery();
+
+	const { mutateAsync: updateUser, isPending: isUpdateUserLoading } =
+		useUpdateUserMutation();
+
+	const roleOptions: SelectOptions[] = roles.map((role) => {
+		return {
+			label: role.name,
+			value: role._id,
+			status: role.is_active ? "Active" : "Inactive",
+		};
+	});
+
+	const form = useForm<UserAmiUpdate>({
+		resolver: zodResolver(userUpdateSchema),
+		mode: "onChange",
+		values: currUserLoggedIn
+			? {
+					username: currUserLoggedIn.username ?? "",
+					email: currUserLoggedIn.email ?? "",
+					first_name: currUserLoggedIn.first_name ?? "",
+					last_name: currUserLoggedIn.last_name ?? "",
+					mobile_number: currUserLoggedIn.mobile_number ?? "",
+					role_id: currUserLoggedIn.role_id ?? "",
+			  }
+			: undefined,
+	});
+
+	const onSubmit = async (payload: UserAmiUpdate) => {
+		if (!currUserLoggedIn?._id) {
+			throw new Error("Error");
 		}
 
-		setIsEdit(false);
-	}, [isEdit]);
+		try {
+			await updateUser({
+				id: currUserLoggedIn._id,
+				payload,
+			});
+		} catch (error) {
+			console.error("Failed to update user:", error);
+		}
+	};
+
+	useEffect(() => {
+		if (currUserLoggedIn && roleOptions.length > 0) {
+			form.reset({
+				username: currUserLoggedIn.username,
+				email: currUserLoggedIn.email,
+				first_name: currUserLoggedIn.first_name,
+				last_name: currUserLoggedIn.last_name,
+				mobile_number: currUserLoggedIn.mobile_number,
+				role_id: currUserLoggedIn.role_id,
+			});
+
+			form.trigger();
+		}
+	}, [currUserLoggedIn, roles, form]);
+
+	if (isUserDataFetching && isRolesDataFetching) {
+		return <>Loading</>;
+	}
 
 	return (
-		<FormCard className="h-fit">
-			<FormCard.Title>Account Profile</FormCard.Title>
-			<FormCard.Body>
-				<div className="space-y-4 justify-center flex flex-col items-center">
-					<div
-						// className=""
-						className={`relative h-36 w-36 border-avatar border-2 place-items-center grid rounded-full bg-cover bg-center ${
-							!image && "bg-avatar-placeholder "
-						} `}
-						style={{
-							backgroundImage: !image ? undefined : `url('${image}')`,
-						}}
-					>
-						{!image && (
-							<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-								<Label className="text-avatar font-semibold text-[64px] tracking-tighter">
-									JD
-								</Label>
-							</div>
-						)}
-						<Input
-							id="profile"
-							type="file"
-							className="hidden"
-							accept="image/*"
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								const file = e.target.files?.[0];
+		<div>
+			<FormCard className="h-fit">
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)}>
+						<FormCard.Title>Account Profile</FormCard.Title>
+						<FormCard.Body>
+							<FormField
+								control={form.control}
+								name="first_name"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label htmlFor="first_name">
+											First Name
+										</FormCard.Label>
+										<Input
+											className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal"
+											placeholder="First name"
+											{...field}
+										/>
+										<div />
 
-								if (file) {
-									const isAttachmentValid = validateFileSize({
-										file: file,
-										errorMessage: "Image size must not exceed 2mb.",
-										fieldName: "image",
-										sizeLimit: 2,
-									});
+										<FormMessage className="ml-1" />
+									</FormCard.Field>
+								)}
+							/>
 
-									const isExtensionValid = validateFileExtension({
-										file: file,
-										errorMessage:
-											"Invalid file type. Please upload a .png, .jpg, or .jpeg file.",
-										fieldName: "image",
-										validExtensions: ["image/jpeg", "image/jpg", "image/png"],
-									});
+							<FormField
+								control={form.control}
+								name="last_name"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label htmlFor="last_name">
+											Last Name
+										</FormCard.Label>
+										<Input
+											className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal"
+											placeholder="Last name"
+											{...field}
+										/>
+										<div />
+										<FormMessage className="ml-1" />
+									</FormCard.Field>
+								)}
+							/>
 
-									if (!isExtensionValid || !isAttachmentValid) {
-										return;
-									} else {
-										// form.clearErrors();
-									}
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label htmlFor="email">
+											Email address
+										</FormCard.Label>
+										<Input
+											className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal"
+											placeholder="Email"
+											{...field}
+										/>
+										<div />
+										<FormMessage className="ml-1" />
+									</FormCard.Field>
+								)}
+							/>
 
-									const imageUrl = URL.createObjectURL(file);
+							<FormField
+								control={form.control}
+								name="username"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label htmlFor="username">Username</FormCard.Label>
+										<Input
+											className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal"
+											placeholder="Username"
+											{...field}
+										/>
+										<div />
+										<FormMessage className="ml-1" />
+									</FormCard.Field>
+								)}
+							/>
 
-									setImage(imageUrl);
-								}
-							}}
-							value=""
-						/>
-						<Button
-							variant="edit"
-							size="edit"
-							className={`absolute bottom-3 right-2 rounded-full bg-avatar hover:bg-foreground hover:border-none hover:ring-none h-5 w-5 pl-1 pt-1 [&_svg]:size-4 [&_svg]:shrink-0`}
-							onClick={() => document.getElementById("profile")?.click()}
-							type="button"
-						>
-							<span className="h-4 w-4 text-white">
-								<EditIcon fill="white" />
-							</span>
-						</Button>
-					</div>
-					<Label className={`text-[10px] text-text-secondary font-light`}>
-						Upload Profile Picture (less than 2mb*)
-					</Label>
-				</div>
+							<FormField
+								control={form.control}
+								name="mobile_number"
+								render={({ field }) => (
+									<FormCard.Field>
+										<FormCard.Label htmlFor="mobile_number">
+											Mobile Number
+										</FormCard.Label>
+										<Input
+											className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal"
+											placeholder="Mobile Number"
+											type="number"
+											{...field}
+										/>
+										<div />
 
-				<div>
-					<FormCard.Body className="p-6 rounded-md bg-accent-foreground border-[1px] border-border">
-						<FormCard.Title
-							className="relative flex flex-col sm:flex-row border-none justify-between items-start sm:items-center"
-							hasSeparator={false}
-						>
-							<span className="mb-2 sm:mb-0">Edit Profile</span>
+										<FormMessage className="ml-1" />
+									</FormCard.Field>
+								)}
+							/>
 
-							{/* {isEdit ? (
-								<div className="flex gap-2 items-center h-9 w-full sm:w-fit">
-									<Button
-										variant="secondary"
-										size="sm"
-										className="w-full"
-										onClick={() => {
-											setFirstName((prev) => {
-												if (prev == "") {
-													return "John";
-												} else {
-													return prev;
-												}
-											});
-											setLastName((prev) => {
-												if (prev == "") {
-													return "Doe";
-												} else {
-													return prev;
-												}
-											});
-											setEmail((prev) => {
-												if (prev == "") {
-													return "johndoe@altinvest.com";
-												} else {
-													return prev;
-												}
-											});
-											setMobile((prev) => {
-												if (prev == "") {
-													return "+234 201 335 3131";
-												} else {
-													return prev;
-												}
-											});
-											setIsEdit(false);
-										}}
-									>
-										Cancel
-									</Button>
-									<Button
-										className="w-full sm:w-fit"
-										size="sm"
-										onClick={() => setIsEdit(false)}
-									>
-										Save Changes
-									</Button>
-								</div>
-							) : (
+							<div className="flex gap-2 items-center justify-end mt-4">
 								<Button
-									variant="edit"
-									size="edit"
-									className="absolute sm:flex right-0"
-									onClick={() => setIsEdit((prev) => !prev)}
-								>
-									<EditIcon fill="#1C1B1F" className=" h-3 w-3 mt-[1.5px]" />
-									Edit
-								</Button>
-							)} */}
-						</FormCard.Title>
+									variant="secondary"
+									size="sm"
+									type="button"
+									onClick={(e) => {
+										e.stopPropagation();
+										e.preventDefault();
 
-						<FormCard.Field>
-							<FormCard.Label htmlFor="firstName">First Name</FormCard.Label>
-							<div className="flex flex-row">
-								<Input
-									className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
-									value={firstName}
-									onChange={(e) => setFirstName(e.target.value)}
-									disabled={!isEdit}
-								/>
+										form.reset();
+										form.clearErrors();
+									}}
+									disabled={!form.formState.isDirty || isUpdateUserLoading}
+								>
+									Cancel
+								</Button>
+								<Button
+									className="w-full sm:w-fit"
+									size="sm"
+									type="submit"
+									disabled={
+										!form.formState.isDirty ||
+										!form.formState.isValid ||
+										isUpdateUserLoading
+									}
+								>
+									{isUpdateUserLoading ? "Updating..." : "Save Changes"}
+								</Button>
 							</div>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label htmlFor="lastName">Last Name</FormCard.Label>
-							<Input
-								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
-								value={lastName}
-								onChange={(e) => setLastName(e.target.value)}
-								disabled={!isEdit}
-							/>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label htmlFor="emailAddress">
-								Email address
-							</FormCard.Label>
-							<Input
-								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								disabled={!isEdit}
-							/>
-						</FormCard.Field>
-						<FormCard.Field>
-							<FormCard.Label htmlFor="mobileNumber">
-								Mobile Number
-							</FormCard.Label>
-							<Input
-								className="h-7 py-1 text-2xs font-normal placeholder:text-2xs placeholder:font-normal disabled:px-0 disabled:shadow-none disabled:h-fit disabled:border-none disabled:bg-transparent  disabled:hover:cursor-default disabled:text-foreground disabled:opacity-100"
-								value={mobile}
-								onChange={(e) => setMobile(e.target.value)}
-								disabled={!isEdit}
-							/>
-						</FormCard.Field>
-					</FormCard.Body>
-				</div>
-			</FormCard.Body>
-		</FormCard>
+						</FormCard.Body>
+					</form>
+				</Form>
+			</FormCard>
+
+			<FormCard className="h-fit">
+				<FormCard.Title>Password</FormCard.Title>
+				<FormCard.Body>
+					<FormCard.Field>
+						<FormCard.Label>Change Password</FormCard.Label>
+
+						<Button
+							variant="outline"
+							size="sm"
+							type="button"
+							className="w-fit"
+							onClick={() => navigate("change-password")}
+						>
+							Change Password
+						</Button>
+					</FormCard.Field>
+				</FormCard.Body>
+			</FormCard>
+		</div>
 	);
 };
 

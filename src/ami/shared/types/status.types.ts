@@ -17,3 +17,5 @@ export type TransactionStatus =
 	| "Failed"
 	| "Refunded"
 	| "Cancelled";
+
+export type RequestStatus = "Pending" | "Approved" | "Rejected";

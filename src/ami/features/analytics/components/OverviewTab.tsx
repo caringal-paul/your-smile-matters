@@ -197,9 +197,33 @@ const OverviewTab = () => {
 									cx="50%"
 									cy="50%"
 									labelLine={false}
-									label={({ status, percentage }) =>
-										`${status}: ${percentage}%`
-									}
+									label={({
+										cx,
+										cy,
+										midAngle,
+										outerRadius,
+										status,
+										percentage,
+									}) => {
+										const RADIAN = Math.PI / 180;
+										const radius = outerRadius + 15; // 👈 offset label outside
+										const x = cx + radius * Math.cos(-midAngle * RADIAN);
+										const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+										return (
+											<text
+												x={x}
+												y={y}
+												fill="#333"
+												textAnchor={x > cx ? "start" : "end"}
+												dominantBaseline="central"
+												fontSize={10} // 👈 make it smaller
+												className="text-[10px]" // optional Tailwind fallback
+											>
+												{`${status}: ${percentage}%`}
+											</text>
+										);
+									}}
 									outerRadius={80}
 									fill="#8884d8"
 									dataKey="count"

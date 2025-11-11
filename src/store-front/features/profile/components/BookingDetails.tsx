@@ -35,10 +35,62 @@ import {
 import { Button } from "@/core/components/base/button";
 import CreateTransactionModal from "../../transactions/components/CreateTransactionModal";
 import { useState } from "react";
+import { RequestRescheduleBookingFormModal } from "./RequestRescheduleBookingFormModal";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { BookingResponseSf } from "../../booking/utils/types/booking-response.sf.types";
+import {
+	RequestRescheduleBookingSchema,
+	requestRescheduleSchema,
+} from "../utils/schema/request-reschedule.schema";
+import {
+	RequestCancelBookingSchema,
+	requestCancelSchema,
+} from "../utils/schema/request-cancel.schema";
+import { useSendRescheduleBookingForApprovalMutation } from "../queries/sendRescheduleBookingForApproval.sf.mutation";
+import { useSendCancelBookingForApprovalMutation } from "../queries/sendCancelBookingForApproval.sf.mutation";
+import { RequestCancelBookingFormModal } from "./RequestCancelBookingFormModal";
+import { BookingRatingModal, RatableType } from "./RatingModal";
 
 const BookingDetails = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
+
+	const [isRescheduleFormOpen, setIsRescheduleFormOpen] = useState(false);
+	const [isCancelFormOpen, setIsCancelFormOpen] = useState(false);
+
+	const {
+		mutateAsync: sendRescheduleBookingForApproval,
+		isPending: isSendingRescheduleRequestForApproval,
+	} = useSendRescheduleBookingForApprovalMutation();
+
+	const {
+		mutateAsync: sendCancelBookingForApproval,
+		isPending: isSendingCancelRequestForApproval,
+	} = useSendCancelBookingForApprovalMutation();
+
+	const rescheduleForm = useForm<RequestRescheduleBookingSchema>({
+		resolver: zodResolver(requestRescheduleSchema),
+		mode: "onChange",
+		defaultValues: {
+			new_booking_date: undefined,
+			dummy_time: "",
+			new_start_time: "",
+			new_end_time: "",
+			new_photographer_id: "",
+			reschedule_reason: "",
+		},
+	});
+
+	const cancelForm = useForm<RequestCancelBookingSchema>({
+		resolver: zodResolver(requestCancelSchema),
+		mode: "onChange",
+		defaultValues: {
+			cancellation_reason: "",
+		},
+	});
 
 	const [isCreateTransactionModalOpen, setIsCreateTransactionModalOpen] =
 		useState(false);
@@ -51,6 +103,26 @@ const BookingDetails = () => {
 		0
 	);
 
+	const handleSubmitRescheduleBooking = async () => {
+		await sendRescheduleBookingForApproval({
+			bookingId: String(booking?._id),
+			payload: rescheduleForm.getValues(),
+		}).then(() => {
+			setIsRescheduleFormOpen(false);
+			rescheduleForm.reset();
+		});
+	};
+
+	const handleSubmitCancelBooking = async () => {
+		await sendCancelBookingForApproval({
+			bookingId: String(booking?._id),
+			payload: cancelForm.getValues(),
+		}).then(() => {
+			setIsCancelFormOpen(false);
+			cancelForm.reset();
+		});
+	};
+
 	if (isBookingFetching && !booking) {
 		return <div>Loading...</div>;
 	}
@@ -60,13 +132,85 @@ const BookingDetails = () => {
 			<CardHeader className="pb-3 border-gray-300 border-b-[1px] drop-shadow-sm shadow-sm">
 				<div className="flex items-start justify-between">
 					<div>
-						<CardTitle className="text-3xl">Booking Details</CardTitle>
+						<div className="flex flex-row gap-2 items-center">
+							<CardTitle className="text-3xl mr-2">Booking Details</CardTitle>
+							<Button
+								onClick={() => setIsRescheduleFormOpen(true)}
+								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Rescheduled"]}`}
+							>
+								Reschedule
+							</Button>
+							<Button
+								onClick={() => setIsCancelFormOpen(true)}
+								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Cancelled"]}`}
+							>
+								Cancel
+							</Button>
+						</div>
+
 						<CardDescription className="text-lg">
 							Ref:{" "}
 							<span className="text-primary font-semibold">
 								{booking?.booking_reference}
 							</span>
 						</CardDescription>
+
+						{/* {booking?.status === "Completed" && (
+							<div className="space-y-3">
+								<Label className="font-semibold text-base">
+									RATE YOUR EXPERIENCE:
+								</Label>
+								<BookingRatingModal
+									bookingId={booking._id}
+									bookingReference={booking.booking_reference}
+									items={[
+										...(booking.package_id
+											? [
+													{
+														id: booking.package_id._id,
+														name: booking.package_id.name,
+														type: "Package" as RatableType,
+													},
+											  ]
+											: []),
+										...booking.services.map((s) => ({
+											id: s.service_id._id,
+											name: s.service_id.name,
+											type: "Service" as RatableType,
+										})),
+									]}
+									//   existingRatings={myRatings} // Fetch from API
+								/>
+							</div>
+						)} */}
+
+						{booking?.status === "Completed" && (
+							<div className="space-y-3">
+								<Label className="font-semibold text-base">
+									RATE YOUR EXPERIENCE:
+								</Label>
+								<BookingRatingModal
+									bookingId={booking._id}
+									bookingReference={booking.booking_reference}
+									items={[
+										...(booking.package_id
+											? [
+													{
+														id: booking.package_id._id,
+														name: booking.package_id.name,
+														type: "Package" as RatableType,
+													},
+											  ]
+											: []),
+										...booking.services.map((s) => ({
+											id: s.service_id._id,
+											name: s.service_id.name,
+											type: "Service" as RatableType,
+										})),
+									]}
+								/>
+							</div>
+						)}
 					</div>
 					<Badge
 						className={cn(
@@ -497,6 +641,20 @@ const BookingDetails = () => {
 					</div>
 				) : null}
 			</CardContent>
+
+			<RequestRescheduleBookingFormModal
+				open={isRescheduleFormOpen}
+				onOpenChange={setIsRescheduleFormOpen}
+				onSubmit={handleSubmitRescheduleBooking}
+				form={rescheduleForm}
+				selectedBooking={booking as BookingResponseSf}
+			/>
+			<RequestCancelBookingFormModal
+				open={isCancelFormOpen}
+				onOpenChange={setIsCancelFormOpen}
+				onSubmit={handleSubmitCancelBooking}
+				form={cancelForm}
+			/>
 		</Card>
 	);
 };

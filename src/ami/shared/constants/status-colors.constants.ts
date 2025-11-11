@@ -2,6 +2,7 @@ import {
 	AvailabilityStatus,
 	BookingStatus,
 	ForApprovalStatus,
+	RequestStatus,
 	TransactionStatus,
 } from "../types/status.types";
 
@@ -32,4 +33,10 @@ export const TRANSACTION_STATUS_COLORS: Record<TransactionStatus, string> = {
 	Failed: "bg-[#ef4444]",
 	Refunded: "bg-[#3b82f6]",
 	Cancelled: "bg-[#9ca3af]",
+};
+
+export const REQUEST_STATUS_COLORS: Record<RequestStatus, string> = {
+	Pending: "bg-[#facc15]",
+	Approved: "bg-[#22c55e]",
+	Rejected: "bg-[#ef4444]",
 };

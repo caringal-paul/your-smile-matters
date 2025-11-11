@@ -8,15 +8,17 @@ import {
 } from "@/ami/features/customer-management/utils/types/customer-response.ami.types";
 import { LoginResponseAmi } from "@/ami/features/auth/utils/types/auth-response.ami.types";
 import { AuthAmiLogin } from "@/ami/features/auth/utils/schemas/auth.schema";
+import { CurrentUserLoggedInResponse } from "@/ami/features/account-settings/utils/types/settings-response.ami.types";
+import { PasswordAmiUpdate } from "@/ami/features/account-settings/utils/schemas/change-password.ami.schema";
 
 const ENDPOINT = "/admin/auth";
 
 const amiAuthApi = {
-	async me(): Promise<BaseResponseDto<GetAllCustomerResponseAmi[]>> {
+	async me(): Promise<BaseResponseDto<CurrentUserLoggedInResponse>> {
 		try {
 			const response = await adminApiClient.get<
-				BaseResponseDto<GetAllCustomerResponseAmi[]>
-			>(ENDPOINT);
+				BaseResponseDto<CurrentUserLoggedInResponse>
+			>(`${ENDPOINT}/me`);
 
 			return response;
 		} catch (error) {
@@ -33,6 +35,23 @@ const amiAuthApi = {
 			const response = await adminApiClient.post<
 				BaseResponseDto<LoginResponseAmi>
 			>(`${ENDPOINT}/login`, payload);
+			return response;
+		} catch (error) {
+			const parsedError = handleError(error);
+
+			throw parsedError;
+		}
+	},
+
+	async changePassword(
+		id: string,
+		payload: PasswordAmiUpdate
+	): Promise<BaseResponseDto<null>> {
+		try {
+			const response = await adminApiClient.patch<BaseResponseDto<null>>(
+				`${ENDPOINT}/change-password/${id}`,
+				payload
+			);
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);

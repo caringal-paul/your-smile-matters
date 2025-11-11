@@ -11,6 +11,7 @@ type PackageResponse = Pick<
 	| "package_price"
 	| "looks"
 	| "custom_duration_minutes"
+	| "total_duration_minutes"
 	| "is_available"
 	| "is_active"
 	| "created_at"

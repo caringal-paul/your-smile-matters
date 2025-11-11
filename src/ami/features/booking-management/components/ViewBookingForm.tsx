@@ -55,8 +55,6 @@ const ViewBookingForm = () => {
 
 	const { data: booking, isLoading } = useGetBookingByIdQuery(id!);
 
-	console.log(booking?.payment_status);
-
 	if (isLoading) {
 		return <>Loading</>;
 	}
@@ -64,8 +62,6 @@ const ViewBookingForm = () => {
 	if (!booking) {
 		return <>Booking Not Found</>;
 	}
-
-	console.log(booking);
 
 	return (
 		<div className="pb-8 grid grid-cols-1 xl:grid-cols-3 gap-4">

@@ -1,5 +1,5 @@
 import { Card } from "@/core/components/base/card";
-import { Book, Lock, User, WalletIcon } from "lucide-react";
+import { Book, Lock, MailIcon, User, WalletIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,10 +24,22 @@ const MENU_ITEMS: MenuItem[] = [
 		path: "my-bookings",
 	},
 	{
+		id: "my-booking-requests",
+		label: "Booking Requests",
+		icon: <MailIcon className="w-5 h-5" />,
+		path: "my-booking-requests",
+	},
+	{
 		id: "my-transactions",
 		label: "My Transactions",
 		icon: <WalletIcon className="w-5 h-5" />,
 		path: "my-transactions",
+	},
+	{
+		id: "my-refund-requests",
+		label: "Refund Requests",
+		icon: <MailIcon className="w-5 h-5" />,
+		path: "my-refund-requests",
 	},
 
 	{

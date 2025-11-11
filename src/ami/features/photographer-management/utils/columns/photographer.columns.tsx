@@ -32,9 +32,9 @@ export const usePhotographerColumns =
 				render: (_, row) => (
 					<Avatar className="ml-4">
 						<AvatarImage
-							src={row.profile_image || "/sf/ysm-profile-fallback.jpg"}
+							src={row.profile_image}
 							alt="@shadcn"
-							className="size-6 bg-red-500"
+							// className="size-6 bg-red-500"
 						/>
 						<AvatarFallback>{getInitials(row.name)}</AvatarFallback>
 					</Avatar>

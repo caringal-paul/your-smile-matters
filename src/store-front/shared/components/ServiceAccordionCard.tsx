@@ -89,11 +89,11 @@ const ServiceAccordionCard = React.memo(
 												<span className="text-2xs 2xl:text-sm font-bold text-black opacity-80">
 													{formatToPeso(price.toFixed(2))}
 												</span>
-												{oldPrice && (
+												{oldPrice ? (
 													<span className="text-3xs 2xl:text-xs text-gray-400 line-through">
 														{formatToPeso(oldPrice.toFixed(2))}
 													</span>
-												)}
+												) : null}
 											</div>
 										</div>
 										<Button
