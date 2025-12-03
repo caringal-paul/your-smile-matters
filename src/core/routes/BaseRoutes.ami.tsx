@@ -138,12 +138,12 @@ const baseRoutes = (
 
 		{/* CUSTOMER MODULE */}
 		<Route path="customer-management" element={<CustomerLayout />}>
-			<Route element={<CustomerRouteTabs />}>
-				<Route path="customers" element={<CustomerPage />}>
-					<Route index element={<CustomerTable />} />
-					<Route path="activity-log" element={<div />} />
-				</Route>
+			{/* <Route element={<CustomerRouteTabs />}> */}
+			<Route path="customers" element={<CustomerPage />}>
+				<Route index element={<CustomerTable />} />
+				<Route path="activity-log" element={<div />} />
 			</Route>
+			{/* </Route> */}
 
 			<Route element={<CustomerBreadcrumbs />}>
 				<Route
@@ -155,15 +155,15 @@ const baseRoutes = (
 
 		{/* PHOTOGRAPHER MODULE */}
 		<Route path="photographer-management" element={<PhotographerLayout />}>
-			<Route element={<PhotographerRouteTabs />}>
-				<Route path="photographers" element={<PhotographerPage />}>
-					<Route index element={<PhotographerTable />} />
-				</Route>
-
-				<Route path="photographers/for-approval" element={<div />}>
-					<Route index element={<div />} />
-				</Route>
+			{/* <Route element={<PhotographerRouteTabs />}> */}
+			<Route path="photographers" element={<PhotographerPage />}>
+				<Route index element={<PhotographerTable />} />
 			</Route>
+
+			<Route path="photographers/for-approval" element={<div />}>
+				<Route index element={<div />} />
+			</Route>
+			{/* </Route> */}
 
 			<Route element={<PhotographerBreadcrumbs />}>
 				<Route

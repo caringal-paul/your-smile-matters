@@ -11,7 +11,7 @@ import { Form, FormField, FormMessage } from "@/core/components/base/form";
 import { cn } from "@/core/lib/utils";
 import { Switch } from "@/core/components/base/switch";
 import { Label } from "@/core/components/base/label";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
 	packageCreateSchema,
@@ -19,9 +19,8 @@ import {
 } from "../utils/schemas/package.schema";
 import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import { PricingInput } from "@/core/components/custom/CustomInput";
-import { useGetPackageByIdQuery } from "../queries/getPackageById.ami.query";
 import { useGetAllServicesQuery } from "../../service-management/queries/getServices.ami.query";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
 	Select,
 	SelectContent,
@@ -35,17 +34,20 @@ import { Plus, Trash2, UploadCloud, X } from "lucide-react";
 import { IncludedService } from "@/core/models/package.model";
 import { Badge } from "@/core/components/base/badge";
 import { useCreatePackageMutation } from "../queries/createPackage.ami.mutation";
+import { useUploadImageMutation } from "@/core/queries/uploadImage.mutation";
 
 const CreatePackageForm = () => {
-	const { id } = useParams();
 	const navigate = useNavigate();
-	const hasInitialized = useRef(false);
 
 	const { data: services = [], isLoading: isServicesFetching } =
 		useGetAllServicesQuery();
 
 	const { mutateAsync: createPackage, isPending: isCreatePackageLoading } =
 		useCreatePackageMutation();
+
+	const uploadImageMutation = useUploadImageMutation();
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string>("");
 
 	const [showAddService, setShowAddService] = useState(false);
 	const [selectedServiceId, setSelectedServiceId] = useState<string>("");
@@ -68,13 +70,34 @@ const CreatePackageForm = () => {
 
 	const onSubmit = async (payload: PackageAmiCreate) => {
 		try {
-			const response = await createPackage(payload);
+			let uploadedImage = "";
+
+			if (selectedFile) {
+				const imageFormData = new FormData();
+				imageFormData.append("image", selectedFile);
+
+				const customFilename = `${form.getValues("name")}_package_image`;
+
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadResult = await uploadImageMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				if (uploadResult?.path) {
+					uploadedImage = `http://localhost:3000${uploadResult.path}`;
+					form.setValue("image", `http://localhost:3000${uploadResult.path}`);
+				}
+			}
+
+			const response = await createPackage({
+				...payload,
+				image: uploadedImage,
+			});
 
 			if (response) {
 				navigate("/admin/ami/package-management/packages");
 			}
-
-			console.log("Package updated:", response);
 		} catch (error) {
 			console.error("Failed to update Package:", error);
 		}
@@ -144,7 +167,7 @@ const CreatePackageForm = () => {
 		<div className="flex flex-col mb-4 space-y-6">
 			<FormCard className={cn("mt-0")}>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form>
 						<FormCard.Body className="my-2">
 							<FormCard.Title hasSeparator>Create Package</FormCard.Title>
 
@@ -656,7 +679,10 @@ const CreatePackageForm = () => {
 														onChange={(e) => {
 															const file = e.target.files?.[0];
 															if (file) {
+																setSelectedFile(file);
 																const imageUrl = URL.createObjectURL(file);
+																setPreviewUrl(imageUrl);
+
 																field.onChange(imageUrl);
 															}
 														}}
@@ -679,7 +705,11 @@ const CreatePackageForm = () => {
 											{field.value && (
 												<div className="mt-4 relative group w-full md:w-1/2">
 													<img
-														src={field.value || "/sf/ysm-card-fallback.png"}
+														src={
+															previewUrl ||
+															field.value ||
+															"/sf/ysm-profile-fallback.jpg"
+														}
 														alt="Uploaded image"
 														onError={(e) => {
 															e.currentTarget.src = "/sf/ysm-card-fallback.png";
@@ -688,7 +718,10 @@ const CreatePackageForm = () => {
 													/>
 													<button
 														type="button"
-														onClick={() => {
+														onClick={(e) => {
+															e.preventDefault();
+															setSelectedFile(null);
+															setPreviewUrl("");
 															field.onChange("");
 														}}
 														className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors"
@@ -739,7 +772,10 @@ const CreatePackageForm = () => {
 									!form.formState.isValid ||
 									isCreatePackageLoading
 								}
-								type="submit"
+								onClick={() => {
+									onSubmit(form.getValues());
+								}}
+								type="button"
 							>
 								Create Package
 							</Button>

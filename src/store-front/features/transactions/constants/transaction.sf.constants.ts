@@ -11,6 +11,7 @@ export const TRANSACTION_TABLE_SEARCH_KEYS: (keyof MyTransactionsSfTableType)[] 
 		"transaction_type",
 		"payment_method",
 		"transaction_date",
+		"transaction_reference",
 		"refund_reason",
 		"failure_reason",
 		"failed_at",

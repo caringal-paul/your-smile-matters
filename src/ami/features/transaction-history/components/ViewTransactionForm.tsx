@@ -67,6 +67,8 @@ import { useRejectTransactionMutation } from "../queries/rejectTransaction.ami.q
 import { useRefundTransactionMutation } from "../queries/refundTransaction.ami.mutation";
 import { Separator } from "@/core/components/base/separator";
 import { useApproveTransactionMutation } from "../queries/approveTransaction.ami.query";
+import { RequestRejectionFormModal } from "./TransactionForApprovalFormModals";
+import { useUploadImagesMutation } from "@/core/queries/uploadImages.mutation";
 
 // Transaction status colors (add this to your constants if not exists)
 
@@ -95,8 +97,6 @@ const ViewTransactionForm = () => {
 	if (!transaction) {
 		return <>Transaction Not Found</>;
 	}
-
-	console.log(transaction);
 
 	return (
 		<div className="pb-8 grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -537,6 +537,9 @@ const TransactionFormButtonControls = ({
 	const [openModal, setOpenModal] = useState<string | null>(null);
 	const [isRefundFormOpen, setIsRefundFormOpen] = useState(false);
 
+	const uploadImagesMutation = useUploadImagesMutation();
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
 	const { mutateAsync: approveTransaction, isPending: isApprovingTransaction } =
 		useApproveTransactionMutation();
 	const { mutateAsync: rejectTransaction, isPending: isRejectingTransaction } =
@@ -555,6 +558,8 @@ const TransactionFormButtonControls = ({
 		},
 	});
 
+	const paymentProofImages = refundForm.watch("payment_proof_images");
+
 	const handleConfirmRefundForm = () => {
 		setIsRefundFormOpen(false);
 		setOpenModal("Refund");
@@ -572,10 +577,77 @@ const TransactionFormButtonControls = ({
 	};
 
 	const handleRefund = async () => {
-		await refundTransaction({
-			id: String(transactionId),
-			payload: refundForm.getValues(),
-		}).then(() => setOpenModal(null));
+		const payload = refundForm.getValues();
+
+		try {
+			let uploadedImagePaths: string[] = [];
+
+			// Upload new files
+			if (selectedFiles.length > 0) {
+				const imageFormData = new FormData();
+				selectedFiles.forEach((file) => {
+					imageFormData.append("images", file);
+				});
+
+				const customFilename = `${transactionId}_refund_proof`;
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadRes = await uploadImagesMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				uploadedImagePaths =
+					uploadRes?.map((res) => `http://localhost:3000${res.path}`) || [];
+			}
+
+			await refundTransaction({
+				id: String(transactionId),
+				payload: { ...payload, payment_proof_images: uploadedImagePaths },
+			}).then(() => setOpenModal(null));
+		} catch (error) {
+			console.error("Failed to update service:", error);
+		}
+	};
+
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files;
+		if (!files) return;
+
+		const fileArray = Array.from(files);
+		const remainingSlots = 4 - selectedFiles.length;
+		const filesToAdd = fileArray.slice(0, remainingSlots);
+
+		// Add the actual File objects
+		setSelectedFiles((prev) => [...prev, ...filesToAdd]);
+
+		// Add preview URLs to the form field
+		const newPreviewUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+		refundForm.setValue("payment_proof_images", [
+			...(refundForm.getValues("payment_proof_images") || []),
+			...newPreviewUrls,
+		]);
+
+		e.target.value = "";
+	};
+
+	const removeImage = (index: number) => {
+		const imageToRemove = paymentProofImages?.[index];
+
+		// If it's a blob URL, remove from selectedFiles
+		if (imageToRemove?.startsWith("blob:")) {
+			const fileIndex = (paymentProofImages ?? [])
+				.slice(0, index)
+				.filter((url) => url?.startsWith("blob:")).length;
+
+			setSelectedFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+		}
+
+		// Remove from form gallery
+		const newPhotos = (paymentProofImages ?? []).filter((_, i) => i !== index);
+		refundForm.setValue("payment_proof_images", newPhotos, {
+			shouldDirty: true,
+			shouldValidate: true,
+		});
 	};
 
 	// === Memoized UI ===
@@ -618,6 +690,7 @@ const TransactionFormButtonControls = ({
 						<CheckCircle2 className="size-4 text-green-600" />
 						<span>Payment completed</span>
 					</div>,
+
 					<TransactionActionModal
 						actionType="Refund"
 						isLoading={isRefundingTransaction}
@@ -667,135 +740,12 @@ const TransactionFormButtonControls = ({
 				open={isRefundFormOpen}
 				onOpenChange={setIsRefundFormOpen}
 				onSubmit={handleConfirmRefundForm}
+				handleImageChange={handleImageChange}
+				removeImage={removeImage}
 				form={refundForm}
 			/>
 		</>
 	);
 };
-
-// type TransactionFormButtonControlsProps = {
-// 	status: TransactionStatus;
-// 	transactionId: string;
-// 	transactionType: TransactionType;
-// };
-
-// const TransactionFormButtonControls = ({
-// 	status,
-// 	transactionId: propTransactionId,
-// 	transactionType,
-// }: TransactionFormButtonControlsProps) => {
-// 	const params = useParams();
-// 	const transactionId = propTransactionId || params.id;
-
-// 	const { mutateAsync: approveTransaction, isPending: isApprovingTransaction } =
-// 		useApproveTransactionMutation();
-// 	const { mutateAsync: rejectTransaction, isPending: isRejectingTransaction } =
-// 		useRejectTransactionMutation();
-
-// 	const isMutating = false;
-
-// 	const handleProcess = () => {
-// 		if (window.confirm("Are you sure you want to process this transaction?")) {
-// 			toast.info("Process functionality not implemented yet");
-// 		}
-// 	};
-
-// 	const handleRefund = () => {
-// 		const refund_reason = prompt("Please enter refund reason:");
-
-// 		if (!refund_reason || refund_reason.trim().length < 5) {
-// 			toast.error("Refund reason must be at least 5 characters");
-// 			return;
-// 		}
-
-// 		// refundTransactionMutation({
-// 		//     id: String(transactionId),
-// 		//     refund_reason,
-// 		// });
-// 		toast.info("Refund functionality not implemented yet");
-// 	};
-
-// 	// Memoized UI based on status
-// 	const buttonControls = useMemo(() => {
-// 		// Pending Status: Can Process or Cancel
-// 		if (status === "Pending") {
-// 			return (
-// 				<div className="flex flex-row gap-2">
-// 					<Button
-// 						onClick={handleProcess}
-// 						disabled={isMutating}
-// 						variant="default"
-// 						size="sm"
-// 						className="gap-2"
-// 					>
-// 						<CreditCard className="size-4" />
-// 						Process Payment
-// 					</Button>
-// 				</div>
-// 			);
-// 		}
-
-// 		// Completed Status: Can Refund
-// 		if (status === "Completed" && transactionType != "Refund") {
-// 			return (
-// 				<div className="flex flex-row gap-2">
-// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
-// 						<CheckCircle2 className="size-4 text-green-600" />
-// 						<span>Payment completed</span>
-// 					</div>
-// 					<Button
-// 						onClick={handleRefund}
-// 						disabled={isMutating}
-// 						size="sm"
-// 						className="gap-2"
-// 					>
-// 						<Undo2 className="size-4" />
-// 						Refund
-// 					</Button>
-// 				</div>
-// 			);
-// 		}
-
-// 		// Failed Status: No actions available
-// 		if (status === "Failed") {
-// 			return (
-// 				<div className="flex flex-row gap-2">
-// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
-// 						<X className="size-4 text-destructive" />
-// 						<span>Payment failed</span>
-// 					</div>
-// 				</div>
-// 			);
-// 		}
-
-// 		// Refunded Status: No actions available
-// 		if (status === "Refunded") {
-// 			return (
-// 				<div className="flex flex-row gap-2">
-// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
-// 						<Undo2 className="size-4 text-purple-600" />
-// 						<span>Payment refunded</span>
-// 					</div>
-// 				</div>
-// 			);
-// 		}
-
-// 		// Cancelled Status: No actions available
-// 		if (status === "Cancelled") {
-// 			return (
-// 				<div className="flex flex-row gap-2">
-// 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
-// 						<X className="size-4 text-destructive" />
-// 						<span>Transaction cancelled</span>
-// 					</div>
-// 				</div>
-// 			);
-// 		}
-
-// 		return null;
-// 	}, [status, isMutating]);
-
-// 	return buttonControls;
-// };
 
 export default ViewTransactionForm;

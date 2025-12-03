@@ -1,5 +1,4 @@
 import { Button } from "@/core/components/base/button";
-import { Input } from "@/core/components/base/input";
 import { Textarea } from "@/core/components/base/textarea";
 import { UseFormReturn } from "react-hook-form";
 
@@ -13,7 +12,6 @@ import {
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -21,11 +19,12 @@ import {
 } from "@/core/components/base/form";
 import { UploadCloud, X } from "lucide-react";
 import { PricingInput } from "@/core/components/custom/CustomInput";
-
 interface TransactionRefundFormModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onSubmit: () => void;
+	handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	removeImage: (index: number) => void;
 	form: UseFormReturn<
 		{
 			refund_amount: number;
@@ -47,35 +46,15 @@ export const TransactionRefundFormModal = ({
 	open,
 	onOpenChange,
 	onSubmit,
+	handleImageChange,
+	removeImage,
 	form: refundForm,
 }: TransactionRefundFormModalProps) => {
-	const MAX_IMAGES = 3;
+	const MAX_IMAGES = 4;
 
 	const proofImages = refundForm.watch("payment_proof_images");
 	const hasImages = (proofImages ?? []).length > 0;
 	const isFull = (proofImages ?? []).length >= MAX_IMAGES;
-
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const files = e.target.files;
-		if (files) {
-			const fileArray = Array.from(files);
-			const remainingSlots = MAX_IMAGES - (proofImages?.length || 0);
-			const filesToAdd = fileArray.slice(0, remainingSlots);
-
-			const newPhotos = filesToAdd.map((file) => URL.createObjectURL(file));
-			refundForm.setValue("payment_proof_images", [
-				...(proofImages || []),
-				...newPhotos,
-			]);
-		}
-		// Reset input
-		e.target.value = "";
-	};
-
-	const removeImage = (index: number) => {
-		const newPhotos = (proofImages ?? []).filter((_, i) => i !== index);
-		refundForm.setValue("payment_proof_images", newPhotos);
-	};
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>

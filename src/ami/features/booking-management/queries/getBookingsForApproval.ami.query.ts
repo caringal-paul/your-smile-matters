@@ -6,23 +6,22 @@ import amiBookingRequestsApi from "@/core/api/booking-request/ami/booking-reques
 export const useGetBookingForApprovalQuery = () => {
 	return useQuery({
 		queryKey: ["ami-booking-requests"],
+		queryFn: amiBookingRequestsApi.getBookingRequests,
+		select: (data): BookingForApprovalAmiTableType[] => {
+			const bookingRequests = data.data ?? [];
 
-		queryFn: () => amiBookingRequestsApi.getBookingRequests(),
-		select: ({ data }): BookingForApprovalAmiTableType[] => {
-			const bookingRequestArray: BookingForApprovalAmiTableType[] =
-				data?.map((bookingRequest: BookingRequestResponse) => {
-					return {
-						...bookingRequest,
-						booking: bookingRequest.booking_id._id,
-						booking_reference: bookingRequest.booking_id.booking_reference,
-						reason:
-							bookingRequest.cancellation_reason ??
-							bookingRequest.reschedule_reason ??
-							null,
-					};
-				}) ?? [];
-
-			return bookingRequestArray;
+			return bookingRequests.map((bookingRequest: BookingRequestResponse) => {
+				return {
+					...bookingRequest,
+					booking: bookingRequest.booking_id?._id ?? null,
+					booking_reference:
+						bookingRequest.booking_id?.booking_reference ?? null,
+					reason:
+						bookingRequest.cancellation_reason ??
+						bookingRequest.reschedule_reason ??
+						null,
+				};
+			});
 		},
 	});
 };

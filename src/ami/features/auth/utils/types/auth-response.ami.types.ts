@@ -18,6 +18,7 @@ type UserAuthResponse = Pick<
 	| "role_id"
 > & {
 	role_and_permissions: RoleResponse | null;
+	is_photographer?: boolean;
 };
 
 export type LoginResponseAmi = {

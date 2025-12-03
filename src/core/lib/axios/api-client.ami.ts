@@ -17,7 +17,7 @@ let refreshPromise: Promise<string> | null = null;
 
 const clearAuth = () => {
 	localStorage.removeItem("ami_access_token");
-	localStorage.removeItem("admin_refresh_token");
+	localStorage.removeItem("ami_refresh_token");
 	isRefreshing = false;
 	refreshPromise = null;
 };

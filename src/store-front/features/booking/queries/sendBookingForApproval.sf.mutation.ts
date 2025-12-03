@@ -2,18 +2,16 @@ import { useMutation } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/core/types/base.types";
 import { toast } from "sonner";
 import {
+	BookingResponseSf,
 	BookingSfCreate,
-	CreateBookingResponseSf,
 } from "../utils/types/booking-response.sf.types";
 import sfBookingApi from "@/core/api/booking/sf/booking.sf.api";
 
 export const useSendBookingForApprovalMutation = () => {
 	return useMutation({
 		mutationFn: async (payload: BookingSfCreate) => {
-			const res: BaseResponseDto<CreateBookingResponseSf> =
+			const res: BaseResponseDto<BookingResponseSf> =
 				await sfBookingApi.sendBookingForApproval(payload);
-
-			console.log("PAYLOAAAD!", payload);
 
 			if (res.error || !res.status) {
 				throw new Error(res.message || "Failed to send for approval!");

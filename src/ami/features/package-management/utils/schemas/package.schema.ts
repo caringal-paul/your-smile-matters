@@ -31,7 +31,7 @@ const basePackageSchema = z.object({
 		.trim()
 		.optional(),
 
-	image: z.string().optional(),
+	image: z.string().url({ message: "" }).optional(),
 
 	package_price: z
 		.number({

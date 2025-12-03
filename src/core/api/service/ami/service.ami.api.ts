@@ -40,6 +40,7 @@ const amiServiceApi = {
 			const response = await adminApiClient.get<
 				BaseResponseDto<GetByIdServiceResponseAmi>
 			>(`${ENDPOINT}/${id}`);
+
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);

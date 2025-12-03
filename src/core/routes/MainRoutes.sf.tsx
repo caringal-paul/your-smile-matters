@@ -16,6 +16,8 @@ import BookingRequestDetails from "@/store-front/features/profile/components/Boo
 import MyTransactionRequests from "@/store-front/features/profile/components/MyTransactionRequests";
 import TransactionRequestDetails from "@/store-front/features/profile/components/TransactionRequestDetails";
 import PackageDetailsPage from "@/store-front/features/package/pages/PackageDetailsPage.sf";
+import EditCustomerProfile from "@/store-front/features/profile/components/EditCustomerProfile";
+import SupportPage from "@/store-front/features/support/pages/SupportPage.sf";
 
 const mainRoutes = (
 	<Route path="/" element={<MainLayout />}>
@@ -39,7 +41,7 @@ const mainRoutes = (
 			</Route>
 
 			<Route path="profile" element={<CustomerProfileLayout />}>
-				<Route path="edit" element={<div />} />
+				<Route path="edit-profile" element={<EditCustomerProfile />} />
 				<Route path="my-bookings" element={<MyBookings />} />
 				<Route path="my-booking-requests" element={<MyBookingRequests />} />
 				<Route
@@ -64,6 +66,8 @@ const mainRoutes = (
 
 				<Route path="reset-password" element={<div />} />
 			</Route>
+
+			<Route path="support" element={<SupportPage />} />
 		</Route>
 	</Route>
 );

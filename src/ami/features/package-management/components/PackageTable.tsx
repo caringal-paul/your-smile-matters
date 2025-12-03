@@ -20,6 +20,7 @@ import { ServiceModel } from "@/core/models/service.model";
 import { useGetAllServicesQuery } from "../../service-management/queries/getServices.ami.query";
 import { useGetAllPackagesQuery } from "../queries/getPackages.ami.query";
 import { PluginKey } from "@tiptap/pm/state";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const PackageTable = () => {
 	const navigate = useNavigate();
@@ -54,29 +55,37 @@ const PackageTable = () => {
 		keys: PACKAGE_TABLE_SEARCH_KEYS,
 	});
 
-	if (isServicesFetching && isPackagesFetching) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isServicesFetching && isPackagesFetching}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						setFilters={setFiltersDraft}
 						filterOptions={PACKAGE_MODULE_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isServicesFetching && isPackagesFetching}
 					/>
 				</div>
-				<Button onClick={() => navigate("create/package")}>
+				<Button
+					onClick={() => navigate("create/package")}
+					className="w-full sm:w-fit"
+				>
 					<PlusCircle />
 					Create Package
 				</Button>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} />
+			{isServicesFetching && isPackagesFetching ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} />
+			)}
 		</div>
 	);
 };

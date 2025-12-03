@@ -27,6 +27,7 @@ export const TRANSACTION_TABLE_SEARCH_KEYS: (keyof TransactionAmiTableType)[] =
 		"amount",
 		"status",
 		"transaction_reference",
+		"booking_reference",
 		"customer_name",
 		"customer_email",
 		"customer_no",

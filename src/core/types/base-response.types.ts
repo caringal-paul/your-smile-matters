@@ -123,3 +123,10 @@ export type RatingWithAnalyticsResponse = {
 	ratings: RatingResponse[];
 	analytics: RatingAnalytics;
 };
+
+export type ImageUploadResponse = {
+	filename: string;
+	path: string;
+	mimetype: string;
+	size: number;
+};

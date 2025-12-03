@@ -1,3 +1,5 @@
+import { CustomerModel } from "@/core/models/customer.model";
+
 export type CustomerAuthResponse = {
 	_id: string;
 	customer_no?: string;
@@ -12,7 +14,7 @@ export type CustomerAuthResponse = {
 };
 
 export type CustomerLoginResponse = {
-	customer: CustomerAuthResponse;
+	customer: CustomerModel;
 	access_token: string;
 	refresh_token: string;
 	expires_in: string;

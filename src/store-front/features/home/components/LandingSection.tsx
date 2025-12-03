@@ -14,12 +14,12 @@ const LandingSection = () => {
 					Every Occasion.
 				</h1>
 
-				<p className="max-w-xl text-base leading-relaxed text-primary lg:text-xl">
+				<p className="max-w-xl text-base leading-relaxed text-primary lg:text-xl mb-[80px]">
 					From photoshoots to makeup and event setups enjoy seamless booking
 					with flexible packages and special deals.
 				</p>
 
-				<div className="flex flex-col max-w-[34rem] gap-3 p-6 bg-white border shadow-xl border-border sm:flex-row rounded-2xl">
+				{/* <div className="flex flex-col max-w-[34rem] gap-3 p-6 bg-white border shadow-xl border-border sm:flex-row rounded-2xl">
 					<input
 						type="text"
 						placeholder="Search Location"
@@ -33,7 +33,7 @@ const LandingSection = () => {
 					<button className="px-5 py-3 text-sm font-semibold text-white transition-all duration-200 transform rounded-lg shadow-lg whitespace-nowrap bg-gradient-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/80 hover:scale-105 hover:shadow-xl">
 						Find Now
 					</button>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Right side: illustration, positioned behind */}

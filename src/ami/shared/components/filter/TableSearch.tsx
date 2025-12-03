@@ -8,6 +8,7 @@ interface TableSearchProps {
 	onChange: (value: string) => void;
 	placeholder?: string;
 	className?: string;
+	disabled?: boolean;
 }
 
 const TableSearch = ({
@@ -15,17 +16,22 @@ const TableSearch = ({
 	onChange,
 	placeholder = "Search",
 	className = "",
+	disabled = false,
 }: TableSearchProps) => {
 	return (
 		<div className="relative w-full">
-			<SearchIcon className="h-5 w-5 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-border-button z-50" />
-			<Input
+			<SearchIcon
+				className="h-5 w-5 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-border-button z-50"
+				disabled={disabled}
+			/>
+			<input
 				className={cn(
-					"w-full sm:w-64 md:w-80 md:text-xs md:placeholder:text-xs h-9 rounded-full border-2 border-border- pl-10 2xl:pl-11 text-2xs placeholder:text-2xs leading-none shadow-none tracking-tight pr-8",
+					"w-full sm:w-64 md:w-80 md:text-xs md:placeholder:text-xs h-9 rounded-full border-2 border-border- pl-10 2xl:pl-11 text-2xs placeholder:text-2xs leading-none shadow-none tracking-tight pr-8 disabled:w-full disabled:sm:w-64 disabled:md:w-80 ",
 					className
 				)}
 				placeholder={placeholder}
 				value={value}
+				disabled={disabled}
 				onChange={(e) => onChange(e.target.value)}
 			/>
 

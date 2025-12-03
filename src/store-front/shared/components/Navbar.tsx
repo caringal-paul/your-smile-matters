@@ -34,6 +34,7 @@ import {
 } from "@/core/components/base/avatar";
 import { getInitials } from "@/core/helpers/getInitials";
 import { useLogoutCustomerMutation } from "@/store-front/features/auth/queries/customerLogout.mutation";
+import { useGetMeMutation } from "@/store-front/features/profile/queries/getMe.sf.query";
 
 type NavLinkProps = {
 	path: string;
@@ -105,6 +106,8 @@ const Navbar = () => {
 
 	const { mutateAsync: logoutCustomer } = useLogoutCustomerMutation();
 
+	console.log(myCredentials);
+
 	return (
 		<div className="flex items-center justify-between">
 			<div
@@ -118,7 +121,13 @@ const Navbar = () => {
 					<NavLink path="/services" title="Services" />
 					<NavLink path="/packages" title="Packages" />
 
-					<NavLinkWithSublink
+					{!myCredentials ? (
+						<NavLink path="/auth/login" title="Booking" />
+					) : (
+						<NavLink path="/profile/my-bookings" title="Booking" />
+					)}
+
+					{/* <NavLinkWithSublink
 						title="Booking"
 						subLinks={[
 							// TODO BRING ME BACK
@@ -139,7 +148,7 @@ const Navbar = () => {
 								},
 							},
 						]}
-					/>
+					/> */}
 
 					{/* TODO BpING ME BACK */}
 					{/* <NavLinkWithSublink
@@ -167,7 +176,7 @@ const Navbar = () => {
 					/> */}
 
 					<NavLink path="/support" title="Support" />
-					<NavLink path="/about" title="About" />
+					{/* <NavLink path="/about" title="About" /> */}
 				</NavigationMenuList>
 			</NavigationMenu>
 
@@ -209,7 +218,7 @@ const Navbar = () => {
 							<Button
 								variant="undefined"
 								className="text-foreground w-full text-start justify-start hover:bg-accent rounded-none"
-								onClick={() => navigate("profile/edit")}
+								onClick={() => navigate("profile/edit-profile")}
 							>
 								<CircleUserRound className="size-4" />
 								Profile

@@ -1,41 +1,16 @@
-import { cn } from "@/core/lib/utils";
-import React, {
-	PropsWithChildren,
-	useCallback,
-	useEffect,
-	useState,
-} from "react";
-
-import { Card, CardContent } from "@/core/components/base/card";
 import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from "@/core/components/base/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import type { EmblaCarouselType } from "embla-carousel";
-import FooterSection from "../components/FooterSection";
-import {
-	Calendar,
-	CalendarCheck,
-	CheckCircle,
-	ChevronLeft,
-	ChevronRight,
-	Gift,
-	Heart,
-	MapPin,
-	MessageCircle,
-	Star,
-} from "lucide-react";
+import { Calendar, CalendarCheck, CheckCircle, MapPin } from "lucide-react";
 import { Button } from "@/core/components/base/button";
-import { ServiceCard } from "@/store-front/shared/components/ServiceCard";
-import { ServiceCategory } from "@/core/models/service.model";
-import LandingSection from "../components/LandingSection";
-import CategoriesSection from "../components/CategoriesSection";
+import { useNavigate } from "react-router-dom";
 
 const AppointmentProcessSection = () => {
+	const navigate = useNavigate();
+
 	return (
 		<div className="text-white min-h-2xl bg-slate-800">
 			{/* Main Hero Section */}
@@ -54,7 +29,13 @@ const AppointmentProcessSection = () => {
 							makes scheduling seamless and stress-free.
 						</p>
 
-						<Button className="flex items-center gap-2 px-6 py-8 font-semibold text-white transition-all scale-100 rounded-lg duration-3000 bg-gradient-to-r from-secondary/80 from-60% to-secondary to-100% hover:scale-110">
+						<Button
+							className="flex items-center gap-2 px-6 py-8 font-semibold text-white transition-all scale-100 rounded-lg duration-3000 bg-gradient-to-r from-secondary/80 from-60% to-secondary to-100% hover:scale-110"
+							onClick={() => {
+								window.scrollTo({ top: 0, behavior: "smooth" });
+								navigate("/packages");
+							}}
+						>
 							<Calendar size={20} />
 							Book Now
 						</Button>

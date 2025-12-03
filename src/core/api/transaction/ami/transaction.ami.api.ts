@@ -59,7 +59,9 @@ const amiTransactionApi = {
 		try {
 			const response = await adminApiClient.patch<
 				BaseResponseDto<TransactionResponse>
-			>(`${ENDPOINT}/${id}/reject`);
+			>(`${ENDPOINT}/${id}/reject`, {
+				reason: "Invalid receipt! Please resubmit.",
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);

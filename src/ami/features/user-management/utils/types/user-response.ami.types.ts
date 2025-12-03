@@ -9,6 +9,7 @@ export type GetAllUserResponseAmi = Pick<
 	| "last_name"
 	| "mobile_number"
 	| "is_active"
+	| "profile_image"
 	| "role_id"
 	| "updated_at"
 >;

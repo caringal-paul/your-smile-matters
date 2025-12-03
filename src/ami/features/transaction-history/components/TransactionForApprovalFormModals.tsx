@@ -17,7 +17,7 @@ import {
 import { Button } from "@/core/components/base/button";
 import { Textarea } from "@/core/components/base/textarea";
 import { ApproveTransactionRequestSchema } from "../utils/schema/approve-transaction-request.ami.schema";
-import { RejectTransactionRequestSchema } from "../utils/schema/reject-reject-request.ami.schema";
+import { RejectTransactionRequestSchema } from "../utils/schema/reject-transaction-request.ami.schema";
 
 // ============================================
 // Approval Form Modal

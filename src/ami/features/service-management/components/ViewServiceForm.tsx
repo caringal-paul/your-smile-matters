@@ -14,6 +14,8 @@ const ViewServiceForm = () => {
 
 	const { data: service, isLoading } = useGetServiceByIdQuery(id!);
 
+	console.log(service);
+
 	if (isLoading) {
 		return <>Loading</>;
 	}

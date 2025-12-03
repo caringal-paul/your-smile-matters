@@ -2,27 +2,52 @@ import { Card, CardContent } from "@/core/components/base/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
-const CategoriesFilterCard = () => {
-	const [expandedSections, setExpandedSections] = useState(false);
+interface CategoriesFilterCardProps {
+	selectedCategories: string[];
+	onCategoriesChange: (categories: string[]) => void;
+	allServices?: any[]; // Optional: to calculate real counts
+}
+
+const CategoriesFilterCard = ({
+	selectedCategories,
+	onCategoriesChange,
+	allServices = [],
+}: CategoriesFilterCardProps) => {
+	const [expandedSections, setExpandedSections] = useState(true);
+
+	// Calculate category counts from actual services
+	const getCategoryCount = (categoryName: string) => {
+		if (categoryName === "All") {
+			return allServices.length;
+		}
+		return allServices.filter((service) => service.category === categoryName)
+			.length;
+	};
 
 	const categories = [
-		{ name: "All", count: 202 },
-		{ name: "Photography", count: 68 },
-		{ name: "Beauty", count: 102 },
-		{ name: "Styling", count: 22 },
-		{ name: "Equipment", count: 32 },
-		{ name: "Other", count: 15 },
+		{ name: "All", count: getCategoryCount("All") },
+		{ name: "Photography", count: getCategoryCount("Photography") },
+		{ name: "Beauty", count: getCategoryCount("Beauty") },
+		{ name: "Styling", count: getCategoryCount("Styling") },
+		{ name: "Equipment", count: getCategoryCount("Equipment") },
+		{ name: "Other", count: getCategoryCount("Other") },
 	];
 
-	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
 	const handleCategoryChange = (category: string) => {
-		setSelectedCategories((prev) =>
-			prev.includes(category)
-				? prev.filter((c) => c !== category)
-				: [...prev, category]
-		);
+		if (category === "All") {
+			// If "All" is selected, clear all categories
+			onCategoriesChange([]);
+		} else {
+			// Toggle the category
+			const newCategories = selectedCategories.includes(category)
+				? selectedCategories.filter((c) => c !== category)
+				: [...selectedCategories, category];
+			onCategoriesChange(newCategories);
+		}
 	};
+
+	// "All" is selected when no specific categories are selected
+	const isAllSelected = selectedCategories.length === 0;
 
 	return (
 		<Card>
@@ -40,25 +65,29 @@ const CategoriesFilterCard = () => {
 				</div>
 				{expandedSections && (
 					<div className="space-y-3 mt-2">
-						{categories.map((category) => (
-							<div
-								key={category.name}
-								className="flex items-center justify-between"
-								onClick={() => handleCategoryChange(category.name)}
-							>
-								<label className="flex items-center space-x-2 cursor-pointer">
-									<div className="flex items-center justify-center w-3 h-3 border-2 border-primary rounded-full">
-										{selectedCategories.includes(category.name) && (
-											<div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-										)}
-									</div>
-									<span className="text-sm">{category.name}</span>
-								</label>
-								<span className="text-xs text-gray-500">
-									({category.count})
-								</span>
-							</div>
-						))}
+						{categories.map((category) => {
+							const isSelected =
+								category.name === "All"
+									? isAllSelected
+									: selectedCategories.includes(category.name);
+
+							return (
+								<div
+									key={category.name}
+									className="flex items-center justify-between"
+									onClick={() => handleCategoryChange(category.name)}
+								>
+									<label className="flex items-center space-x-2 cursor-pointer">
+										<div className="flex items-center justify-center w-3 h-3 border-2 border-primary rounded-full">
+											{isSelected && (
+												<div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+											)}
+										</div>
+										<span className="text-sm">{category.name}</span>
+									</label>
+								</div>
+							);
+						})}
 					</div>
 				)}
 			</CardContent>

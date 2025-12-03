@@ -38,6 +38,10 @@ export const userCreateSchema = z.object({
 		}), // no regex, backend handles ObjectId
 
 	is_active: z.boolean(),
+	profile_image: z
+		.string()
+		.url({ message: "Each images must be a valid URL" })
+		.optional(),
 });
 
 // For update operations

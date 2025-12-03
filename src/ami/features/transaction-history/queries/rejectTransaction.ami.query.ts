@@ -13,13 +13,13 @@ export const useRejectTransactionMutation = () => {
 				await amiTransactionApi.reject(id);
 
 			if (res.error || !res.status) {
-				throw new Error(res.message || "Failed to approve transaction!");
+				throw new Error(res.message || "Failed to reject transaction!");
 			}
 
 			return res.data;
 		},
 		onSuccess: async (data) => {
-			toast.success(`${data?.transaction_reference} approved successfully!`);
+			toast.success(`${data?.transaction_reference} rejected successfully!`);
 
 			queryClient.invalidateQueries({
 				queryKey: ["transactions"],

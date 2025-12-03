@@ -35,6 +35,7 @@ import { Plus, Trash2, UploadCloud, X } from "lucide-react";
 import { IncludedService } from "@/core/models/package.model";
 import { Badge } from "@/core/components/base/badge";
 import { useUpdatePackageMutation } from "../queries/updatePackage.ami.mutation";
+import { useUploadImageMutation } from "@/core/queries/uploadImage.mutation";
 
 const UpdatePackageForm = () => {
 	const { id } = useParams();
@@ -50,6 +51,10 @@ const UpdatePackageForm = () => {
 	const { mutateAsync: updatePackage, isPending: isUpdatePackageLoading } =
 		useUpdatePackageMutation();
 
+	const uploadImageMutation = useUploadImageMutation();
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string>("");
+
 	const [showAddService, setShowAddService] = useState(false);
 	const [selectedServiceId, setSelectedServiceId] = useState<string>("");
 	const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
@@ -61,7 +66,29 @@ const UpdatePackageForm = () => {
 
 	const onSubmit = async (payload: PackageAmiUpdate) => {
 		try {
-			const response = await updatePackage({ id: String(id), payload });
+			let uploadedImage = payload.image;
+
+			if (selectedFile) {
+				const imageFormData = new FormData();
+				imageFormData.append("image", selectedFile);
+
+				const customFilename = `${form.getValues("name")}_package_image`;
+
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadResult = await uploadImageMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				if (uploadResult?.path) {
+					uploadedImage = `http://localhost:3000${uploadResult.path}`;
+				}
+			}
+
+			const response = await updatePackage({
+				id: String(id),
+				payload: { ...payload, image: uploadedImage },
+			});
 
 			if (response) {
 				navigate("/admin/ami/package-management/packages");
@@ -148,10 +175,6 @@ const UpdatePackageForm = () => {
 			</div>
 		);
 	}
-
-	console.log(form.formState.isValid);
-	console.log(form.formState.isDirty);
-	console.log(form.formState.errors);
 
 	return (
 		<div className="flex flex-col mb-4 space-y-6">
@@ -669,7 +692,10 @@ const UpdatePackageForm = () => {
 														onChange={(e) => {
 															const file = e.target.files?.[0];
 															if (file) {
+																setSelectedFile(file);
 																const imageUrl = URL.createObjectURL(file);
+																setPreviewUrl(imageUrl);
+
 																field.onChange(imageUrl);
 															}
 														}}
@@ -692,7 +718,11 @@ const UpdatePackageForm = () => {
 											{field.value && (
 												<div className="mt-4 relative group w-full md:w-1/2">
 													<img
-														src={field.value || "/sf/ysm-card-fallback.png"}
+														src={
+															previewUrl ||
+															field.value ||
+															"/sf/ysm-profile-fallback.jpg"
+														}
 														alt="Uploaded image"
 														onError={(e) => {
 															e.currentTarget.src = "/sf/ysm-card-fallback.png";
@@ -701,7 +731,10 @@ const UpdatePackageForm = () => {
 													/>
 													<button
 														type="button"
-														onClick={() => {
+														onClick={(e) => {
+															e.preventDefault();
+															setSelectedFile(null);
+															setPreviewUrl("");
 															field.onChange("");
 														}}
 														className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors"

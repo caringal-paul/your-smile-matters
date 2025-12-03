@@ -90,7 +90,7 @@ export const useMyBookingColumns = (): Column<MyBookingsSfTableType>[] => {
 							// 		(row.package_id?.package_price || 0 > 0) &&
 							// 		!!row?.package_id?.package_price;
 
-							// 	const initialData: BookingFormData = {
+							// 	const initialData: BookingSfCreate = {
 							// 		services: row.services.map((service) => ({
 							// 			_id: service.service_id._id,
 							// 			quantity: service.quantity,

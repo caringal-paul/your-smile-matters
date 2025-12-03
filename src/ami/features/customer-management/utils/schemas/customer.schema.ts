@@ -49,7 +49,10 @@ export const customerCreateSchema = z.object({
 
 	// Profile fields
 	birth_date: z.string().optional(),
-	profile_image: z.string().optional(),
+	profile_image: z
+		.string()
+		.url({ message: "Each images must be a valid URL" })
+		.optional(),
 
 	// Status
 	is_active: z.boolean(),

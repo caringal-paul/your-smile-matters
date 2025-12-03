@@ -7,6 +7,12 @@ import { formatDateToTextMonth } from "@/ami/shared/helpers/formatDate";
 import image from "/profile-avatar.jpg";
 import { Badge } from "@/core/components/base/badge";
 import { useGetCustomerByIdQuery } from "../queries/getCustomerById.ami.query";
+import { getInitials } from "@/core/helpers/getInitials";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/core/components/base/avatar";
 
 const ViewCustomerForm = () => {
 	const { id } = useParams();
@@ -23,23 +29,21 @@ const ViewCustomerForm = () => {
 				<FormCard.Title>Customer Information</FormCard.Title>
 				<div className="flex flex-col w-full gap-4 lg:flex-row lg:min-h-fit">
 					{/* Profile Image */}
-					<div className="relative flex items-center justify-center lg:w-1/2 lg:min-h-full">
-						<div className="absolute transform -translate-x-1/2 top-4 left-1/2">
+					<div className="relative flex items-center justify-center lg:w-1/2 lg:min-h-full h-44">
+						<div className="absolute transform -translate-x-1/2 top-4 left-1/2 flex flex-col items-center gap-2">
 							<FormCard.Label>Profile Image</FormCard.Label>
-						</div>
-						<div
-							className={`h-36 w-36 border-avatar mt-12 lg:mt-6 border-2 flex items-center justify-center rounded-full bg-cover bg-center ${
-								!image && "bg-avatar-placeholder"
-							}`}
-							style={{
-								backgroundImage: !image ? undefined : `url('${image}')`,
-							}}
-						>
-							{!image && (
-								<Label className="text-avatar font-semibold text-[64px] tracking-tighter">
-									JD
-								</Label>
-							)}
+							<Avatar className="size-32 border-2 border-gray-300">
+								<AvatarImage
+									src={foundCustomer?.profile_image}
+									alt="Profile"
+									className="object-cover"
+								/>
+								<AvatarFallback className="text-4xl">
+									{getInitials(
+										`${foundCustomer?.first_name} ${foundCustomer?.last_name}`
+									)}
+								</AvatarFallback>
+							</Avatar>
 						</div>
 					</div>
 
@@ -86,9 +90,9 @@ const ViewCustomerForm = () => {
 						<FormCard.Field>
 							<FormCard.Label>Complete Address</FormCard.Label>
 							<Label className="font-normal text-2xs">
-								{foundCustomer?.country} {foundCustomer?.province}{" "}
-								{foundCustomer?.city} {foundCustomer?.barangay}{" "}
-								{foundCustomer?.address} {foundCustomer?.postal_code}
+								{foundCustomer?.address} {foundCustomer?.barangay}{" "}
+								{foundCustomer?.city} {foundCustomer?.postal_code}{" "}
+								{foundCustomer?.province} {foundCustomer?.country}{" "}
 							</Label>
 						</FormCard.Field>
 						{/* Account Status */}

@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../shared/components/Navbar";
 import FooterSection from "../features/home/components/FooterSection";
 import { useMyCredentials } from "../store/useMyCredentials";
+import BookingFormModal from "../features/booking/components/BookingFormModal";
 
 const MainLayout = () => {
 	const [isScrolled, setIsScrolled] = useState(false);
@@ -43,6 +44,8 @@ const MainLayout = () => {
 			<Outlet />
 
 			<FooterSection />
+
+			<BookingFormModal />
 		</div>
 	);
 };

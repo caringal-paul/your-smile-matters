@@ -7,10 +7,13 @@ import sfAuthApi, {
 } from "@/core/api/auth/store-front/auth.sf.api";
 import { CustomerLoginResponse } from "../utils/types/auth-response.sf.types";
 import { useMyCredentials } from "@/store-front/store/useMyCredentials";
+import { useGetMeMutation } from "../../profile/queries/getMe.sf.query";
 
 // TODO INTEGRATE REGISTER THEN CHECK THE PROCESS AGAIN IF GOOD IMPROVE EVERYTHING THEN AFTER, DO THE TRANSACTION VIEW OF CUSTOMER SIDE
 export const useLoginCustomerMutation = () => {
 	const setMyCredentials = useMyCredentials((state) => state.setMyCredentials);
+	const { data: currentUser, isLoading: isFetchingMyDetails } =
+		useGetMeMutation();
 
 	return useMutation({
 		mutationFn: async (payload: LoginPayloadSf) => {
@@ -37,25 +40,18 @@ export const useLoginCustomerMutation = () => {
 				);
 			}
 
-			if (data?.customer) {
-				setMyCredentials({
-					_id: data.customer._id,
-					customer_no: data.customer.customer_no,
-					email: data.customer.email,
-					first_name: data.customer.first_name,
-					last_name: data.customer.last_name,
-					mobile_number: data.customer.mobile_number,
-					gender: data.customer.gender,
-					is_active: data.customer.is_active,
-					created_at: data.customer.created_at,
-					updated_at: data.customer.updated_at,
-				});
-			}
-
 			queryClient.invalidateQueries({
 				queryKey: ["customer-logged-in"],
 				refetchType: "all",
 			});
+
+			if (currentUser) {
+				setMyCredentials(currentUser);
+				return;
+			} else if (data?.customer) {
+				setMyCredentials(data.customer);
+				return;
+			}
 		},
 
 		onError: (error: any) => {

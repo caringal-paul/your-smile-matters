@@ -1,4 +1,5 @@
 // src/store-front/store/useMyCredentials.ts
+import { CustomerModel } from "@/core/models/customer.model";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -17,8 +18,8 @@ export type MyCredentials = {
 };
 
 type MyCredentialsState = {
-	myCredentials: MyCredentials | null;
-	setMyCredentials: (data: MyCredentials) => void;
+	myCredentials: CustomerModel | null;
+	setMyCredentials: (data: CustomerModel) => void;
 	clearMyCredentials: () => void;
 };
 

@@ -88,7 +88,7 @@ const photographerBaseSchema = z.object({
 
 	mobile_number: z.string().trim().optional(),
 
-	bio: z.string().max(1000, "Bio cannot exceed 1000 characters").optional(),
+	bio: z.string().optional(),
 
 	profile_image: z.string().optional(),
 
@@ -106,7 +106,7 @@ const photographerBaseSchema = z.object({
 		.max(5, "Cannot have more than 5 specialties"),
 
 	photo_gallery: z
-		.array(z.string())
+		.array(z.string().url({ message: "Each images must be a valid URL" }))
 		// .regex(imageUrlRegex, "Invalid image URL format"))
 		.max(9, "Photo gallery cannot have more than 9 images")
 		.optional(),

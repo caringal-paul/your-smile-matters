@@ -1,9 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState, useCallback } from "react";
-import {
-	BookingFormData,
-	useBookingFormStore,
-} from "@/store-front/store/useBookingFormStore";
+import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
 import {
 	Dialog,
 	DialogClose,
@@ -20,6 +17,7 @@ import StepFiveForm from "./StepFiveForm";
 import BookingFormStepsHeader from "./BookingFormStepsHeader";
 import { Loader2, X } from "lucide-react";
 import { useGetAllServicesQuerySf } from "../../service/queries/getServices.sf.query";
+import { BookingSfCreate } from "../utils/types/booking-response.sf.types";
 
 const BookingFormModal = () => {
 	const { modalOpen, closeModal, formData, clearForm, loading } =
@@ -31,19 +29,13 @@ const BookingFormModal = () => {
 
 	const manualClose = useRef(false);
 
-	const { handleSubmit, reset } = useForm<BookingFormData>({
+	const { reset } = useForm<BookingSfCreate>({
 		defaultValues: formData,
 	});
 
-	// Reset formData on modal open
 	useEffect(() => {
 		if (modalOpen) reset(formData);
 	}, [modalOpen, formData, reset]);
-
-	const onSubmit = (data: BookingFormData) => {
-		clearForm();
-		closeModal();
-	};
 
 	const handleClose = () => {
 		clearForm();
@@ -65,7 +57,7 @@ const BookingFormModal = () => {
 				manualClose.current = false;
 			}}
 		>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form>
 				{loading ? (
 					<DialogContent className="w-fit h-fit">
 						<Loader2 className="animate-spin text-primary" size={48} />

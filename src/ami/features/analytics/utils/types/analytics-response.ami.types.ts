@@ -7,10 +7,12 @@ export type OverviewMetricsAmiResponse = {
 		confirmed: number;
 		ongoing: number;
 		growth: number;
+		last30Days: number;
 	};
 	revenue: {
 		total: number;
 		thisMonth: number;
+		last30Days: number;
 		average: number;
 		growth: number;
 		totalDiscounts: number;
@@ -65,13 +67,13 @@ export type PhotographerPerformanceAmiResponse = {
 	netRevenue: number;
 	averageRating: number;
 	totalRatings: number;
-	profileImage: string | null;
+	profileImage?: string;
 };
 
 export type TopCustomerAmiResponse = {
 	_id: string;
 	customerName: string;
-	profileImage: string | null;
+	profileImage?: string;
 	email: string;
 	totalBookings: number;
 	totalSpent: number;

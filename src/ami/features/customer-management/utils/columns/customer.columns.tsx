@@ -12,11 +12,34 @@ import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors
 import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
 import { CustomerAmiTableType } from "../types/customer-table.types";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/core/components/base/avatar";
+import { getInitials } from "@/core/helpers/getInitials";
 
 export const useCustomerColumns = (): Column<CustomerAmiTableType>[] => {
 	const navigate = useNavigate();
 
 	const columns: Column<CustomerAmiTableType>[] = [
+		{
+			key: "profile_image",
+			label: "",
+			priority: 1,
+			render: (_, row) => (
+				<Avatar className="ml-4">
+					<AvatarImage
+						src={row.profile_image}
+						alt="@shadcn"
+						// className="size-6 bg-red-500"
+					/>
+					<AvatarFallback>
+						{getInitials(`${row.first_name} ${row.last_name}`)}
+					</AvatarFallback>
+				</Avatar>
+			),
+		},
 		{
 			key: "customer_no",
 			label: "Customer No",

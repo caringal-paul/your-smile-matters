@@ -13,6 +13,7 @@ import {
 	PHOTOGRAPHER_TABLE_SEARCH_KEYS,
 } from "../constants/photographer.constants";
 import TableFilter from "@/ami/shared/components/filter/TableFilter";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const PhotographerTable = () => {
 	const navigate = useNavigate();
@@ -39,30 +40,38 @@ const PhotographerTable = () => {
 		dateFields: ["updated_at"],
 	});
 
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						setFilters={setFiltersDraft}
 						filterOptions={PHOTOGRAPHER_MODULE_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 
-				<Button onClick={() => navigate("create/photographer")}>
+				<Button
+					onClick={() => navigate("create/photographer")}
+					className="w-full sm:w-fit"
+				>
 					<PlusCircle />
 					Create Photographer
 				</Button>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} />
+			)}
 		</div>
 	);
 };

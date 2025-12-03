@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/core/components/base/button";
 import { Input } from "@/core/components/base/input";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
@@ -68,19 +68,18 @@ export interface Package {
 
 const PackagePage = () => {
 	const navigate = useNavigate();
+	const myCredentials = useMyCredentials((state) => state.myCredentials);
+
+	// Filtering states
+	const [searchQuery, setSearchQuery] = useState("");
+	const [sortBy, setSortBy] = useState("");
+
+	// Pagination state
 	const [currentPage, setCurrentPage] = useState(1);
 	const packagesPerPage = 6;
 
-	const myCredentials = useMyCredentials((state) => state.myCredentials);
-
-	const {
-		openModal,
-		clearForm,
-		setLoading,
-		saveOriginalForm,
-		setFieldImmediate,
-		originalFormData,
-	} = useBookingFormStore();
+	const { openModal, clearForm, setLoading, saveOriginalForm } =
+		useBookingFormStore();
 
 	const handleBook = (
 		pkg: GetAllPackageResponseSf,
@@ -144,7 +143,6 @@ const PackagePage = () => {
 		} catch (error) {
 			console.error(error);
 		} finally {
-			// small timeout to ensure loading state renders
 			setLoading(false);
 			openModal();
 		}
@@ -152,10 +150,53 @@ const PackagePage = () => {
 
 	const { data: allPackages = [], isPending } = useGetAllPackagesQuerySf();
 
-	const totalPages = Math.ceil(allPackages.length / packagesPerPage);
+	// Filter packages based on search query
+	const filteredPackages = allPackages.filter((pkg) => {
+		const matchesSearch =
+			searchQuery.trim() === "" ||
+			pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			pkg?.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+		return matchesSearch;
+	});
+
+	// Sort filtered packages
+	const sortedPackages = [...filteredPackages].sort((a, b) => {
+		const getTotalPrice = (pkg: GetAllPackageResponseSf) => {
+			const totalServicesPrice = pkg.services.reduce(
+				(total, service) => total + service.price_per_unit * service.quantity,
+				0
+			);
+			return pkg.package_price > 0 ? pkg.package_price : totalServicesPrice;
+		};
+
+		switch (sortBy) {
+			case "price-low":
+				return getTotalPrice(a) - getTotalPrice(b);
+			case "price-high":
+				return getTotalPrice(b) - getTotalPrice(a);
+			case "newest":
+				return (
+					new Date(b.created_at || 0).getTime() -
+					new Date(a.created_at || 0).getTime()
+				);
+			case "popular":
+				return (b.looks || 0) - (a.looks || 0);
+			default:
+				return 0;
+		}
+	});
+
+	// Calculate pagination
+	const totalPages = Math.ceil(sortedPackages.length / packagesPerPage);
 	const startIndex = (currentPage - 1) * packagesPerPage;
 	const endIndex = startIndex + packagesPerPage;
-	const currentPackages = allPackages.slice(startIndex, endIndex);
+	const currentPackages = sortedPackages.slice(startIndex, endIndex);
+
+	// Reset to page 1 when filters change
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchQuery, sortBy]);
 
 	// Pagination handlers
 	const goToPage = (page: number) => {
@@ -192,6 +233,16 @@ const PackagePage = () => {
 		return pages;
 	};
 
+	// Clear all filters
+	const handleClearFilters = () => {
+		setSearchQuery("");
+		setSortBy("");
+		setCurrentPage(1);
+	};
+
+	// Check if any filters are active
+	const hasActiveFilters = searchQuery !== "" || sortBy !== "";
+
 	if (isPending) {
 		return <>Loading</>;
 	}
@@ -208,6 +259,8 @@ const PackagePage = () => {
 					<Input
 						className="h-[38px] text-sm xl:text-base placeholder:text-base font-normal"
 						placeholder="Browse for package names here"
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 
 					{/* Search Button */}
@@ -266,15 +319,20 @@ const PackagePage = () => {
 						<div className="flex flex-row gap-4">
 							<h1 className="mb-2 text-2xl font-bold">
 								We Found{" "}
-								<span className="text-primary">{allPackages.length}</span>{" "}
+								<span className="text-primary">{sortedPackages.length}</span>{" "}
 								Packages
 							</h1>
-							<Button className="text-xs rounded-2xl px-4 py-2 h-8 bg-secondary hover:bg-secondary-foreground">
-								Clear Filter
-							</Button>
+							{hasActiveFilters && (
+								<Button
+									onClick={handleClearFilters}
+									className="text-xs rounded-2xl px-4 py-2 h-8 bg-secondary hover:bg-secondary-foreground"
+								>
+									Clear Filter
+								</Button>
+							)}
 						</div>
 						<div className="flex items-center gap-2">
-							<Select>
+							<Select value={sortBy} onValueChange={setSortBy}>
 								<SelectTrigger className="w-[300px] xl:text-sm h-[38px] px-4">
 									<SelectValue
 										placeholder="Sort packages"
@@ -307,103 +365,123 @@ const PackagePage = () => {
 
 					{/* Page Info */}
 					<div className="mb-4 text-sm text-gray-600">
-						Showing {startIndex + 1}-{Math.min(endIndex, allPackages.length)} of{" "}
-						{allPackages.length} packages
+						Showing {sortedPackages.length > 0 ? startIndex + 1 : 0}-
+						{Math.min(endIndex, sortedPackages.length)} of{" "}
+						{sortedPackages.length} packages
 					</div>
 
-					<div className="flex flex-col space-y-4 mb-8">
-						{currentPackages.map((packageItem) => {
-							const totalServicesPrice = packageItem.services.reduce(
-								(total, service) =>
-									total + service.price_per_unit * service.quantity,
-								0
-							);
+					{/* Packages List */}
+					{currentPackages.length > 0 ? (
+						<div className="flex flex-col space-y-4 mb-8">
+							{currentPackages.map((packageItem) => {
+								const totalServicesPrice = packageItem.services.reduce(
+									(total, service) =>
+										total + service.price_per_unit * service.quantity,
+									0
+								);
 
-							const hasCustomPackagePrice =
-								packageItem.package_price > 0 && !!packageItem.package_price;
+								const hasCustomPackagePrice =
+									packageItem.package_price > 0 && !!packageItem.package_price;
 
-							return (
-								<PackageAccordionCard
-									key={packageItem._id}
-									id={packageItem._id}
-									name={packageItem.name}
-									description={packageItem.description}
-									image={packageItem.image}
-									status={
-										packageItem.is_available ? "available" : "unavailable"
-									}
-									services={packageItem.services.map(
-										(service) => service.service_details?.name ?? ""
-									)}
-									price={
-										hasCustomPackagePrice
-											? packageItem.package_price
-											: totalServicesPrice
-									}
-									oldPrice={
-										hasCustomPackagePrice ? totalServicesPrice : undefined
-									}
-									looks={packageItem.looks}
-									onBook={() => {
-										window.scrollTo({ top: 0, behavior: "smooth" });
-										handleBook(
-											packageItem,
-											totalServicesPrice,
+								return (
+									<PackageAccordionCard
+										key={packageItem._id}
+										id={packageItem._id}
+										name={packageItem.name}
+										description={packageItem.description}
+										image={packageItem.image}
+										status={
+											packageItem.is_available ? "available" : "unavailable"
+										}
+										services={packageItem.services.map(
+											(service) => service.service_details?.name ?? ""
+										)}
+										price={
 											hasCustomPackagePrice
-										);
-									}}
-									onView={() => {
-										window.scrollTo({ top: 0, behavior: "smooth" });
-										navigate(
-											`/packages/package/${packageItem._id}/package-details`
-										);
-									}}
-								/>
-							);
-						})}
-					</div>
+												? packageItem.package_price
+												: totalServicesPrice
+										}
+										oldPrice={
+											hasCustomPackagePrice ? totalServicesPrice : undefined
+										}
+										looks={packageItem.looks}
+										onBook={() => {
+											window.scrollTo({ top: 0, behavior: "smooth" });
+											handleBook(
+												packageItem,
+												totalServicesPrice,
+												hasCustomPackagePrice
+											);
+										}}
+										onView={() => {
+											window.scrollTo({ top: 0, behavior: "smooth" });
+											navigate(
+												`/packages/package/${packageItem._id}/package-details`
+											);
+										}}
+									/>
+								);
+							})}
+						</div>
+					) : (
+						<div className="flex flex-col items-center justify-center py-16 text-center">
+							<p className="text-xl text-gray-500 mb-2">No packages found</p>
+							<p className="text-sm text-gray-400 mb-4">
+								Try adjusting your search
+							</p>
+							{hasActiveFilters && (
+								<Button onClick={handleClearFilters} variant="outline">
+									Clear All Filters
+								</Button>
+							)}
+						</div>
+					)}
 
 					{/* Pagination */}
-					<div className="flex items-center justify-center space-x-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							disabled={currentPage === 1}
-							onClick={goToPrevPage}
-						>
-							<ChevronLeft size={16} />
-						</Button>
+					{totalPages > 1 && (
+						<>
+							<div className="flex items-center justify-center space-x-2">
+								<Button
+									variant="ghost"
+									size="sm"
+									disabled={currentPage === 1}
+									onClick={goToPrevPage}
+								>
+									<ChevronLeft size={16} />
+								</Button>
 
-						{getPageNumbers().map((pageNum) => (
-							<Button
-								key={pageNum}
-								variant={currentPage === pageNum ? "default" : "ghost"}
-								size="sm"
-								className={
-									currentPage === pageNum
-										? "w-8 h-8 text-white bg-primary rounded-full hover:bg-primary/80"
-										: "w-8 h-8"
-								}
-								onClick={() => goToPage(pageNum)}
-							>
-								{pageNum}
-							</Button>
-						))}
+								{getPageNumbers().map((pageNum) => (
+									<Button
+										key={pageNum}
+										variant={currentPage === pageNum ? "default" : "ghost"}
+										size="sm"
+										className={
+											currentPage === pageNum
+												? "w-8 h-8 text-white bg-primary rounded-full hover:bg-primary/80"
+												: "w-8 h-8"
+										}
+										onClick={() => goToPage(pageNum)}
+									>
+										{pageNum}
+									</Button>
+								))}
 
-						<Button
-							variant="ghost"
-							size="sm"
-							disabled={currentPage === totalPages}
-							onClick={goToNextPage}
-						>
-							<ChevronRight size={16} />
-						</Button>
-					</div>
+								<Button
+									variant="ghost"
+									size="sm"
+									disabled={currentPage === totalPages}
+									onClick={goToNextPage}
+								>
+									<ChevronRight size={16} />
+								</Button>
+							</div>
 
-					{/* Pagination Info */}
-					<div className="mt-4 text-center text-sm text-gray-500">
-						Page {currentPage} of {totalPages}
-					</div>
+							{/* Pagination Info */}
+							<div className="mt-4 text-center text-sm text-gray-500">
+								Page {currentPage} of {totalPages}
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

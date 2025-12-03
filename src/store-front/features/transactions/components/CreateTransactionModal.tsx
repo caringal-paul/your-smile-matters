@@ -12,7 +12,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/core/components/base/dialog";
-import { Input } from "@/core/components/base/input";
 import {
 	Form,
 	FormDescription,
@@ -21,7 +20,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/core/components/base/form";
-import FormCard from "@/ami/shared/components/card/FormCard";
 
 import {
 	transactionCreateSchema,
@@ -43,6 +41,8 @@ import { PricingInput } from "@/core/components/custom/CustomInput";
 import { Textarea } from "@/core/components/base/textarea";
 import { useCreateTransactionMutation } from "../queries/createTransaction.sf.mutation";
 import { Spinner } from "@/core/components/base/spinner";
+import { useUploadImagesMutation } from "@/core/queries/uploadImages.mutation";
+import { useState } from "react";
 
 type CreateTransactionModalProps = {
 	bookingId: string;
@@ -62,6 +62,9 @@ const CreateTransactionModal = ({
 	const { mutateAsync: createTransaction, isPending: isTransactionSending } =
 		useCreateTransactionMutation();
 
+	const uploadImagesMutation = useUploadImagesMutation();
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
 	const form = useForm<TransactionSfCreate>({
 		resolver: zodResolver(transactionCreateSchema),
 		defaultValues: {
@@ -78,30 +81,74 @@ const CreateTransactionModal = ({
 	const isFull = (proofImages ?? []).length >= MAX_IMAGES;
 
 	const onSubmit = async (data: TransactionSfCreate) => {
-		await createTransaction({ id: bookingId, payload: data }).then(() => {
+		try {
+			let uploadedImagePaths: string[] = [];
+
+			// Upload only if user selected files
+			if (selectedFiles.length > 0) {
+				const imageFormData = new FormData();
+
+				selectedFiles.forEach((file) => {
+					imageFormData.append("images", file);
+				});
+
+				const customFilename = `${bookingId}_transaction_proof`;
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadRes = await uploadImagesMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				uploadedImagePaths =
+					uploadRes?.map((res) => {
+						return `http://localhost:3000${res.path}`;
+					}) || [];
+
+				if (Array.isArray(uploadRes) && uploadRes.length > 0) {
+					form.setValue("payment_proof_images", uploadedImagePaths);
+				}
+			}
+
+			await createTransaction({
+				id: bookingId,
+				payload: {
+					...data,
+					payment_proof_images: uploadedImagePaths,
+				},
+			});
+
 			form.reset();
+			setSelectedFiles([]);
 			setIsModalOpen(false);
-		});
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
-		if (files) {
-			const fileArray = Array.from(files);
-			const remainingSlots = MAX_IMAGES - (proofImages?.length || 0);
-			const filesToAdd = fileArray.slice(0, remainingSlots);
+		if (!files) return;
 
-			const newPhotos = filesToAdd.map((file) => URL.createObjectURL(file));
-			form.setValue("payment_proof_images", [
-				...(proofImages || []),
-				...newPhotos,
-			]);
-		}
-		// Reset input
+		const fileArray = Array.from(files);
+		const remainingSlots = MAX_IMAGES - selectedFiles.length;
+		const filesToAdd = fileArray.slice(0, remainingSlots);
+
+		// Add the actual File objects
+		setSelectedFiles((prev) => [...prev, ...filesToAdd]);
+
+		// Add preview URLs to the form field
+		const newPreviewUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+		form.setValue("payment_proof_images", [
+			...(form.getValues("payment_proof_images") || []),
+			...newPreviewUrls,
+		]);
+
 		e.target.value = "";
 	};
 
 	const removeImage = (index: number) => {
+		setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+
 		const newPhotos = (proofImages ?? []).filter((_, i) => i !== index);
 		form.setValue("payment_proof_images", newPhotos);
 	};
@@ -276,7 +323,6 @@ const CreateTransactionModal = ({
 								/>
 							</div>
 
-							{/* Payment Proof Images */}
 							<div className="col-span-1 border-l-border border-l-[1px] pl-4">
 								<FormField
 									control={form.control}
@@ -290,7 +336,6 @@ const CreateTransactionModal = ({
 												Proof of Payment*
 											</FormLabel>
 											<div className="w-full flex-1 flex flex-col">
-												{/* Upload Area - Full space when no images */}
 												{!hasImages && (
 													<div
 														className="border-2 border-dashed border-gray-300 rounded-lg p-14 2xl:p-20 text-center hover:border-gray-400 transition-colors flex-1 flex items-center justify-center hover:cursor-pointer"

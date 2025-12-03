@@ -12,6 +12,7 @@ import {
 } from "../constants/customer-constants";
 import { useGetAllCustomersQuery } from "../queries/getCustomers.ami.query";
 import DataTable from "@/ami/shared/components/table/DataTable";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const CustomerTable = () => {
 	const { data: customers = [], isLoading } = useGetAllCustomersQuery();
@@ -35,25 +36,30 @@ const CustomerTable = () => {
 		keys: CUSTOMER_TABLE_SEARCH_KEYS,
 	});
 
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						setFilters={setFiltersDraft}
 						filterOptions={CUSTOMER_MODULE_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} />
+			)}
 		</div>
 	);
 };

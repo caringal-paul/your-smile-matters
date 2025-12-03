@@ -41,7 +41,7 @@ import {
 import {
 	rejectTransactionRequestSchema,
 	RejectTransactionRequestSchema,
-} from "../utils/schema/reject-reject-request.ami.schema";
+} from "../utils/schema/reject-transaction-request.ami.schema";
 import {
 	RequestApprovalFormModal,
 	RequestRejectionFormModal,

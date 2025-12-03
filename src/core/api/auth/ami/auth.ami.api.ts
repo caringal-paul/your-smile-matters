@@ -75,13 +75,14 @@ const amiAuthApi = {
 		}
 	},
 
-	async logout(
-		id: string
-	): Promise<BaseResponseDto<GetByIdCustomerResponseAmi>> {
+	async logout(refreshToken: string): Promise<BaseResponseDto<null>> {
+		const payload = { refresh_token: refreshToken };
+
 		try {
-			const response = await adminApiClient.get<
-				BaseResponseDto<GetByIdCustomerResponseAmi>
-			>(`${ENDPOINT}/${id}`);
+			const response = await adminApiClient.post<BaseResponseDto<null>>(
+				`${ENDPOINT}/logout`,
+				payload
+			);
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);

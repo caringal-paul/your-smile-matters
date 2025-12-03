@@ -3,8 +3,8 @@ import { BaseResponseDto } from "@/core/types/base.types";
 import { queryClient } from "@/core/lib/react-query/react-query-client";
 import { toast } from "sonner";
 import { TransactionSfCreate } from "../utils/schema/transaction.sf.schema";
-import { TransactionResponse } from "../utils/types/transaction-response.sf.types";
 import sfTransactionsApi from "@/core/api/transaction/sf/transaction.sf.api";
+import { TransactionResponse } from "@/core/types/base-response.types";
 
 type CreateTransactionPaylod = {
 	id: string;

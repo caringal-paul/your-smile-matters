@@ -53,6 +53,7 @@ import { useSendRescheduleBookingForApprovalMutation } from "../queries/sendResc
 import { useSendCancelBookingForApprovalMutation } from "../queries/sendCancelBookingForApproval.sf.mutation";
 import { RequestCancelBookingFormModal } from "./RequestCancelBookingFormModal";
 import { BookingRatingModal, RatableType } from "./RatingModal";
+import BookingPDFExport from "@/core/components/custom/BookingPDFExport";
 
 const BookingDetails = () => {
 	const navigate = useNavigate();
@@ -127,6 +128,7 @@ const BookingDetails = () => {
 		return <div>Loading...</div>;
 	}
 
+	console.log(booking);
 	return (
 		<Card className="h-full w-full flex flex-col">
 			<CardHeader className="pb-3 border-gray-300 border-b-[1px] drop-shadow-sm shadow-sm">
@@ -134,18 +136,37 @@ const BookingDetails = () => {
 					<div>
 						<div className="flex flex-row gap-2 items-center">
 							<CardTitle className="text-3xl mr-2">Booking Details</CardTitle>
-							<Button
-								onClick={() => setIsRescheduleFormOpen(true)}
-								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Rescheduled"]}`}
-							>
-								Reschedule
-							</Button>
-							<Button
-								onClick={() => setIsCancelFormOpen(true)}
-								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Cancelled"]}`}
-							>
-								Cancel
-							</Button>
+							{booking &&
+							booking.status !== "Cancelled" &&
+							booking.status !== "Completed" &&
+							booking.status !== "Ongoing" ? (
+								<Button
+									onClick={() => setIsRescheduleFormOpen(true)}
+									className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Rescheduled"]}`}
+								>
+									Reschedule
+								</Button>
+							) : null}
+
+							{booking &&
+							booking.status !== "Cancelled" &&
+							booking.status !== "Completed" &&
+							booking.status !== "Ongoing" ? (
+								<Button
+									onClick={() => setIsCancelFormOpen(true)}
+									className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${BOOKING_STATUS_COLORS["Rescheduled"]} ${BOOKING_STATUS_COLORS["Cancelled"]}`}
+								>
+									Cancel
+								</Button>
+							) : null}
+
+							{booking && (
+								<BookingPDFExport
+									data={booking}
+									buttonText="Export as PDF"
+									buttonClassName="rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:bg-primary/90 bg-primary text-white"
+								/>
+							)}
 						</div>
 
 						<CardDescription className="text-lg">
@@ -155,37 +176,8 @@ const BookingDetails = () => {
 							</span>
 						</CardDescription>
 
-						{/* {booking?.status === "Completed" && (
-							<div className="space-y-3">
-								<Label className="font-semibold text-base">
-									RATE YOUR EXPERIENCE:
-								</Label>
-								<BookingRatingModal
-									bookingId={booking._id}
-									bookingReference={booking.booking_reference}
-									items={[
-										...(booking.package_id
-											? [
-													{
-														id: booking.package_id._id,
-														name: booking.package_id.name,
-														type: "Package" as RatableType,
-													},
-											  ]
-											: []),
-										...booking.services.map((s) => ({
-											id: s.service_id._id,
-											name: s.service_id.name,
-											type: "Service" as RatableType,
-										})),
-									]}
-									//   existingRatings={myRatings} // Fetch from API
-								/>
-							</div>
-						)} */}
-
 						{booking?.status === "Completed" && (
-							<div className="space-y-3">
+							<div className="flex flex-row gap-2 items-center mt-2">
 								<Label className="font-semibold text-base">
 									RATE YOUR EXPERIENCE:
 								</Label>
@@ -485,7 +477,12 @@ const BookingDetails = () => {
 																);
 															}}
 														>
-															{transaction?.transaction_reference}
+															{transaction?.transaction_reference}{" "}
+															<span className="font-medium">
+																{transaction?.transaction_type === "Refund"
+																	? "(Refund)"
+																	: ""}
+															</span>
 														</Button>
 													</TooltipTrigger>
 													<TooltipContent

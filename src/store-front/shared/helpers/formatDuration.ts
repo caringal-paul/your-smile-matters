@@ -57,3 +57,16 @@ export function formatDurationByHours(hours: number): string {
 
 	return result;
 }
+
+export function formatTime24to12(time: string): string {
+	const [hourStr, minuteStr] = time.split(":");
+	let hour = parseInt(hourStr, 10);
+	const minutes = minuteStr;
+
+	const ampm = hour >= 12 ? "PM" : "AM";
+
+	hour = hour % 12;
+	if (hour === 0) hour = 12;
+
+	return `${hour}:${minutes} ${ampm}`;
+}

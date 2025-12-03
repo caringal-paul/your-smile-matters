@@ -14,25 +14,13 @@ import {
 	X,
 	CheckCircle,
 } from "lucide-react";
-import {
-	PaymentMethod,
-	useBookingFormStore,
-} from "@/store-front/store/useBookingFormStore";
+import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import {
 	formatToNormalDate,
 	formatToNormalTime,
 } from "@/ami/shared/helpers/formatDate";
 import parse from "html-react-parser";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "@/core/components/base/select";
 import { GetAllServiceResponseSf } from "../../service/utils/types/service-response.sf.types";
 import { useMyCredentials } from "@/store-front/store/useMyCredentials";
 import CloseBookingFormConfirmationModal from "./CloseBookingFormConfirmationModal";
@@ -89,11 +77,8 @@ const StepFourForm = ({ allServices }: StepFourFormProps) => {
 				</Label>
 			</div>
 
-			{/* Main Content */}
 			<div className="flex flex-col lg:flex-row gap-2 pb-6">
-				{/* Left Side - Booking Summary */}
 				<div className="flex-1 space-y-2">
-					{/* Services Section */}
 					<div className="bg-white rounded-lg border border-border p-4 shadow-sm">
 						<h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
 							<Camera className="size-5 text-primary" />
@@ -172,9 +157,6 @@ const StepFourForm = ({ allServices }: StepFourFormProps) => {
 									<p className="font-normal text-xs">
 										{formatToNormalTime(formData.start_time)} -{" "}
 										{formatToNormalTime(formData.end_time)}
-										{/* {formatTo24HourTime(formData.start_time || "")}
-										{formData.end_time &&
-											` - ${formatTo24HourTime(formData.end_time)}`} */}
 									</p>
 								</div>
 							</div>
@@ -325,51 +307,6 @@ const StepFourForm = ({ allServices }: StepFourFormProps) => {
 						</div>
 					)}
 
-					{/* {canProceedToStep(5) ? (
-						<div className="px-2">
-							<Label className="font-medium text-base">
-								Method of Payment:{" "}
-							</Label>
-							<Label className="font-semibold text-base">
-								{formData.method_of_payment}
-							</Label>
-						</div>
-					) : (
-						<Select
-							value={String(mop)}
-							onValueChange={(value) => {
-								setFieldImmediate("method_of_payment", value as PaymentMethod);
-								setMop(value);
-							}}
-						>
-							<SelectTrigger
-								disabled={canProceedToStep(5) || !myCredentials}
-								className={`w-full h-[32px] xl:text-xs  ${
-									!formData.method_of_payment
-										? "text-gray-400"
-										: "text-foreground"
-								}`}
-							>
-								<SelectValue placeholder="Select method of payment" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									<SelectLabel className="text-xs">
-										Method of Payment
-									</SelectLabel>
-
-									<SelectItem value="GCash" className="xl:text-xs">
-										GCash
-									</SelectItem>
-									<SelectItem value="Cash" className="xl:text-xs">
-										Cash
-									</SelectItem>
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-					)} */}
-
-					{/* Submit Button */}
 					<Button
 						onClick={async (e) => {
 							e.preventDefault();
@@ -389,7 +326,6 @@ const StepFourForm = ({ allServices }: StepFourFormProps) => {
 
 									setFieldImmediate("is_booking_sent", true);
 								}
-								console.log(res);
 							} catch (error) {
 								console.log(error);
 							}
@@ -429,58 +365,3 @@ const StepFourForm = ({ allServices }: StepFourFormProps) => {
 };
 
 export default StepFourForm;
-
-{
-	/* <div className="bg-white rounded-lg border border-border p-4 shadow-sm">
-<h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-	<Upload className="size-4 text-primary" />
-	Payment Proof
-</h4>
-
-<div className="mb-4">
-	<input
-		ref={fileInputRef}
-		type="file"
-		accept="image/*"
-		multiple
-		onChange={handleImageUpload}
-		className="hidden"
-	/>
-	<Button
-		onClick={() => fileInputRef.current?.click()}
-		variant="ghost"
-		className="w-full"
-		disabled={uploadedImages.length >= 5}
-	>
-		<Upload className="size-4 mr-2" />
-		Upload Images ({uploadedImages.length}/5)
-	</Button>
-</div>
-
-{uploadedImages.length > 0 && (
-	<div className="grid grid-cols-2 gap-2">
-		{uploadedImages.map((image, index) => (
-			<div key={index} className="relative group">
-				<img
-					src={image}
-					alt={`Payment proof ${index + 1}`}
-					className="w-full h-20 object-cover rounded-lg border border-border"
-				/>
-				<button
-					onClick={() => handleImageRemove(index)}
-					className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-				>
-					<X className="size-3" />
-				</button>
-			</div>
-		))}
-	</div>
-)}
-
-{uploadedImages.length === 0 && (
-	<div className="text-center py-4 text-gray-500 text-sm border border-dashed border-gray-300 rounded-lg">
-		No payment proof uploaded yet
-	</div>
-)}
-</div> */
-}

@@ -17,7 +17,14 @@ export const BOOKING_TABLE_SEARCH_KEYS: (keyof BookingAmiTableType)[] = [
 ];
 
 export const BOOKING_FOR_APPROVALTABLE_SEARCH_KEYS: (keyof BookingForApprovalAmiTableType)[] =
-	["_id", "booking_reference", "request_type", "reason", "status"];
+	[
+		"_id",
+		"booking_reference",
+		"request_type",
+		"reason",
+		"status",
+		"request_reference",
+	];
 
 export const BOOKING_ROUTES: TabRoute[] = [
 	{

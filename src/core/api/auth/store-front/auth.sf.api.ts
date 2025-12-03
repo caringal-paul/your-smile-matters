@@ -22,11 +22,11 @@ export type LogoutPayloadSf = {
 };
 
 const sfAuthApi = {
-	async me(): Promise<BaseResponseDto<GetAllCustomerResponseAmi[]>> {
+	async me(): Promise<BaseResponseDto<CustomerModel>> {
 		try {
 			const response = await customerApiClient.get<
-				BaseResponseDto<GetAllCustomerResponseAmi[]>
-			>(ENDPOINT);
+				BaseResponseDto<CustomerModel>
+			>(`${ENDPOINT}/me`);
 
 			return response;
 		} catch (error) {

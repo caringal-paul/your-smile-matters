@@ -66,8 +66,6 @@ const CreatePhotographerForm = () => {
 			if (response) {
 				navigate("/admin/ami/photographer-management/photographers");
 			}
-
-			console.log("User created:", response);
 		} catch (error) {
 			console.error("Failed to create user:", error);
 		}
@@ -76,10 +74,6 @@ const CreatePhotographerForm = () => {
 	useEffect(() => {
 		form.setValue("weekly_schedule", DEFAULT_WEEKLY_SCHEDULE);
 	}, []);
-
-	console.log("Values", form.getValues());
-	console.log("Erros", form.formState.errors);
-	console.log("Is Valid", form.formState.isValid);
 
 	return (
 		<FormCard className="mb-6">
@@ -92,10 +86,8 @@ const CreatePhotographerForm = () => {
 							name="name"
 							render={({ field }) => (
 								<FormCard.Field className="lg:col-span-1">
-									<FormCard.Label htmlFor="first_name">
-										First Name
-									</FormCard.Label>
-									<Input placeholder="First name" {...field} />
+									<FormCard.Label htmlFor="name">Name</FormCard.Label>
+									<Input placeholder="Name" {...field} />
 									<div />
 									<FormMessage className="ml-1" />
 								</FormCard.Field>
@@ -886,17 +878,6 @@ const CreatePhotographerForm = () => {
 					</FormCard.Body>
 
 					<FormCard.Footer className="flex justify-end gap-2 border-dashed border-t-[1px] pt-4">
-						{Object.keys(form.formState.errors).length > 0 && (
-							<div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm">
-								<p className="font-semibold text-red-800 mb-2">
-									Validation Errors:
-								</p>
-								<pre className="text-red-600 whitespace-pre-wrap overflow-auto max-h-40">
-									{JSON.stringify(form.formState.errors, null, 2)}
-								</pre>
-							</div>
-						)}
-
 						<Button
 							variant="secondary"
 							type="button"

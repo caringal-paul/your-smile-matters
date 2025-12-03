@@ -16,6 +16,7 @@ import { BOOKING_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.c
 import { useBookingForApprovalColumns } from "../utils/columns/bookings-for-approval.columns";
 import { useGetBookingForApprovalQuery } from "../queries/getBookingsForApproval.ami.query";
 import { BookingForApprovalAmiTableType } from "../utils/types/booking-for-approval-table.ami.types";
+import { useEffect } from "react";
 
 const BookingForApprovalTable = () => {
 	const { data: bookings = [], isLoading } = useGetBookingForApprovalQuery();

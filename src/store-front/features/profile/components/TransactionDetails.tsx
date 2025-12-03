@@ -36,6 +36,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RequestTransactionFormModal } from "./RequestRefundTransactionFormModal";
 import { useSendRefundTransactionForApproval } from "../queries/sendRefundTransactionForApproval.sf.mutation";
+import TransactionPDFExport from "@/core/components/custom/TransactionPDFExport";
 
 const TransactionDetails = () => {
 	const navigate = useNavigate();
@@ -91,22 +92,32 @@ const TransactionDetails = () => {
 		<Card className="h-full w-full flex flex-col">
 			<CardHeader className="pb-3 border-gray-300 border-b-[1px] drop-shadow-sm shadow-sm">
 				<div className="flex items-start justify-between">
-					<div>
-						<div className="flex flex-row gap-4 items-center">
-							<CardTitle className="text-3xl">Transaction Details</CardTitle>
-							<Button
-								onClick={() => setIsRefundFormOpen(true)}
-								className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${TRANSACTION_STATUS_COLORS["Refunded"]} ${TRANSACTION_STATUS_COLORS["Refunded"]}`}
-							>
-								Request for Refund
-							</Button>
+					<div className="flex flex-row gap-2 items-center">
+						<div>
+							<div className="flex flex-row gap-2 items-center">
+								<CardTitle className="text-3xl">Transaction Details</CardTitle>
+								<Button
+									onClick={() => setIsRefundFormOpen(true)}
+									className={`rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:${TRANSACTION_STATUS_COLORS["Refunded"]} ${TRANSACTION_STATUS_COLORS["Refunded"]}`}
+								>
+									Request for Refund
+								</Button>
+
+								{transaction && (
+									<TransactionPDFExport
+										data={transaction}
+										buttonText="Export as PDF"
+										buttonClassName="rounded-full h-8 py-0 px-4 text-xs font-light tracking-tight shadow-lg border-border border hover:bg-primary/90 bg-primary text-white"
+									/>
+								)}
+							</div>
+							<CardDescription className="text-lg">
+								Ref:{" "}
+								<span className="text-primary font-semibold">
+									{transaction?.transaction_reference}
+								</span>
+							</CardDescription>
 						</div>
-						<CardDescription className="text-lg">
-							Ref:{" "}
-							<span className="text-primary font-semibold">
-								{transaction?.transaction_reference}
-							</span>
-						</CardDescription>
 					</div>
 					<Badge
 						className={cn(

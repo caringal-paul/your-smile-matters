@@ -25,6 +25,7 @@ type TableFilterProps<T> = {
 	setFilters: React.Dispatch<React.SetStateAction<T>>;
 	filterOptions?: FilterOptions<T>;
 	hasDateFilter?: boolean;
+	disabled?: boolean;
 	dateFilter?: {
 		type: "Today" | "Last 7 days" | "Last 30 days" | "Custom" | null;
 		startDate?: string;
@@ -46,6 +47,7 @@ const TableFilter = <T extends Record<string, string[]>>({
 	setFilters,
 	filterOptions,
 	hasDateFilter = false,
+	disabled = false,
 	dateFilter,
 	setDateFilter,
 	onApply,
@@ -59,11 +61,12 @@ const TableFilter = <T extends Record<string, string[]>>({
 
 	return (
 		<Popover>
-			<PopoverTrigger className="h-fit">
+			<PopoverTrigger className="h-fit" disabled={disabled}>
 				<Button
 					variant="ghost"
+					disabled={disabled}
 					className={cn(
-						"hover:bg-none hover:text-foreground disabled:bg-red-500",
+						"hover:bg-none hover:text-foreground disabled:bg-disabled disabled:border-0",
 						className
 					)}
 				>

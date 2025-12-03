@@ -16,6 +16,7 @@ import { Button } from "@/core/components/base/button";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllServicesQuery } from "../queries/getServices.ami.query";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const ServiceTable = () => {
 	const navigate = useNavigate();
@@ -41,30 +42,38 @@ const ServiceTable = () => {
 		keys: SERVICE_TABLE_SEARCH_KEYS,
 	});
 
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						setFilters={setFiltersDraft}
 						filterOptions={SERVICE_MODULE_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 
-				<Button onClick={() => navigate("create/service")}>
+				<Button
+					onClick={() => navigate("create/service")}
+					className="w-full sm:w-fit"
+				>
 					<PlusCircle />
 					Create Service
 				</Button>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} />
+			)}
 		</div>
 	);
 };

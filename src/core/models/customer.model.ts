@@ -15,5 +15,5 @@ export type CustomerModel = MetaData & {
 	postal_code?: string;
 	country?: string;
 	birth_date?: string;
-	profile_image?: string | null;
+	profile_image?: string;
 };

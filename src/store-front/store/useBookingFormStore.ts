@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import debounce from "lodash/debounce";
 import { formatToUtc } from "@/ami/shared/helpers/formatDate";
-import { BookingStatus } from "@/ami/shared/types/status.types";
+import { BookingSfCreate } from "../features/booking/utils/types/booking-response.sf.types";
 
 type StepKey = "step1" | "step2" | "step3" | "step4";
 
@@ -15,50 +15,16 @@ export type BookingFormService = {
 	duration_minutes?: number | null;
 };
 
-export type BookingFormData = {
-	// Step 1: Services & Customization
-	services: BookingFormService[];
-	is_customized: boolean;
-	customization_notes?: string | null;
-	customer_id?: string;
-	package_id?: string | null;
-
-	// Step 2: Date, Time & Location
-	booking_date: Date;
-	start_time: string;
-	end_time: string;
-	session_duration_minutes: number;
-	location: string;
-
-	// Step 3: Photographer & Details
-	photographer_id: string;
-	photographer_name?: string | null;
-	theme?: string | null;
-	special_requests?: string | null;
-
-	// Step 4: Payment & Pricing
-	old_amount?: number;
-	total_amount: number;
-	discount_amount: number;
-	promo_id?: string | null;
-	final_amount: number;
-
-	// Metadata
-	is_booking_sent: boolean;
-	status: BookingStatus;
-	booking_reference: string;
-};
-
 type BookingState = {
 	// Modal & Draft Management
 	modalOpen: boolean;
 	currentStep: number;
 
 	// Form Data - Flat structure for easier management
-	formData: BookingFormData;
-	originalFormData: BookingFormData | null;
+	formData: BookingSfCreate;
+	originalFormData: BookingSfCreate | null;
 
-	draft: BookingFormData | null;
+	draft: BookingSfCreate | null;
 
 	saveDraft: () => void;
 	loadDraft: () => void;
@@ -78,15 +44,15 @@ type BookingState = {
 	closeModal: () => void;
 	setLoading: (loading: boolean) => void;
 	// Debounced field updates
-	setField: <K extends keyof BookingFormData>(
+	setField: <K extends keyof BookingSfCreate>(
 		field: K,
-		value: BookingFormData[K]
+		value: BookingSfCreate[K]
 	) => void;
 
 	// Immediate field updates (for critical actions)
-	setFieldImmediate: <K extends keyof BookingFormData>(
+	setFieldImmediate: <K extends keyof BookingSfCreate>(
 		field: K,
-		value: BookingFormData[K]
+		value: BookingSfCreate[K]
 	) => void;
 
 	// Service management
@@ -105,7 +71,7 @@ type BookingState = {
 	) => void;
 
 	// Form lifecycle
-	saveOriginalForm: (formData: BookingFormData) => void;
+	saveOriginalForm: (formData: BookingSfCreate) => void;
 	resetForm: () => void;
 	clearForm: () => void;
 
@@ -117,7 +83,7 @@ type BookingState = {
 	canProceedToStep: (step: number) => boolean;
 };
 
-const initialFormData: BookingFormData = {
+const initialFormData: BookingSfCreate = {
 	services: [],
 	is_customized: false,
 	customization_notes: null,
@@ -150,9 +116,9 @@ export const useBookingFormStore = create<BookingState>()(
 		(set, get) => {
 			// Create debounced setField function
 			const debouncedSetField = debounce(
-				<K extends keyof BookingFormData>(
+				<K extends keyof BookingSfCreate>(
 					field: K,
-					value: BookingFormData[K]
+					value: BookingSfCreate[K]
 				) => {
 					const debouncedValidateStep = debounce((step: number) => {
 						get().validateStep(step);
@@ -216,9 +182,9 @@ export const useBookingFormStore = create<BookingState>()(
 
 				setField: debouncedSetField,
 
-				setFieldImmediate: <K extends keyof BookingFormData>(
+				setFieldImmediate: <K extends keyof BookingSfCreate>(
 					field: K,
-					value: BookingFormData[K]
+					value: BookingSfCreate[K]
 				) => {
 					set((state) => {
 						const updatedFormData = { ...state.formData, [field]: value };
@@ -349,7 +315,7 @@ export const useBookingFormStore = create<BookingState>()(
 					}));
 				},
 
-				saveOriginalForm: (formData: BookingFormData) => {
+				saveOriginalForm: (formData: BookingSfCreate) => {
 					const session_duration_minutes = calculateTotalDuration(
 						formData.services
 					);
@@ -534,9 +500,9 @@ export const useBookingFormStore = create<BookingState>()(
 );
 
 const clearDependentData = (
-	formData: BookingFormData,
+	formData: BookingSfCreate,
 	step: number
-): BookingFormData => {
+): BookingSfCreate => {
 	const newFormData = { ...formData };
 
 	switch (step) {

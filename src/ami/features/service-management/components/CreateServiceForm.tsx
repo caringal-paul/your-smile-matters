@@ -23,19 +23,19 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/core/components/base/select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SERVICE_OPTIONS } from "@/core/constants/options.constants";
-import { UploadCloud } from "lucide-react";
-import { ServiceCategory } from "@/core/models/service.model";
+import { UploadCloud, X } from "lucide-react";
 import { PricingInput } from "@/core/components/custom/CustomInput";
 import DurationInput from "@/core/components/custom/DurationInput";
-import { Checkbox } from "@/core/components/base/checkbox";
-import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { useCreateServiceMutation } from "../queries/createService.ami.mutation";
 import {
 	ServiceAmiCreate,
 	serviceCreateSchema,
 } from "../utils/schemas/service.schema";
+import { useUploadImagesMutation } from "@/core/queries/uploadImages.mutation";
+
+const MAX_IMAGES = 4;
 
 const CreateServiceForm = () => {
 	const navigate = useNavigate();
@@ -45,7 +45,8 @@ const CreateServiceForm = () => {
 
 	const options = SERVICE_OPTIONS;
 
-	const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
+	const uploadImagesMutation = useUploadImagesMutation();
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
 	const form = useForm<ServiceAmiCreate>({
 		resolver: zodResolver(serviceCreateSchema),
@@ -62,17 +63,85 @@ const CreateServiceForm = () => {
 		},
 	});
 
+	const serviceGallery = form.watch("service_gallery");
+	const hasImages = (serviceGallery ?? []).length > 0;
+	const isFull = (serviceGallery ?? []).length >= 4;
+
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files;
+		if (!files) return;
+
+		const fileArray = Array.from(files);
+		const remainingSlots = MAX_IMAGES - selectedFiles.length;
+		const filesToAdd = fileArray.slice(0, remainingSlots);
+
+		// Add the actual File objects
+		setSelectedFiles((prev) => [...prev, ...filesToAdd]);
+
+		// Add preview URLs to the form field
+		const newPreviewUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+		form.setValue("service_gallery", [
+			...(form.getValues("service_gallery") || []),
+			...newPreviewUrls,
+		]);
+
+		e.target.value = "";
+	};
+
+	const removeImage = (index: number) => {
+		const imageToRemove = serviceGallery?.[index];
+
+		// If it's a blob URL, remove from selectedFiles
+		if (imageToRemove?.startsWith("blob:")) {
+			const fileIndex = (serviceGallery ?? [])
+				.slice(0, index)
+				.filter((url) => url?.startsWith("blob:")).length;
+
+			setSelectedFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+		}
+
+		// Remove from form gallery
+		const newPhotos = (serviceGallery ?? []).filter((_, i) => i !== index);
+		form.setValue("service_gallery", newPhotos, {
+			shouldDirty: true,
+			shouldValidate: true,
+		});
+	};
+
 	const onSubmit = async (payload: ServiceAmiCreate) => {
 		try {
-			const response = await createService(payload);
+			let uploadedImagePaths: string[] = [];
 
-			if (response) {
-				navigate("/admin/ami/service-management/services");
+			// Upload new files
+			if (selectedFiles.length > 0) {
+				const imageFormData = new FormData();
+				selectedFiles.forEach((file) => {
+					imageFormData.append("images", file);
+				});
+
+				const customFilename = `${form.getValues("name")}_service_image`;
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadRes = await uploadImagesMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				uploadedImagePaths =
+					uploadRes?.map((res) => `http://localhost:3000${res.path}`) || [];
 			}
 
-			console.log("Service updated:", response);
+			const response = await createService({
+				...payload,
+				service_gallery: uploadedImagePaths,
+			});
+
+			if (response) {
+				form.reset();
+				setSelectedFiles([]);
+				navigate("/admin/ami/service-management/services");
+			}
 		} catch (error) {
-			console.error("Failed to create photographer:", error);
+			console.error("Failed to update service:", error);
 		}
 	};
 
@@ -226,24 +295,6 @@ const CreateServiceForm = () => {
 								Service Pricing
 							</FormCard.Title>
 
-							{/* <div className="flex items-center space-x-2">
-								<Checkbox
-									checked={isApplyingDiscount}
-									onCheckedChange={(value) => {
-										setIsApplyingDiscount(!!value);
-
-										if (value == true) {
-											form.setValue("old_price", form.getValues("price"));
-										} else {
-											form.setValue("old_price", 0);
-										}
-									}}
-								/>
-								<FormCard.Label className="!mt-0 cursor-pointer">
-									Apply price change as a discount
-								</FormCard.Label>
-							</div> */}
-
 							<FormField
 								control={form.control}
 								name="price"
@@ -256,7 +307,7 @@ const CreateServiceForm = () => {
 											placeholder="Enter service price"
 											value={!field.value ? "" : String(field.value)}
 											onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-												const value = e.target.value.replace(/[^\d.]/g, ""); // Remove non-numeric chars except decimal
+												const value = e.target.value.replace(/[^\d.]/g, "");
 												const numericValue =
 													value === "" ? 0 : parseFloat(value);
 
@@ -281,7 +332,7 @@ const CreateServiceForm = () => {
 											placeholder="Enter old price"
 											value={!field.value ? "" : String(field.value)}
 											onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-												const value = e.target.value.replace(/[^\d.]/g, ""); // Remove non-numeric chars except decimal
+												const value = e.target.value.replace(/[^\d.]/g, "");
 												const numericValue =
 													value === "" ? 0 : parseFloat(value);
 
@@ -311,95 +362,126 @@ const CreateServiceForm = () => {
 											Upload Photos
 										</FormCard.Label>
 										<div className="w-full">
-											<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-												<input
-													id="service_gallery"
-													type="file"
-													multiple
-													accept="image/*"
-													className="hidden"
-													onChange={(e) => {
-														const files = e.target.files;
-														if (files) {
-															const fileArray = Array.from(files);
-															const newPhotos = fileArray.map((file) =>
-																URL.createObjectURL(file)
-															);
-															field.onChange([
-																...(field.value || []),
-																...newPhotos,
-															]);
-														}
+											{!hasImages && (
+												<div
+													className="border-2 border-dashed border-gray-300 rounded-lg p-14 2xl:p-20 text-center hover:border-gray-400 transition-colors flex-1 flex items-center justify-center hover:cursor-pointer"
+													onClick={() => {
+														if (!isFull)
+															document
+																.getElementById("service_gallery")
+																?.click();
 													}}
-												/>
-												<label
-													htmlFor="service_gallery"
-													className="cursor-pointer flex flex-col items-center justify-center"
 												>
-													<UploadCloud className="size-16 text-gray-400 mb-4" />
-													<p className="text-sm text-gray-600 mb-1">
-														Click to upload or drag and drop
-													</p>
-													<p className="text-xs text-gray-500">
-														PNG, JPG, GIF up to 10MB
-													</p>
-												</label>
-											</div>
+													<input
+														id="service_gallery"
+														type="file"
+														multiple
+														accept="image/*"
+														className="hidden"
+														disabled={isFull}
+														onChange={handleImageChange}
+													/>
 
-											{(field.value ?? []).length > 0 && (
-												<div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-													{(field.value ?? []).map((photo, index) => (
-														<div key={index} className="relative group">
-															<img
-																src={photo || "/sf/ysm-card-fallback.png"}
-																alt={`Preview ${index + 1}`}
-																onError={(e) => {
-																	e.currentTarget.src =
-																		"/sf/ysm-card-fallback.png";
-																}}
-																className="w-full h-32 object-cover rounded-lg border border-gray-200"
-															/>
-															<button
-																type="button"
-																onClick={() => {
-																	const newPhotos = (field.value ?? []).filter(
-																		(_, i) => i !== index
-																	);
-																	field.onChange(newPhotos);
-																}}
-																className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-															>
-																<svg
-																	className="w-4 h-4"
-																	fill="none"
-																	stroke="currentColor"
-																	viewBox="0 0 24 24"
+													<label
+														htmlFor="service_gallery"
+														className={`cursor-pointer flex flex-col items-center justify-center ${
+															isFull ? "opacity-50 cursor-not-allowed" : ""
+														}`}
+													>
+														<UploadCloud className="size-16 text-gray-400 mb-4" />
+														<p className="text-sm text-gray-600 mb-1">
+															Click to upload or drag and drop
+														</p>
+														<p className="text-xs text-gray-500">
+															PNG, JPG, GIF up to 10MB (Max {MAX_IMAGES})
+														</p>
+													</label>
+												</div>
+											)}
+
+											{hasImages && (
+												<div className="space-y-4 flex flex-col flex-1 mt-4">
+													<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+														{serviceGallery.map((photo, index) => (
+															<div key={index} className="relative group">
+																<img
+																	src={photo || "/sf/ysm-card-fallback.png"}
+																	alt={`Preview ${index + 1}`}
+																	onError={(e) => {
+																		e.currentTarget.src =
+																			"/sf/ysm-card-fallback.png";
+																	}}
+																	className="w-full h-32 object-cover rounded-lg border border-gray-200"
+																/>
+
+																<button
+																	type="button"
+																	onClick={() => removeImage(index)}
+																	className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
 																>
-																	<path
-																		strokeLinecap="round"
-																		strokeLinejoin="round"
-																		strokeWidth={2}
-																		d="M6 18L18 6M6 6l12 12"
-																	/>
-																</svg>
-															</button>
+																	<X className="w-4 h-4" />
+																</button>
+															</div>
+														))}
+													</div>
+
+													{!isFull && (
+														<div
+															className="flex-1 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors hover:cursor-pointer"
+															onClick={() =>
+																document
+																	.getElementById("service_gallery")
+																	?.click()
+															}
+														>
+															<input
+																id="service_gallery"
+																type="file"
+																multiple
+																accept="image/*"
+																className="hidden"
+																disabled={isFull}
+																onChange={handleImageChange}
+															/>
+
+															<label
+																htmlFor="service_gallery"
+																className="cursor-pointer flex flex-col items-center justify-center"
+															>
+																<UploadCloud className="size-16 text-gray-400 mb-4" />
+																<p className="text-sm text-gray-600 mb-1">
+																	Click to upload or drag and drop
+																</p>
+																<p className="text-xs text-gray-500">
+																	PNG, JPG, GIF up to 10MB (Max {MAX_IMAGES})
+																</p>
+															</label>
 														</div>
-													))}
+													)}
+
+													{isFull && (
+														<div className="bg-secondary/20 border border-secondary/40 rounded-lg p-3 text-center">
+															<p className="text-sm text-secondary font-medium">
+																Maximum {MAX_IMAGES} images uploaded!
+															</p>
+														</div>
+													)}
 												</div>
 											)}
 										</div>
+
 										<div />
 										<FormMessage className="ml-1" />
 									</FormCard.Field>
 								)}
 							/>
 						</FormCard.Body>
-						{/* Form Actions */}
+
 						<FormCard.Footer className="flex justify-end gap-2">
 							<Button
 								variant="secondary"
 								type="button"
-								disabled={!form.formState.isDirty}
+								disabled={!form.formState.isDirty || isCreateServiceLoading}
 								onClick={(e) => {
 									e.stopPropagation();
 									e.preventDefault();
@@ -412,9 +494,9 @@ const CreateServiceForm = () => {
 							<Button
 								className="sm:w-fit"
 								type="submit"
-								disabled={!form.formState.isDirty || !form.formState.isValid}
+								disabled={!form.formState.isDirty || isCreateServiceLoading}
 							>
-								Save Changes
+								Create Service
 							</Button>
 						</FormCard.Footer>
 					</FormCard>

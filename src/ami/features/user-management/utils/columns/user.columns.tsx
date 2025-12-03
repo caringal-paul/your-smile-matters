@@ -10,11 +10,34 @@ import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
 import StatusWithIndicator from "@/ami/shared/components/indicator/StatusWithIndicator";
 import { AVAILABILITY_STATUS_COLORS } from "@/ami/shared/constants/status-colors.constants";
 import { AvailabilityStatus } from "@/ami/shared/types/status.types";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/core/components/base/avatar";
+import { getInitials } from "@/core/helpers/getInitials";
 
 export const useUserColumns = (): Column<UserAmiTableType>[] => {
 	const navigate = useNavigate();
 
 	const columns: Column<UserAmiTableType>[] = [
+		{
+			key: "profile_image",
+			label: "",
+			priority: 1,
+			render: (_, row) => (
+				<Avatar className="ml-4">
+					<AvatarImage
+						src={row.profile_image}
+						alt="@shadcn"
+						// className="size-6 bg-red-500"
+					/>
+					<AvatarFallback>
+						{getInitials(`${row.first_name} ${row.last_name}`)}
+					</AvatarFallback>
+				</Avatar>
+			),
+		},
 		{
 			key: "full_name",
 			label: "Name",

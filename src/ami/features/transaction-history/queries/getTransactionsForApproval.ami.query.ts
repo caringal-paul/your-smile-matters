@@ -7,18 +7,19 @@ export const useGetTransactionsForApprovalQuery = () => {
 	return useQuery({
 		queryKey: ["ami-transactions-requests"],
 		queryFn: () => amiTransactionRequestsApi.getTransactionRequests(),
-		select: ({ data }): TransactionForApprovalAmiTableType[] => {
-			const transactionsRequestArray: TransactionForApprovalAmiTableType[] =
-				data?.map((transactionsRequest: TransactionRequestResponse) => {
+		select: (data): TransactionForApprovalAmiTableType[] => {
+			const transactionRequests = data.data ?? [];
+
+			return transactionRequests?.map(
+				(transactionsRequest: TransactionRequestResponse) => {
 					return {
 						...transactionsRequest,
-						transaction: transactionsRequest.transaction_id._id,
+						transaction: transactionsRequest.transaction_id?._id ?? null,
 						transaction_reference:
-							transactionsRequest.transaction_id.transaction_reference,
+							transactionsRequest.transaction_id?.transaction_reference ?? null,
 					};
-				}) ?? [];
-
-			return transactionsRequestArray;
+				}
+			);
 		},
 	});
 };

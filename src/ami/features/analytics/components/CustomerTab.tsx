@@ -59,6 +59,7 @@ const CustomerTab = () => {
 	const { data: bookingHeatmapData } = useGetBookingHeatmapAnalyticsQuery();
 	const { data: peakHoursData } = useGetPeakHoursAnalyticsQuery();
 
+	console.log(customersInsights);
 	const totalBookings =
 		bookingHeatmapData?.reduce((sum, day) => sum + day.bookingCount, 0) || 0;
 
@@ -180,9 +181,7 @@ const CustomerTab = () => {
 								<div className="flex items-center gap-3">
 									<Avatar className="ml-4">
 										<AvatarImage
-											src={
-												customer.profileImage || "/sf/ysm-profile-fallback.jpg"
-											}
+											src={customer.profileImage}
 											alt="@shadcn"
 											className="size-10 "
 										/>

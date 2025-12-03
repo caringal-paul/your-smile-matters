@@ -7,10 +7,10 @@
 @layer base {
 	:root {
 		/** AMI SIDE **/
-		--admin-primary: 132 110 98;
+		--admin-primary: 132 110 98; /** #846e62 **/
 		--admin-primary-foreground: #f0f0f0;
 		--admin-primary-hover: #6f5a4d;
-		--admin-secondary: 167 162 156;
+		--admin-secondary: 167 162 156; /** #a7a29c **/
 		--admin-secondary-foreground: #f0f0f0;
 		--admin-secondary-hover: #8f8a84;
 		--admin-background: #efeae6;

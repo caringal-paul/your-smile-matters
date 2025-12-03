@@ -13,6 +13,7 @@ import { useGetAllTransactionsQuery } from "../queries/getTransactions.ami.query
 import { useTransactionColumns } from "../utils/columns/transaction.columns";
 import { TransactionAmiTableType } from "../utils/types/transaction-history-table.types";
 import { TRANSACTION_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const TransactionTable = () => {
 	const { data: transactions = [], isLoading } = useGetAllTransactionsQuery();
@@ -45,15 +46,15 @@ const TransactionTable = () => {
 		// dateFields: ["Transaction_date"],
 	});
 
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						hasDateFilter
@@ -62,11 +63,16 @@ const TransactionTable = () => {
 						setFilters={setFiltersDraft}
 						filterOptions={TRANSACTION_TABLE_AMI_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			)}
 		</div>
 	);
 };

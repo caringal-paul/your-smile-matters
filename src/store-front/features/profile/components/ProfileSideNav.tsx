@@ -12,10 +12,10 @@ interface MenuItem {
 
 const MENU_ITEMS: MenuItem[] = [
 	{
-		id: "edit",
+		id: "edit-profile",
 		label: "Edit Profile",
 		icon: <User className="w-5 h-5" />,
-		path: "edit",
+		path: "edit-profile",
 	},
 	{
 		id: "my-bookings",
@@ -119,7 +119,7 @@ const ProfileSideNav = () => {
 							<div className="border-b border-dashed border-gray-200 my-1" />
 						)}
 					</React.Fragment>
-				))}
+				))} 
 			</nav>
 		</div>
 	);

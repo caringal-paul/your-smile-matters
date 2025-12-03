@@ -38,14 +38,16 @@ export function ServiceCard({
 						e.currentTarget.src = "/sf/ysm-card-fallback.png";
 					}}
 				/>
-				<button className="absolute p-2 bg-white rounded-lg shadow top-3 right-3 hover:bg-gray-100">
+				{/* <button className="absolute p-2 bg-white rounded-lg shadow top-3 right-3 hover:bg-gray-100">
 					<Heart size={18} className="text-gray-600" />
-				</button>
+				</button> */}
 			</CardHeader>
 
 			<CardContent className="p-4 pb-6 flex flex-col flex-1">
-				<div className="space-y-1">
-					<Label className="text-2xl font-bold tracking-normal">{title}</Label>
+				<div className="flex flex-col gap-1">
+					<Label className="whitespace-nowrap truncate text-xl 2xl:text-2xl font-bold tracking-normal">
+						{title}
+					</Label>
 					<div className="flex gap-2 items-center">
 						<Badge className="hover:bg-secondary bg-secondary">
 							{category}
@@ -71,17 +73,17 @@ export function ServiceCard({
 					</div>
 				</div>
 
-				<div className="flex items-center justify-between pt-3 mt-auto">
+				<div className="flex gap-2 items-center justify-between pt-3 mt-auto">
 					<Button
 						onClick={onBook}
-						className="text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
+						className="text-3xs 2xl:text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
 					>
 						<Book />
 						Book Service
 					</Button>
 					<Button
 						onClick={onView}
-						className="text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
+						className="text-3xs 2xl:text-2xs bg-gradient-to-r from-primary to-primary/65 hover:opacity-90 px-4"
 					>
 						<Eye /> View Service
 					</Button>

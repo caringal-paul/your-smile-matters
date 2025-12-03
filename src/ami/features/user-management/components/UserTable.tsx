@@ -15,6 +15,7 @@ import { Button } from "@/core/components/base/button";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
 import { useGetAllUsersQuery } from "../queries/getUsers.ami.query";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const UserTable = () => {
 	const navigate = useNavigate();
@@ -44,15 +45,15 @@ const UserTable = () => {
 		dateFields: ["updated_at"],
 	});
 
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						hasDateFilter
 						filters={filtersDraft}
@@ -61,16 +62,25 @@ const UserTable = () => {
 						dateFilter={dateFilterDraft}
 						setDateFilter={setDateFilterDraft}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 
-				<Button onClick={() => navigate("create/user")}>
+				<Button
+					onClick={() => navigate("create/user")}
+					className="w-full sm:w-fit"
+					disabled={isLoading}
+				>
 					<PlusCircle />
 					Create User
 				</Button>
 			</SectionHeader>
 
-			<DataTable data={filteredData} columns={columns} />
+			{!isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} />
+			)}
 		</div>
 	);
 };

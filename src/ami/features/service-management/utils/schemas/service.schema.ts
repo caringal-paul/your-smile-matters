@@ -45,7 +45,7 @@ const baseServiceSchema = z.object({
 	is_available: z.boolean(),
 
 	service_gallery: z
-		.array(z.string())
+		.array(z.string().url({ message: "Each images must be a valid URL" }))
 		.min(1, "Service gallery must have at least 1 image")
 		.max(4, "Service gallery must have at most 4 images"),
 });

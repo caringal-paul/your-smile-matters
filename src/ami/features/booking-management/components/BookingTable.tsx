@@ -10,6 +10,7 @@ import { BookingAmiTableType } from "../utils/types/booking-table.ami.types";
 import { BOOKING_TABLE_SEARCH_KEYS } from "../constants/booking.constants";
 import { useBookingColumns } from "../utils/columns/booking.columns";
 import { BOOKING_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const BookingTable = () => {
 	const { data: bookings = [], isLoading } = useGetAllBookingQuery();
@@ -40,17 +41,15 @@ const BookingTable = () => {
 		dateFields: ["booking_date"],
 	});
 
-	console.log(filteredData);
-
-	if (isLoading) {
-		return <>Loading</>;
-	}
-
 	return (
 		<div className="relative pb-4">
 			<SectionHeader hasSeparator={true}>
 				<div className="flex items-center w-full gap-2 h-9 sm:w-fit">
-					<TableSearch value={searchText} onChange={setSearchText} />
+					<TableSearch
+						value={searchText}
+						onChange={setSearchText}
+						disabled={isLoading}
+					/>
 					<TableFilter
 						filters={filtersDraft}
 						hasDateFilter
@@ -59,11 +58,15 @@ const BookingTable = () => {
 						setFilters={setFiltersDraft}
 						filterOptions={BOOKING_STATUSES_FILTER_OPTIONS}
 						onApply={applyFilters}
+						disabled={isLoading}
 					/>
 				</div>
 			</SectionHeader>
-
-			<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			)}
 		</div>
 	);
 };
