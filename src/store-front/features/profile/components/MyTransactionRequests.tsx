@@ -15,6 +15,7 @@ import { useGetMyTransactionRequestsQuery } from "../queries/getMyTransactionReq
 import { useMyTransactionRequestsColumns } from "../utils/columns/my-transaction-requests.columns";
 import { MyTransactionRequestsSfTableType } from "../utils/types/my-transaction-requests-table.sf.types";
 import { MY_TRANSACTION_REQUESTS_TABLE_SEARCH_KEYS } from "../constants/my-transaction-requests.constants";
+import CustomerLoadingFallback from "@/core/components/custom/CustomerLoadingFallback";
 
 const MyTransactionRequests = () => {
 	const { data: transactions = [], isPending: isTransactionsFetching } =
@@ -37,7 +38,11 @@ const MyTransactionRequests = () => {
 	});
 
 	if (isTransactionsFetching) {
-		return <div>Loading...</div>;
+		return (
+			<div className="h-full justify-center items-center flex">
+				<CustomerLoadingFallback />
+			</div>
+		);
 	}
 
 	return (

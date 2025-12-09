@@ -17,6 +17,7 @@ import { useBookingForApprovalColumns } from "../utils/columns/bookings-for-appr
 import { useGetBookingForApprovalQuery } from "../queries/getBookingsForApproval.ami.query";
 import { BookingForApprovalAmiTableType } from "../utils/types/booking-for-approval-table.ami.types";
 import { useEffect } from "react";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const BookingForApprovalTable = () => {
 	const { data: bookings = [], isLoading } = useGetBookingForApprovalQuery();
@@ -57,8 +58,11 @@ const BookingForApprovalTable = () => {
 					/>
 				</div>
 			</SectionHeader>
-
-			<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			)}
 		</div>
 	);
 };

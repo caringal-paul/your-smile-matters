@@ -48,6 +48,7 @@ import {
 import CameraIcon from "@/ami/shared/assets/icons/CameraIcon";
 import { useUpdateCustomerMutation } from "../queries/updateCustomer.sf.mutation";
 import { useUploadImageMutation } from "@/core/queries/uploadImage.mutation";
+import CustomerLoadingFallback from "@/core/components/custom/CustomerLoadingFallback";
 
 const EditCustomerProfile = () => {
 	const { mutateAsync: updateProfile, isPending: isUpdating } =
@@ -142,7 +143,11 @@ const EditCustomerProfile = () => {
 	};
 
 	if (isFetchingMyDetails) {
-		return <>Loading...</>;
+		return (
+			<div className="h-full justify-center items-center flex">
+				<CustomerLoadingFallback />
+			</div>
+		);
 	}
 
 	return (

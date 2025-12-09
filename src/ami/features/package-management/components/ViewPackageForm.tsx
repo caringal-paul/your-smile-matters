@@ -173,7 +173,9 @@ const ViewPackageForm = () => {
 										<ItemDescription className="text-xs xl:text-xs">
 											{formatToPeso(String(service.price_per_unit))} *{" "}
 											{service.quantity} ={" "}
-											<strong>{service.total_price}</strong>
+											<strong>
+												{formatToPeso(String(service.total_price))}
+											</strong>
 										</ItemDescription>
 									</ItemContent>
 								</Item>

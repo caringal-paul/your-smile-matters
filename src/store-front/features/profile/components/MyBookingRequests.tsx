@@ -22,6 +22,7 @@ import { useGetMyBookingRequestsQuery } from "../queries/getMyBookingRequests.sf
 import { MyBookingRequestsSfTableType } from "../utils/types/my-booking-requests-table.sf.types";
 import { MY_BOOKING_REQUESTS_TABLE_SEARCH_KEYS } from "../constants/my-booking-requests.constants";
 import { useMyBookingRequestsColumns } from "../utils/columns/my-booking-requests.columns";
+import CustomerLoadingFallback from "@/core/components/custom/CustomerLoadingFallback";
 
 const MyBookingRequests = () => {
 	const { data: bookings = [], isPending: isBookingsFetching } =
@@ -45,10 +46,12 @@ const MyBookingRequests = () => {
 	});
 
 	if (isBookingsFetching) {
-		return <div>Loading...</div>;
+		return (
+			<div className="h-full justify-center items-center flex">
+				<CustomerLoadingFallback />
+			</div>
+		);
 	}
-
-	console.log(bookings);
 
 	return (
 		<Card className="h-fit w-full flex flex-col">

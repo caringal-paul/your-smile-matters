@@ -14,9 +14,10 @@ import { TRANSACTION_TABLE_SEARCH_KEYS } from "../../transactions/constants/tran
 import { MyTransactionsSfTableType } from "../utils/types/my-transactions-table.sf.types";
 import { useMyTransactionsColumns } from "../utils/columns/my-transactions.columns";
 import { useGetAllTransactionsPerCustomer } from "../../transactions/queries/getTransactionsByBooking.sf.query";
+import CustomerLoadingFallback from "@/core/components/custom/CustomerLoadingFallback";
 
 const MyTransactions = () => {
-	const { data: transactions = [], isPending: isBookingsFetching } =
+	const { data: transactions = [], isPending: isTransactionsFetching } =
 		useGetAllTransactionsPerCustomer();
 
 	const columns = useMyTransactionsColumns();
@@ -43,11 +44,13 @@ const MyTransactions = () => {
 		dateFields: ["transaction_date"],
 	});
 
-	if (isBookingsFetching) {
-		return <div>Loading...</div>;
+	if (isTransactionsFetching) {
+		return (
+			<div className="h-full justify-center items-center flex">
+				<CustomerLoadingFallback />
+			</div>
+		);
 	}
-
-	console.log(transactions);
 
 	return (
 		<Card className="h-fit w-full flex flex-col">

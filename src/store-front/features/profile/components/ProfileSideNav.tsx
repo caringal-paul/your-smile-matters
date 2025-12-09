@@ -41,13 +41,12 @@ const MENU_ITEMS: MenuItem[] = [
 		icon: <MailIcon className="w-5 h-5" />,
 		path: "my-refund-requests",
 	},
-
-	{
-		id: "reset-password",
-		label: "Reset Password",
-		icon: <Lock className="w-5 h-5" />,
-		path: "reset-password",
-	},
+	// {
+	// 	id: "reset-password",
+	// 	label: "Reset Password",
+	// 	icon: <Lock className="w-5 h-5" />,
+	// 	path: "reset-password",
+	// },
 ];
 
 const ProfileSideNav = () => {
@@ -119,7 +118,7 @@ const ProfileSideNav = () => {
 							<div className="border-b border-dashed border-gray-200 my-1" />
 						)}
 					</React.Fragment>
-				))} 
+				))}
 			</nav>
 		</div>
 	);

@@ -18,6 +18,8 @@ import { formatToNormalTime } from "@/ami/shared/helpers/formatDate";
 import BookingFormModal from "../../booking/components/BookingFormModal";
 import { useBookingFormStore } from "@/store-front/store/useBookingFormStore";
 import { MY_BOOKING_TABLE_SEARCH_KEYS } from "../constants/my-bookings.constants";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
+import CustomerLoadingFallback from "@/core/components/custom/CustomerLoadingFallback";
 
 const MyBookings = () => {
 	const { data: bookings = [], isPending: isBookingsFetching } =
@@ -49,7 +51,11 @@ const MyBookings = () => {
 	});
 
 	if (isBookingsFetching) {
-		return <div>Loading...</div>;
+		return (
+			<div className="h-full justify-center items-center flex">
+				<CustomerLoadingFallback />
+			</div>
+		);
 	}
 
 	return (

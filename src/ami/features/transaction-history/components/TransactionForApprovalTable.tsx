@@ -13,6 +13,7 @@ import { useGetTransactionsForApprovalQuery } from "../queries/getTransactionsFo
 import { useTransactionForApprovalColumns } from "../utils/columns/transaction-for-approval.columns";
 import { TransactionForApprovalAmiTableType } from "../utils/types/transaction-for-approval-table.ami.types";
 import { TRANSACTION_FOR_APPROVALTABLE_SEARCH_KEYS } from "../constants/transaction.constants";
+import LoadingFallback from "@/core/components/custom/LoadingFallback";
 
 const TransactionsForApprovalTable = () => {
 	const { data: transactions = [], isLoading } =
@@ -54,8 +55,11 @@ const TransactionsForApprovalTable = () => {
 					/>
 				</div>
 			</SectionHeader>
-
-			<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			{isLoading ? (
+				<LoadingFallback />
+			) : (
+				<DataTable data={filteredData} columns={columns} isColumnsCompressed />
+			)}
 		</div>
 	);
 };
