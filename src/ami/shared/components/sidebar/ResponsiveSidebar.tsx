@@ -17,6 +17,7 @@ import {
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../../../core/components/base/button";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 type Module = {
 	id: number;
@@ -30,6 +31,11 @@ type NavItems = Module & { subModules?: Module[] };
 const ResponsiveSidebar = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
+
+	const currentRole = currentUser?.role_and_permissions.name;
+	const hiddenForPhotographer = [1, 2, 3, 6, 9];
 
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [expandedModules, setExpandedModules] = useState<number[]>([]);
@@ -138,6 +144,13 @@ const ResponsiveSidebar = () => {
 		},
 	];
 
+	const filteredModules = modules.filter((mod) => {
+		if (currentRole === "Photographer") {
+			return !hiddenForPhotographer.includes(mod.id);
+		}
+		return true;
+	});
+
 	return (
 		<div className="xl:sticky xl:top-0 xl:left-0 xl:h-screen xl:w-[260px] flex flex-col">
 			{/* Mobile Header (only shows on mobile) - Now sticky */}
@@ -180,8 +193,7 @@ const ResponsiveSidebar = () => {
 						/>
 						<nav>
 							<ul className="space-y-4 xl:space-y-3 xl:mt-2">
-								{/* Dynamic rendering: loops through all modules and handles submodules automatically */}
-								{modules.map((module) => {
+								{filteredModules.map((module) => {
 									const hasSubModules =
 										module.subModules && module.subModules.length > 0;
 									const expanded = isModuleExpanded(module.id);

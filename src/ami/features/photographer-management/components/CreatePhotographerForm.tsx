@@ -23,14 +23,20 @@ import TextAreaEditor from "@/ami/shared/components/input/TextAreaEditor";
 import { DEFAULT_WEEKLY_SCHEDULE } from "@/core/constants/schedule.constants";
 import { Checkbox } from "@/core/components/base/checkbox";
 import { Textarea } from "@/core/components/base/textarea";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import AddButtonIcon from "@/ami/shared/assets/icons/AddButtonIcon";
 import TrashIcon from "@/ami/shared/assets/icons/TrashIcon";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { useUploadImagesMutation } from "@/core/queries/uploadImages.mutation";
+
+const MAX_IMAGES = 9;
 
 const CreatePhotographerForm = () => {
 	const navigate = useNavigate();
+
+	const uploadImagesMutation = useUploadImagesMutation();
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
 	const {
 		mutateAsync: createPhotographer,
@@ -59,15 +65,87 @@ const CreatePhotographerForm = () => {
 		},
 	});
 
+	const photoGallery = form.watch("photo_gallery") || [];
+	const hasImages = (photoGallery ?? []).length > 0;
+	const isFull = (photoGallery ?? []).length >= MAX_IMAGES;
+
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files;
+		if (!files) return;
+
+		const fileArray = Array.from(files);
+		const remainingSlots = MAX_IMAGES - (photoGallery ?? []).length;
+		const filesToAdd = fileArray.slice(0, remainingSlots);
+
+		// Add the actual File objects
+		setSelectedFiles((prev) => [...prev, ...filesToAdd]);
+
+		// Add preview URLs to the form field
+		const newPreviewUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+		form.setValue("photo_gallery", [
+			...(form.getValues("photo_gallery") || []),
+			...newPreviewUrls,
+		]);
+
+		e.target.value = "";
+	};
+
+	const removeImage = (index: number) => {
+		const imageToRemove = photoGallery?.[index];
+
+		// If it's a blob URL, remove from selectedFiles
+		if (imageToRemove?.startsWith("blob:")) {
+			const fileIndex = (photoGallery ?? [])
+				.slice(0, index)
+				.filter((url) => url?.startsWith("blob:")).length;
+
+			setSelectedFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+		}
+
+		// Remove from form gallery
+		const newPhotos = (photoGallery ?? []).filter((_, i) => i !== index);
+		form.setValue("photo_gallery", newPhotos, {
+			shouldDirty: true,
+			shouldValidate: true,
+		});
+	};
+
 	const onSubmit = async (payload: PhotographerAmiCreate) => {
 		try {
-			const response = await createPhotographer(payload);
+			let uploadedImagePaths: string[] = [];
+
+			// Upload new files
+			if (selectedFiles.length > 0) {
+				const imageFormData = new FormData();
+				selectedFiles.forEach((file) => {
+					imageFormData.append("images", file);
+				});
+
+				const customFilename = `${form.getValues("name")}_photographer_image`;
+				imageFormData.append("custom_filename", customFilename);
+
+				const uploadRes = await uploadImagesMutation.mutateAsync({
+					formData: imageFormData,
+				});
+
+				uploadedImagePaths =
+					uploadRes?.map((res) => `http://localhost:3000${res.path}`) || [];
+			}
+
+			console.log(uploadedImagePaths);
+
+			const response = await createPhotographer({
+				...payload,
+				photo_gallery: uploadedImagePaths,
+			});
 
 			if (response) {
+				form.reset();
+				setSelectedFiles([]);
 				navigate("/admin/ami/photographer-management/photographers");
 			}
 		} catch (error) {
-			console.error("Failed to create user:", error);
+			console.error("Failed to create photographer:", error);
 		}
 	};
 
@@ -194,6 +272,9 @@ const CreatePhotographerForm = () => {
 							Photo Gallery
 						</FormCard.Title>
 
+						<FormCard.Title className="pt-3 border-t-[1px] border-dashed">
+							Photo Gallery
+						</FormCard.Title>
 						<FormField
 							control={form.control}
 							name="photo_gallery"
@@ -203,83 +284,111 @@ const CreatePhotographerForm = () => {
 										Upload Photos
 									</FormCard.Label>
 									<div className="w-full">
-										<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-											<input
-												id="photo_gallery"
-												type="file"
-												multiple
-												accept="image/*"
-												className="hidden"
-												onChange={(e) => {
-													const files = e.target.files;
-													if (files) {
-														const fileArray = Array.from(files);
-														const newPhotos = fileArray.map((file) =>
-															URL.createObjectURL(file)
-														);
-														field.onChange([
-															...(field.value || []),
-															...newPhotos,
-														]);
-													}
+										{!hasImages && (
+											<div
+												className="border-2 border-dashed border-gray-300 rounded-lg p-14 2xl:p-20 text-center hover:border-gray-400 transition-colors flex-1 flex items-center justify-center hover:cursor-pointer"
+												onClick={() => {
+													if (!isFull)
+														document.getElementById("photo_gallery")?.click();
 												}}
-											/>
-											<label
-												htmlFor="photo_gallery"
-												className="cursor-pointer flex flex-col items-center justify-center"
 											>
-												<UploadCloud className="size-16 text-gray-400 mb-4" />
-												<p className="text-sm text-gray-600 mb-1">
-													Click to upload or drag and drop
-												</p>
-												<p className="text-xs text-gray-500">
-													PNG, JPG, GIF up to 10MB
-												</p>
-											</label>
-										</div>
+												<input
+													id="photo_gallery"
+													type="file"
+													multiple
+													accept="image/*"
+													className="hidden"
+													disabled={isFull}
+													onChange={handleImageChange}
+												/>
 
-										{(field.value ?? []).length > 0 && (
-											<div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-												{(field.value ?? []).map((photo, index) => (
-													<div key={index} className="relative group">
-														<img
-															src={photo || "/sf/ysm-card-fallback.png"}
-															alt={`Preview ${index + 1}`}
-															onError={(e) => {
-																e.currentTarget.src =
-																	"/sf/ysm-card-fallback.png";
-															}}
-															className="w-full h-32 object-cover rounded-lg border border-gray-200"
-														/>
-														<button
-															type="button"
-															onClick={() => {
-																const newPhotos = (field.value ?? []).filter(
-																	(_, i) => i !== index
-																);
-																field.onChange(newPhotos);
-															}}
-															className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-														>
-															<svg
-																className="w-4 h-4"
-																fill="none"
-																stroke="currentColor"
-																viewBox="0 0 24 24"
+												<label
+													htmlFor="photo_gallery"
+													className={`cursor-pointer flex flex-col items-center justify-center ${
+														isFull ? "opacity-50 cursor-not-allowed" : ""
+													}`}
+												>
+													<UploadCloud className="size-16 text-gray-400 mb-4" />
+													<p className="text-sm text-gray-600 mb-1">
+														Click to upload or drag and drop
+													</p>
+													<p className="text-xs text-gray-500">
+														PNG, JPG, GIF up to 10MB (Max {MAX_IMAGES})
+													</p>
+												</label>
+											</div>
+										)}
+
+										{hasImages && (
+											<div className="space-y-4 flex flex-col flex-1 mt-4">
+												<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+													{photoGallery.map((photo, index) => (
+														<div key={index} className="relative group">
+															<img
+																src={photo || "/sf/ysm-card-fallback.png"}
+																alt={`Preview ${index + 1}`}
+																onError={(e) => {
+																	e.currentTarget.src =
+																		"/sf/ysm-card-fallback.png";
+																}}
+																className="w-full h-32 object-cover rounded-lg border border-gray-200"
+															/>
+
+															<button
+																type="button"
+																onClick={() => removeImage(index)}
+																className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
 															>
-																<path
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																	strokeWidth={2}
-																	d="M6 18L18 6M6 6l12 12"
-																/>
-															</svg>
-														</button>
+																<X className="w-4 h-4" />
+															</button>
+														</div>
+													))}
+												</div>
+
+												{!isFull && (
+													<div
+														className="flex-1 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors hover:cursor-pointer"
+														onClick={() =>
+															document.getElementById("photo_gallery")?.click()
+														}
+													>
+														<input
+															id="photo_gallery"
+															type="file"
+															multiple
+															accept="image/*"
+															className="hidden"
+															disabled={isFull}
+															onChange={handleImageChange}
+														/>
+
+														<label
+															htmlFor="photo_gallery"
+															className="cursor-pointer flex flex-col items-center justify-center"
+														>
+															<UploadCloud className="size-16 text-gray-400 mb-4" />
+															<p className="text-sm text-gray-600 mb-1">
+																Click to upload or drag and drop
+															</p>
+															<p className="text-xs text-gray-500">
+																PNG, JPG, GIF up to 10MB (Max {MAX_IMAGES})
+															</p>
+														</label>
 													</div>
-												))}
+												)}
+
+												{isFull && (
+													<div className="bg-secondary/20 border border-secondary/40 rounded-lg p-3 text-center">
+														<p className="text-sm text-secondary font-medium">
+															Maximum {MAX_IMAGES} images uploaded!
+														</p>
+													</div>
+												)}
 											</div>
 										)}
 									</div>
+
+									<div />
 									<FormMessage className="ml-1" />
 								</FormCard.Field>
 							)}

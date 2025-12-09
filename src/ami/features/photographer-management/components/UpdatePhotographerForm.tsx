@@ -199,6 +199,8 @@ const UpdatePhotographerForm = () => {
 				}
 			}
 
+			console.log(finalGallery);
+
 			const response = await updatePhotographer({
 				id: String(id),
 				payload: {
@@ -1148,11 +1150,7 @@ const UpdatePhotographerForm = () => {
 
 								onSubmit(form.getValues());
 							}}
-							disabled={
-								!form.formState.isDirty ||
-								// !form.formState.isValid ||
-								isUpdatePhotographerLoading
-							}
+							disabled={isUpdatePhotographerLoading}
 						>
 							{isUpdatePhotographerLoading
 								? "Updating Photographer..."

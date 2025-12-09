@@ -9,9 +9,12 @@ import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { ServiceModel } from "@/core/models/service.model";
 import { Badge } from "@/core/components/base/badge";
 import parse from "html-react-parser";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 export const useServiceColumns = (): Column<PackageAmiTableType>[] => {
 	const navigate = useNavigate();
+
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const columns: Column<PackageAmiTableType>[] = [
 		{
@@ -106,13 +109,16 @@ export const useServiceColumns = (): Column<PackageAmiTableType>[] => {
 					>
 						<EyeIcon fill="#1C1B1F" className="mt-[1px]" />
 					</Button>
-					<Button
-						size="icon"
-						variant="icon"
-						onClick={() => navigate(`edit/package/${row._id}`)}
-					>
-						<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
-					</Button>
+
+					{currentUser?.is_photographer ? null : (
+						<Button
+							size="icon"
+							variant="icon"
+							onClick={() => navigate(`edit/package/${row._id}`)}
+						>
+							<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
+						</Button>
+					)}
 				</div>
 			),
 		},

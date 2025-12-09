@@ -7,9 +7,12 @@ import EyeIcon from "@/ami/shared/assets/icons/EyeIcon";
 import { ServiceAmiTableType } from "../types/service-table.types";
 import parse from "html-react-parser";
 import { Badge } from "@/core/components/base/badge";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 export const useServiceColumns = (): Column<ServiceAmiTableType>[] => {
 	const navigate = useNavigate();
+
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const columns: Column<ServiceAmiTableType>[] = [
 		{
@@ -59,13 +62,16 @@ export const useServiceColumns = (): Column<ServiceAmiTableType>[] => {
 					>
 						<EyeIcon fill="#1C1B1F" className="mt-[1px]" />
 					</Button>
-					<Button
-						size="icon"
-						variant="icon"
-						onClick={() => navigate(`edit/service/${row._id}`)}
-					>
-						<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
-					</Button>
+
+					{currentUser?.is_photographer ? null : (
+						<Button
+							size="icon"
+							variant="icon"
+							onClick={() => navigate(`edit/service/${row._id}`)}
+						>
+							<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
+						</Button>
+					)}
 				</div>
 			),
 		},

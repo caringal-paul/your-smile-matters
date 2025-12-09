@@ -17,11 +17,13 @@ import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllServicesQuery } from "../queries/getServices.ami.query";
 import LoadingFallback from "@/core/components/custom/LoadingFallback";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const ServiceTable = () => {
 	const navigate = useNavigate();
 
 	const { data: services = [], isLoading } = useGetAllServicesQuery();
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const columns = useServiceColumns();
 
@@ -60,13 +62,15 @@ const ServiceTable = () => {
 					/>
 				</div>
 
-				<Button
-					onClick={() => navigate("create/service")}
-					className="w-full sm:w-fit"
-				>
-					<PlusCircle />
-					Create Service
-				</Button>
+				{currentUser?.is_photographer ? null : (
+					<Button
+						onClick={() => navigate("create/service")}
+						className="w-full sm:w-fit"
+					>
+						<PlusCircle />
+						Create Service
+					</Button>
+				)}
 			</SectionHeader>
 
 			{isLoading ? (

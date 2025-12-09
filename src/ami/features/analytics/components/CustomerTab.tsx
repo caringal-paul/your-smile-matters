@@ -59,7 +59,6 @@ const CustomerTab = () => {
 	const { data: bookingHeatmapData } = useGetBookingHeatmapAnalyticsQuery();
 	const { data: peakHoursData } = useGetPeakHoursAnalyticsQuery();
 
-	console.log(customersInsights);
 	const totalBookings =
 		bookingHeatmapData?.reduce((sum, day) => sum + day.bookingCount, 0) || 0;
 

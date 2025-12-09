@@ -35,11 +35,9 @@ import UserBreadcrumbs from "@/ami/features/user-management/components/UserBread
 import UpdateUserForm from "@/ami/features/user-management/components/UpdateUserForm";
 import CreateUserForm from "@/ami/features/user-management/components/CreateUserForm";
 import ViewCustomerForm from "@/ami/features/customer-management/components/ViewCustomerForm";
-import CustomerRouteTabs from "@/ami/features/customer-management/components/CustomerRouteTabs";
 import UpdateServiceForm from "@/ami/features/service-management/components/UpdateServiceForm";
 import ViewServiceForm from "@/ami/features/service-management/components/ViewServiceForm";
 import PhotographerLayout from "@/ami/features/photographer-management/layout/PhotographerLayout";
-import PhotographerRouteTabs from "@/ami/features/photographer-management/components/PhotographerRouteTabs";
 import RolesAndPermissionsLayout from "@/ami/features/role-and-permission/layout/RolesAndPermissionsLayout";
 import RolesAndPermissionsPage from "@/ami/features/role-and-permission/pages/RolesAndPermissionsPage";
 import RolesAndPermissionsBreadcrumbs from "@/ami/features/role-and-permission/components/RolesAndPermissionsBreadcrumbs";
@@ -62,7 +60,6 @@ import TransactionBreadcrumbs from "@/ami/features/transaction-history/component
 import ViewTransactionForm from "@/ami/features/transaction-history/components/ViewTransactionForm";
 import DashboardLayout from "@/ami/features/analytics/layout/DashboardLayout";
 import AccountSettingsLayout from "@/ami/features/account-settings/layout/AccountSettingsLayout.ami";
-import ChangePasswordForm from "@/ami/features/account-settings/components/ChangePasswordForm.ami";
 import ChangePasswordPage from "@/ami/features/account-settings/pages/ChangePasswordPage.ami";
 import BookingRouteTabs from "@/ami/features/booking-management/components/BookingRouteTabs";
 import BookingForApprovalPage from "@/ami/features/booking-management/pages/BookingForApprovalPage";
@@ -74,28 +71,6 @@ import TransactionForApprovalPage from "@/ami/features/transaction-history/pages
 import TransactionsForApprovalTable from "@/ami/features/transaction-history/components/TransactionForApprovalTable";
 import TransactionsForApprovalBreadcrumbs from "@/ami/features/transaction-history/components/TransactionForApprovalBreadcrumbs";
 import ViewTransactionForApproval from "@/ami/features/transaction-history/components/ViewTransactionForApproval";
-
-const selectedRole = {
-	_id: "68a004a613451d2e9d4cb517",
-	name: "Manager",
-	description: "Management level access with approval rights",
-	permissions: [
-		"user:read",
-		"user:update",
-		"customer:create",
-		"customer:read",
-		"customer:update",
-		"customer:approve",
-		"product:create",
-		"product:read",
-		"product:update",
-		"product:approve",
-		"order:read",
-		"order:update",
-		"order:approve",
-		"report:read",
-	],
-};
 
 const baseRoutes = (
 	<Route path="ami" element={<RootLayout />}>

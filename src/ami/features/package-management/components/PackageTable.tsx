@@ -21,6 +21,7 @@ import { useGetAllServicesQuery } from "../../service-management/queries/getServ
 import { useGetAllPackagesQuery } from "../queries/getPackages.ami.query";
 import { PluginKey } from "@tiptap/pm/state";
 import LoadingFallback from "@/core/components/custom/LoadingFallback";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const PackageTable = () => {
 	const navigate = useNavigate();
@@ -32,6 +33,7 @@ const PackageTable = () => {
 
 	const packagesData = packages as PackageAmiTableType[];
 	const columns = useServiceColumns();
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const {
 		searchText,
@@ -72,13 +74,16 @@ const PackageTable = () => {
 						disabled={isServicesFetching && isPackagesFetching}
 					/>
 				</div>
-				<Button
-					onClick={() => navigate("create/package")}
-					className="w-full sm:w-fit"
-				>
-					<PlusCircle />
-					Create Package
-				</Button>
+
+				{currentUser?.is_photographer ? null : (
+					<Button
+						onClick={() => navigate("create/package")}
+						className="w-full sm:w-fit"
+					>
+						<PlusCircle />
+						Create Package
+					</Button>
+				)}
 			</SectionHeader>
 
 			{isServicesFetching && isPackagesFetching ? (

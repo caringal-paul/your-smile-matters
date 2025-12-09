@@ -163,11 +163,9 @@ const ViewPackageForm = () => {
 										<ItemTitle className="text-xs xl:text-sm line-clamp-3 max-w-[85%] truncate">
 											{service.service_details.name}
 										</ItemTitle>
-										<ItemDescription className="text-xs xl:text-xs">
+										<ItemDescription className="text-xs xl:text-xs max-w-[90%]">
 											{parse(String(service.service_details.description))}
 										</ItemDescription>
-
-										<ItemSeparator />
 
 										<ItemTitle className="text-xs xl:text-sm">
 											Service Price:

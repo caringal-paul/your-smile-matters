@@ -1,7 +1,28 @@
 import { Outlet } from "react-router-dom";
 import ResponsiveSidebar from "../shared/components/sidebar/ResponsiveSidebar";
+import { useGetCurrentUserLoggedInQuery } from "../features/account-settings/queries/getCurrentUserLoggedIn.ami.query";
+import {
+	CurrentAmiUserModel,
+	useCurrentAmiUser,
+} from "../store/useCurrentAmiUser";
 
 const RootLayout = () => {
+	const { data: currUserLoggedIn, isLoading: isUserDataFetching } =
+		useGetCurrentUserLoggedInQuery();
+
+	const setCurrentUser = useCurrentAmiUser((state) => state.setCurrentUser);
+	const clearCurrentUser = useCurrentAmiUser((state) => state.clearCurrentUser);
+
+	if (!currUserLoggedIn && !isUserDataFetching) {
+		clearCurrentUser();
+	} else {
+		try {
+			setCurrentUser(currUserLoggedIn as unknown as CurrentAmiUserModel);
+		} catch (error) {
+			clearCurrentUser();
+		}
+	}
+
 	return (
 		<div className="relative w-screen min-h-screen overflow-hidden xl:flex font-poppins">
 			<ResponsiveSidebar />

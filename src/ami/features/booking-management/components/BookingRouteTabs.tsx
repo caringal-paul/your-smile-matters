@@ -12,12 +12,14 @@ import { cn } from "@/core/lib/utils";
 import ButtonArrowRightIcon from "@/ami/shared/assets/icons/ButtonArrowRightIcon";
 import { TabRoute } from "@/ami/shared/types/tab-routes.types";
 import { BOOKING_ROUTES } from "../constants/booking.constants";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const BookingRouteTabs = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [isSelectPopoverOpen, setIsSelectPopoverOpen] = useState(false);
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	// Get current tab value from location.pathname
 	const getCurrentTab = () => {
@@ -42,6 +44,10 @@ const BookingRouteTabs = () => {
 		setTab(getCurrentTab());
 		setTabName(getCurrentTabName());
 	}, [location.pathname]);
+
+	if (currentUser?.is_photographer) {
+		return <Outlet />;
+	}
 
 	return (
 		<div>

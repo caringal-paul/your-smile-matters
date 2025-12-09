@@ -14,6 +14,7 @@ import {
 } from "../constants/photographer.constants";
 import TableFilter from "@/ami/shared/components/filter/TableFilter";
 import LoadingFallback from "@/core/components/custom/LoadingFallback";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const PhotographerTable = () => {
 	const navigate = useNavigate();
@@ -21,6 +22,20 @@ const PhotographerTable = () => {
 	const { data: photographers = [], isLoading } = useGetAllPhotographersQuery();
 
 	const columns = usePhotographerColumns();
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
+
+	const sortedData = photographers
+		.map((user) => ({
+			...user,
+			status: user.is_active ? "Active" : "Inactive",
+		}))
+		.sort((a, b) => {
+			if (currentUser?.is_photographer) {
+				if (a._id === currentUser._id) return -1;
+				if (b._id === currentUser._id) return 1;
+			}
+			return 0;
+		});
 
 	const {
 		searchText,
@@ -30,12 +45,7 @@ const PhotographerTable = () => {
 		applyFilters,
 		filteredData,
 	} = useFilteredTableData<PhotographerAmiTableType>({
-		data: photographers.map((user) => {
-			return {
-				...user,
-				status: user.is_active ? "Active" : "Inactive",
-			};
-		}),
+		data: sortedData,
 		keys: PHOTOGRAPHER_TABLE_SEARCH_KEYS,
 		dateFields: ["updated_at"],
 	});
@@ -58,13 +68,15 @@ const PhotographerTable = () => {
 					/>
 				</div>
 
-				<Button
-					onClick={() => navigate("create/photographer")}
-					className="w-full sm:w-fit"
-				>
-					<PlusCircle />
-					Create Photographer
-				</Button>
+				{!currentUser?.is_photographer && (
+					<Button
+						onClick={() => navigate("create/photographer")}
+						className="w-full sm:w-fit"
+					>
+						<PlusCircle />
+						Create Photographer
+					</Button>
+				)}
 			</SectionHeader>
 
 			{isLoading ? (

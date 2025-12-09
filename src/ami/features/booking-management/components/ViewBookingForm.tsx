@@ -49,6 +49,7 @@ import {
 	cancelSchema,
 } from "@/core/schemas/cancel.schema";
 import { BookingCancelFormModal } from "./BookingCancelFormModal";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const ViewBookingForm = () => {
 	const { id } = useParams();
@@ -739,6 +740,8 @@ const BookingFormButtonControls = ({
 	const [openModal, setOpenModal] = useState<string | null>(null);
 	const [isLocalLoading, setIsLocalLoading] = useState(false);
 
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
+
 	const { mutateAsync: confirmMutation, isPending: isConfirming } =
 		useConfirmBookingMutation();
 	const { mutateAsync: rescheduleMutation, isPending: isRescheduling } =
@@ -857,80 +860,94 @@ const BookingFormButtonControls = ({
 
 	// === Memoized UI ===
 	const buttonControls = useMemo(() => {
-		const renderButtonGroup = (...modals: React.ReactNode[]) => (
-			<div className="flex flex-row gap-2">{modals}</div>
-		);
+		const renderButtonGroup = (...modals: React.ReactNode[]) => <>{modals}</>;
 
 		switch (status) {
 			case "Pending":
 				return renderButtonGroup(
-					<BookingActionModal
-						actionType="Confirm"
-						isLoading={isLocalLoading || isConfirming}
-						onAction={handleConfirm}
-						open={openModal === "Confirm"}
-						onOpenChange={(open) => setOpenModal(open ? "Confirm" : null)}
-					/>,
-					<BookingActionModal
-						actionType="Reschedule"
-						isLoading={isLocalLoading || isRescheduling}
-						onAction={handleReschedule}
-						open={openModal === "Reschedule"}
-						onOpenChange={() => {
-							setIsRescheduleFormOpen(true);
-							setOpenModal(null);
-						}}
-					/>,
-					<BookingActionModal
-						actionType="Cancel"
-						isLoading={isLocalLoading || isCancelling}
-						onAction={handleCancel}
-						disabled={
-							booking.status === "Ongoing" &&
-							!booking.payment_status.is_payment_complete
-						}
-						open={openModal === "Cancel"}
-						onOpenChange={() => {
-							setIsCancelFormOpen(true);
-							setOpenModal(null);
-						}}
-					/>
+					<div className="flex flex-row gap-2">
+						<BookingActionModal
+							actionType="Confirm"
+							isLoading={isLocalLoading || isConfirming}
+							onAction={handleConfirm}
+							open={openModal === "Confirm"}
+							onOpenChange={(open) => setOpenModal(open ? "Confirm" : null)}
+						/>
+						,
+						{currentUser?.is_photographer ? null : (
+							<>
+								<BookingActionModal
+									actionType="Reschedule"
+									isLoading={isLocalLoading || isRescheduling}
+									onAction={handleReschedule}
+									open={openModal === "Reschedule"}
+									onOpenChange={() => {
+										setIsRescheduleFormOpen(true);
+										setOpenModal(null);
+									}}
+								/>
+								,
+								<BookingActionModal
+									actionType="Cancel"
+									isLoading={isLocalLoading || isCancelling}
+									onAction={handleCancel}
+									disabled={
+										booking.status === "Ongoing" &&
+										!booking.payment_status.is_payment_complete
+									}
+									open={openModal === "Cancel"}
+									onOpenChange={() => {
+										setIsCancelFormOpen(true);
+										setOpenModal(null);
+									}}
+								/>
+							</>
+						)}
+					</div>
 				);
 
 			case "Confirmed":
 			case "Rescheduled":
 				return renderButtonGroup(
-					<BookingActionModal
-						actionType="Start"
-						isLoading={isLocalLoading || isStarting}
-						onAction={handleStart}
-						open={openModal === "Start"}
-						onOpenChange={(open) => setOpenModal(open ? "Start" : null)}
-					/>,
-					<BookingActionModal
-						actionType="Reschedule"
-						isLoading={isLocalLoading || isRescheduling}
-						onAction={handleReschedule}
-						open={openModal === "Reschedule"}
-						onOpenChange={() => {
-							setIsRescheduleFormOpen(true);
-							setOpenModal(null);
-						}}
-					/>,
-					<BookingActionModal
-						actionType="Cancel"
-						isLoading={isLocalLoading || isCancelling}
-						onAction={handleCancel}
-						disabled={
-							booking.status === "Ongoing" &&
-							!booking.payment_status.is_payment_complete
-						}
-						open={openModal === "Cancel"}
-						onOpenChange={() => {
-							setIsCancelFormOpen(true);
-							setOpenModal(null);
-						}}
-					/>
+					<div className="flex flex-row gap-2">
+						<BookingActionModal
+							actionType="Start"
+							isLoading={isLocalLoading || isStarting}
+							onAction={handleStart}
+							open={openModal === "Start"}
+							onOpenChange={(open) => setOpenModal(open ? "Start" : null)}
+						/>
+
+						{currentUser?.is_photographer ? null : (
+							<>
+								<BookingActionModal
+									actionType="Reschedule"
+									isLoading={isLocalLoading || isRescheduling}
+									onAction={handleReschedule}
+									open={openModal === "Reschedule"}
+									onOpenChange={() => {
+										setIsRescheduleFormOpen(true);
+										setOpenModal(null);
+									}}
+								/>
+
+								<BookingActionModal
+									actionType="Cancel"
+									isLoading={isLocalLoading || isCancelling}
+									onAction={handleCancel}
+									disabled={
+										booking.status === "Ongoing" &&
+										!booking.payment_status.is_payment_complete
+									}
+									open={openModal === "Cancel"}
+									onOpenChange={() => {
+										setIsCancelFormOpen(true);
+										setOpenModal(null);
+									}}
+								/>
+							</>
+						)}
+					</div>
 				);
 
 			case "Ongoing":

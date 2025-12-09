@@ -11,11 +11,31 @@ import { BOOKING_TABLE_SEARCH_KEYS } from "../constants/booking.constants";
 import { useBookingColumns } from "../utils/columns/booking.columns";
 import { BOOKING_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
 import LoadingFallback from "@/core/components/custom/LoadingFallback";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 const BookingTable = () => {
 	const { data: bookings = [], isLoading } = useGetAllBookingQuery();
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const columns = useBookingColumns();
+
+	// Filter bookings by current user if photographer
+	const filteredBookings = bookings
+		.filter((booking) => {
+			if (currentUser?.is_photographer) {
+				return booking.photographer_id === currentUser._id;
+			}
+			return true; // non-photographers see all bookings
+		})
+		.sort(
+			(a, b) =>
+				new Date(String(b.updated_at)).getTime() -
+				new Date(String(a.updated_at)).getTime()
+		)
+		.map((booking) => ({
+			...booking,
+			booking_duration: `${booking.start_time} - ${booking.end_time}`,
+		}));
 
 	const {
 		searchText,
@@ -27,16 +47,7 @@ const BookingTable = () => {
 		setDateFilterDraft,
 		filteredData,
 	} = useFilteredTableData<BookingAmiTableType>({
-		data: bookings
-			.sort(
-				(a, b) =>
-					new Date(String(b.updated_at)).getTime() -
-					new Date(String(a.updated_at)).getTime()
-			)
-			.map((booking) => ({
-				...booking,
-				booking_duration: `${booking.start_time} - ${booking.end_time}`,
-			})),
+		data: filteredBookings,
 		keys: BOOKING_TABLE_SEARCH_KEYS,
 		dateFields: ["booking_date"],
 	});

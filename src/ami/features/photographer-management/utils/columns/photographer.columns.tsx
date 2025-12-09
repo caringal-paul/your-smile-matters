@@ -19,10 +19,13 @@ import { getInitials } from "@/core/helpers/getInitials";
 import { Badge } from "@/core/components/base/badge";
 
 import parse from "html-react-parser";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 export const usePhotographerColumns =
 	(): Column<PhotographerAmiTableType>[] => {
 		const navigate = useNavigate();
+
+		const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 		const columns: Column<PhotographerAmiTableType>[] = [
 			{
@@ -105,13 +108,17 @@ export const usePhotographerColumns =
 						>
 							<EyeIcon fill="#1C1B1F" className="mt-[1px]" />
 						</Button>
-						<Button
-							size="icon"
-							variant="icon"
-							onClick={() => navigate(`edit/photographer/${row._id}`)}
-						>
-							<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
-						</Button>
+
+						{currentUser?.role_and_permissions.name === "Admin" ||
+						currentUser?._id != row._id ? null : (
+							<Button
+								size="icon"
+								variant="icon"
+								onClick={() => navigate(`edit/photographer/${row._id}`)}
+							>
+								<EditIcon fill="#1C1B1F" className="ml-1 mt-[2px]" />
+							</Button>
+						)}
 					</div>
 				),
 			},

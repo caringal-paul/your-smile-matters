@@ -13,6 +13,7 @@ import ButtonArrowRightIcon from "@/ami/shared/assets/icons/ButtonArrowRightIcon
 
 import { TabRoute } from "@/ami/shared/types/tab-routes.types";
 import { TRANSACTION_ROUTES } from "../constants/transaction.constants";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 /**
  * TransactionRouteTabs
@@ -26,6 +27,7 @@ const TransactionRouteTabs = () => {
 	const location = useLocation();
 
 	const [isSelectPopoverOpen, setIsSelectPopoverOpen] = useState(false);
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	/** Get current active tab based on current path */
 	const getCurrentTab = () => {
@@ -50,6 +52,10 @@ const TransactionRouteTabs = () => {
 		setTab(getCurrentTab());
 		setTabName(getCurrentTabName());
 	}, [location.pathname]);
+
+	if (currentUser?.is_photographer) {
+		return <Outlet />;
+	}
 
 	return (
 		<div>

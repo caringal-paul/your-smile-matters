@@ -14,6 +14,7 @@ import {
 } from "@/core/components/base/avatar";
 import { getInitials } from "@/core/helpers/getInitials";
 import { useLogoutUserMutation } from "@/ami/features/auth/queries/logoutAmiUser.mutation";
+import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
 
 type PageHeaderProps = { pageTitle: string };
 
@@ -23,6 +24,9 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 
 	const { data: currUserLoggedIn, isLoading: isUserDataFetching } =
 		useGetCurrentUserLoggedInQuery();
+
+	const clearCurrentUser = useCurrentAmiUser((state) => state.clearCurrentUser);
+	const currentUser = useCurrentAmiUser((state) => state.currentUser);
 
 	const { mutateAsync: logout } = useLogoutUserMutation();
 
@@ -63,7 +67,15 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 						>
 							<button
 								className="w-full p-2 text-xs bg-transparent hover:bg-accent text-foreground text-start"
-								onClick={() => navigate("/account-settings")}
+								onClick={() => {
+									if (currentUser?.is_photographer) {
+										navigate(
+											`/admin/ami/photographer-management/photographers/edit/photographer/${currentUser?._id}`
+										);
+									} else {
+										navigate("/admin/ami/account-settings");
+									}
+								}}
 							>
 								Account Settings
 							</button>
@@ -73,6 +85,7 @@ const PageHeader = ({ pageTitle }: PageHeaderProps) => {
 									await logout();
 									localStorage.removeItem("ami_access_token");
 									localStorage.removeItem("ami_refresh_token");
+									clearCurrentUser();
 									navigate("/admin/ami/auth");
 								}}
 							>
