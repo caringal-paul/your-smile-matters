@@ -149,12 +149,12 @@ const EditCustomerProfile = () => {
 		<Card className="h-fit w-full flex flex-col">
 			<Form {...form}>
 				<div>
-					<CardHeader className="flex flex-row justify-between px-8 py-4">
+					<CardHeader className="flex flex-row items-center justify-between px-8 py-4">
 						<CardTitle className="text-3xl font-bold tracking-normal">
 							Edit Profile
 						</CardTitle>
 					</CardHeader>
-					<Separator className="mt-4 mb-6" />
+					<Separator className="mb-6" />
 					<CardContent className="overflow-auto px-8 pb-8 flex flex-col gap-6">
 						{/* ==================== PROFILE IMAGE ==================== */}
 						<FormField
@@ -162,7 +162,7 @@ const EditCustomerProfile = () => {
 							name="profile_image"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Profile Image</FormLabel>
+									<FormLabel className="w-full">Profile Image</FormLabel>
 									<div className="w-full flex justify-center">
 										<div className="relative group">
 											<input

@@ -76,7 +76,7 @@ const UserTable = () => {
 				</Button>
 			</SectionHeader>
 
-			{!isLoading ? (
+			{isLoading ? (
 				<LoadingFallback />
 			) : (
 				<DataTable data={filteredData} columns={columns} />

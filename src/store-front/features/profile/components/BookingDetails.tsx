@@ -575,68 +575,73 @@ const BookingDetails = () => {
 					</div>
 				</div>
 
-				{booking?.payment_status.remaining_balance &&
-				booking?.payment_status.remaining_balance > 0 ? (
-					<div className="w-full">
-						{/* Modern Alert with Gradient */}
-						<div className="relative overflow-hidden bg-primary/20 border border-primary rounded-lg p-4 shadow-sm">
-							{/* Decorative left accent bar */}
-							<div className="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+				{booking?.status == "Cancelled" ? null : (
+					<>
+						{" "}
+						{booking?.payment_status.remaining_balance &&
+						booking?.payment_status.remaining_balance > 0 ? (
+							<div className="w-full">
+								{/* Modern Alert with Gradient */}
+								<div className="relative overflow-hidden bg-primary/20 border border-primary rounded-lg p-4 shadow-sm">
+									{/* Decorative left accent bar */}
+									<div className="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
 
-							<div className="flex gap-4 ml-2">
-								{/* Icon with animation */}
-								<div className="flex-shrink-0">
-									<div className="w-10 h-10 rounded-full bg-primary/40 border border-primary  flex items-center justify-center">
-										<TriangleAlertIcon className="w-5 h-5 text-primary" />
+									<div className="flex gap-4 ml-2">
+										{/* Icon with animation */}
+										<div className="flex-shrink-0">
+											<div className="w-10 h-10 rounded-full bg-primary/40 border border-primary  flex items-center justify-center">
+												<TriangleAlertIcon className="w-5 h-5 text-primary" />
+											</div>
+										</div>
+
+										{/* Content */}
+										<div className="flex-1 space-y-1">
+											<div className="flex items-center gap-2">
+												<p className="font-semibold text-primary text-base">
+													{booking.status === "Pending"
+														? "Booking Unconfirmed"
+														: "Payment Pending"}
+												</p>
+												<span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/70 text-admin-primary-foreground text-xs font-medium rounded-full animate-pulse duration-3000 transition-all">
+													<Clock className="w-3 h-3" />
+													{booking.status === "Pending"
+														? "Wait for Confirmation"
+														: "Action Required"}
+												</span>
+											</div>
+
+											{booking.status === "Pending" ? (
+												<p className="text-primary/80 text-sm font-light">
+													Please wait while we review your booking details.
+												</p>
+											) : (
+												<p className="text-primary/80 text-sm font-light">
+													Please settle the full payment of{" "}
+													<span className="font-medium text-primary">
+														{formatToPeso(
+															String(booking?.payment_status.remaining_balance)
+														)}
+													</span>{" "}
+													to confirm and secure your booking date.
+												</p>
+											)}
+										</div>
 									</div>
 								</div>
 
-								{/* Content */}
-								<div className="flex-1 space-y-1">
-									<div className="flex items-center gap-2">
-										<p className="font-semibold text-primary text-base">
-											{booking.status === "Pending"
-												? "Booking Unconfirmed"
-												: "Payment Pending"}
-										</p>
-										<span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/70 text-admin-primary-foreground text-xs font-medium rounded-full animate-pulse duration-3000 transition-all">
-											<Clock className="w-3 h-3" />
-											{booking.status === "Pending"
-												? "Wait for Confirmation"
-												: "Action Required"}
-										</span>
-									</div>
-
-									{booking.status === "Pending" ? (
-										<p className="text-primary/80 text-sm font-light">
-											Please wait while we review your booking details.
-										</p>
-									) : (
-										<p className="text-primary/80 text-sm font-light">
-											Please settle the full payment of{" "}
-											<span className="font-medium text-primary">
-												{formatToPeso(
-													String(booking?.payment_status.remaining_balance)
-												)}
-											</span>{" "}
-											to confirm and secure your booking date.
-										</p>
-									)}
-								</div>
+								{/* Optional CTA Button */}
+								{(booking?.status as BookingStatus) == "Cancelled" ? null : (
+									<Button
+										className="mt-4 w-full"
+										onClick={() => setIsCreateTransactionModalOpen(true)}
+									>
+										Make a Payment
+									</Button>
+								)}
 							</div>
-						</div>
-
-						{/* Optional CTA Button */}
-						<div className="mt-3">
-							<CreateTransactionModal
-								disabled={booking.status === "Pending"}
-								bookingId={booking._id}
-								open={isCreateTransactionModalOpen}
-								setIsModalOpen={setIsCreateTransactionModalOpen}
-							/>
-						</div>
-					</div>
-				) : null}
+						) : null}
+					</>
+				)}
 			</CardContent>
 
 			<RequestRescheduleBookingFormModal

@@ -101,6 +101,7 @@ export const BookingRescheduleFormModal = ({
 	>([]);
 
 	const [error, setError] = useState<string | null>(null);
+	const currentYear = new Date().getFullYear();
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -191,6 +192,8 @@ export const BookingRescheduleFormModal = ({
 													return date < today; // disables only dates before today
 												}}
 												captionLayout="dropdown"
+												fromYear={currentYear}
+												toYear={currentYear + 10}
 											/>
 										</PopoverContent>
 									</Popover>

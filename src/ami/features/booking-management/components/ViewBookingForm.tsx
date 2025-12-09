@@ -737,6 +737,7 @@ const BookingFormButtonControls = ({
 
 	// Track which modal is open
 	const [openModal, setOpenModal] = useState<string | null>(null);
+	const [isLocalLoading, setIsLocalLoading] = useState(false);
 
 	const { mutateAsync: confirmMutation, isPending: isConfirming } =
 		useConfirmBookingMutation();
@@ -784,24 +785,39 @@ const BookingFormButtonControls = ({
 
 	// === Handlers ===
 	const handleConfirm = async () => {
-		await confirmMutation(String(bookingId));
-		setOpenModal(null);
+		setIsLocalLoading(true); // Set loading immediately
+		try {
+			await confirmMutation(String(bookingId));
+		} finally {
+			setIsLocalLoading(false);
+			setOpenModal(null);
+		}
 	};
 
-	const handleCancel = () => {
-		cancelMutation({
-			id: String(bookingId),
-			cancelled_reason: cancelForm.getValues("cancelled_reason")!,
-		});
-		setOpenModal(null);
+	const handleCancel = async () => {
+		setIsLocalLoading(true);
+		try {
+			await cancelMutation({
+				id: String(bookingId),
+				cancelled_reason: cancelForm.getValues("cancelled_reason")!,
+			});
+		} finally {
+			setIsLocalLoading(false);
+			setOpenModal(null);
+		}
 	};
 
-	const handleStart = () => {
-		startMutation(String(bookingId));
-		setOpenModal(null);
+	const handleStart = async () => {
+		setIsLocalLoading(true);
+		try {
+			await startMutation(String(bookingId));
+		} finally {
+			setIsLocalLoading(false);
+			setOpenModal(null);
+		}
 	};
 
-	const handleReschedule = () => {
+	const handleReschedule = async () => {
 		const new_booking_date = rescheduleForm.getValues("new_booking_date");
 		const new_start_time = rescheduleForm.getValues("new_start_time");
 		const new_end_time = rescheduleForm.getValues("new_end_time");
@@ -812,22 +828,31 @@ const BookingFormButtonControls = ({
 			return;
 		}
 
-		rescheduleMutation({
-			id: String(bookingId),
-			payload: {
-				new_booking_date,
-				new_start_time,
-				new_end_time,
-				new_photographer_id,
-			},
-		});
-
-		setOpenModal(null);
+		setIsLocalLoading(true);
+		try {
+			await rescheduleMutation({
+				id: String(bookingId),
+				payload: {
+					new_booking_date,
+					new_start_time,
+					new_end_time,
+					new_photographer_id,
+				},
+			});
+		} finally {
+			setIsLocalLoading(false);
+			setOpenModal(null);
+		}
 	};
 
 	const handleComplete = async () => {
-		await completeMutation(String(bookingId));
-		setOpenModal(null);
+		setIsLocalLoading(true);
+		try {
+			await completeMutation(String(bookingId));
+		} finally {
+			setIsLocalLoading(false);
+			setOpenModal(null);
+		}
 	};
 
 	// === Memoized UI ===
@@ -841,14 +866,14 @@ const BookingFormButtonControls = ({
 				return renderButtonGroup(
 					<BookingActionModal
 						actionType="Confirm"
-						isLoading={isConfirming}
+						isLoading={isLocalLoading || isConfirming}
 						onAction={handleConfirm}
 						open={openModal === "Confirm"}
 						onOpenChange={(open) => setOpenModal(open ? "Confirm" : null)}
 					/>,
 					<BookingActionModal
 						actionType="Reschedule"
-						isLoading={isRescheduling}
+						isLoading={isLocalLoading || isRescheduling}
 						onAction={handleReschedule}
 						open={openModal === "Reschedule"}
 						onOpenChange={() => {
@@ -858,7 +883,7 @@ const BookingFormButtonControls = ({
 					/>,
 					<BookingActionModal
 						actionType="Cancel"
-						isLoading={isCancelling}
+						isLoading={isLocalLoading || isCancelling}
 						onAction={handleCancel}
 						disabled={
 							booking.status === "Ongoing" &&
@@ -877,14 +902,14 @@ const BookingFormButtonControls = ({
 				return renderButtonGroup(
 					<BookingActionModal
 						actionType="Start"
-						isLoading={isStarting}
+						isLoading={isLocalLoading || isStarting}
 						onAction={handleStart}
 						open={openModal === "Start"}
 						onOpenChange={(open) => setOpenModal(open ? "Start" : null)}
 					/>,
 					<BookingActionModal
 						actionType="Reschedule"
-						isLoading={isRescheduling}
+						isLoading={isLocalLoading || isRescheduling}
 						onAction={handleReschedule}
 						open={openModal === "Reschedule"}
 						onOpenChange={() => {
@@ -894,7 +919,7 @@ const BookingFormButtonControls = ({
 					/>,
 					<BookingActionModal
 						actionType="Cancel"
-						isLoading={isCancelling}
+						isLoading={isLocalLoading || isCancelling}
 						onAction={handleCancel}
 						disabled={
 							booking.status === "Ongoing" &&
@@ -912,7 +937,7 @@ const BookingFormButtonControls = ({
 				return renderButtonGroup(
 					<BookingActionModal
 						actionType="Complete"
-						isLoading={isCompleting}
+						isLoading={isLocalLoading || isCompleting}
 						onAction={handleComplete}
 						open={openModal === "Complete"}
 						onOpenChange={(open) => setOpenModal(open ? "Complete" : null)}
@@ -938,7 +963,18 @@ const BookingFormButtonControls = ({
 			default:
 				return null;
 		}
-	}, [status, openModal]);
+	}, [
+		status,
+		openModal,
+		isLocalLoading,
+		isConfirming,
+		isRescheduling,
+		isCancelling,
+		isStarting,
+		isCompleting,
+		booking.status,
+		booking.payment_status.is_payment_complete,
+	]);
 
 	return (
 		<>

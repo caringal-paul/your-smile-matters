@@ -39,6 +39,8 @@ export const BookingActionModal = ({
 	onOpenChange,
 	disabled,
 }: BookingActionModalProps) => {
+	console.log(isLoading);
+
 	const config = {
 		Confirm: {
 			label: "Confirm Booking",
