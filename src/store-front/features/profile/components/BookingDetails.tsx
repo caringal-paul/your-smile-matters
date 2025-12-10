@@ -629,14 +629,22 @@ const BookingDetails = () => {
 									</div>
 								</div>
 
-								{/* Optional CTA Button */}
-								{(booking?.status as BookingStatus) == "Cancelled" ? null : (
-									<Button
+								{/* <Button
 										className="mt-4 w-full"
 										onClick={() => setIsCreateTransactionModalOpen(true)}
 									>
 										Make a Payment
-									</Button>
+									</Button> */}
+
+								{/* Optional CTA Button */}
+								{(booking?.status as BookingStatus) == "Cancelled" ? null : (
+									<div className="mt-4">
+										<CreateTransactionModal
+											bookingId={String(booking?._id)}
+											open={isCreateTransactionModalOpen}
+											setIsModalOpen={setIsCreateTransactionModalOpen}
+										/>
+									</div>
 								)}
 							</div>
 						) : null}

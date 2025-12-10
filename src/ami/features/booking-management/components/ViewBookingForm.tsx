@@ -873,7 +873,7 @@ const BookingFormButtonControls = ({
 							open={openModal === "Confirm"}
 							onOpenChange={(open) => setOpenModal(open ? "Confirm" : null)}
 						/>
-						,
+
 						{currentUser?.is_photographer ? null : (
 							<>
 								<BookingActionModal
@@ -886,7 +886,7 @@ const BookingFormButtonControls = ({
 										setOpenModal(null);
 									}}
 								/>
-								,
+
 								<BookingActionModal
 									actionType="Cancel"
 									isLoading={isLocalLoading || isCancelling}
