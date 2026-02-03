@@ -27,6 +27,7 @@ import { JSX, useEffect, useState } from "react";
 import { Cloud, CloudRain, Sun, Wind, Droplets, Eye } from "lucide-react";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { Spinner } from "@/core/components/base/spinner";
+import { OverviewDateFilter } from "@/core/components/custom/OverviewDateFilter";
 
 const COLORS = ["#846e62", "#9c7c6a", "#bfa89b", "#6b5a4f", "#d1b6a1"];
 
@@ -56,16 +57,13 @@ const OverviewTab = () => {
 	}, []);
 
 	useEffect(() => {
-		// Fetch weather data for Manila, Philippines
 		const fetchWeather = async () => {
 			try {
-				// Added precipitation_probability_max to the API call
 				const response = await fetch(
 					"https://api.open-meteo.com/v1/forecast?latitude=14.5995&longitude=120.9842&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=precipitation_probability&timezone=Asia%2FSingapore"
 				);
 				const data = await response.json();
 
-				// Get current hour's rain probability
 				const currentHour = new Date().getHours();
 				const rainProbability =
 					data.hourly.precipitation_probability[currentHour];
@@ -82,7 +80,6 @@ const OverviewTab = () => {
 		};
 
 		fetchWeather();
-		// Refresh weather every 30 minutes
 		const weatherInterval = setInterval(fetchWeather, 30 * 60 * 1000);
 		return () => clearInterval(weatherInterval);
 	}, []);
@@ -101,8 +98,12 @@ const OverviewTab = () => {
 		if (code <= 77) return "Snowy";
 		return "Stormy";
 	};
+
 	return (
 		<TabsContent value="overview" className="space-y-6">
+			{/* 30-Day Period Filter */}
+			<OverviewDateFilter />
+
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 				<Card className="flex flex-col justify-center p-6 md:col-span-2 ">
 					{loading ? (
@@ -403,10 +404,11 @@ const OverviewTab = () => {
 								<Legend />
 								<Area
 									type="monotone"
-									dataKey="Total Bookings"
+									dataKey="totalBookings"
 									stroke="#846e62"
 									fill="#846e62"
 									fillOpacity={0.6}
+									name="Total Bookings"
 								/>
 							</AreaChart>
 						</ResponsiveContainer>
@@ -434,7 +436,7 @@ const OverviewTab = () => {
 										percentage,
 									}) => {
 										const RADIAN = Math.PI / 180;
-										const radius = outerRadius + 15; // 👈 offset label outside
+										const radius = outerRadius + 15;
 										const x = cx + radius * Math.cos(-midAngle * RADIAN);
 										const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -445,8 +447,8 @@ const OverviewTab = () => {
 												fill="#333"
 												textAnchor={x > cx ? "start" : "end"}
 												dominantBaseline="central"
-												fontSize={10} // 👈 make it smaller
-												className="text-[10px]" // optional Tailwind fallback
+												fontSize={10}
+												className="text-[10px]"
 											>
 												{`${status}: ${percentage}%`}
 											</text>
@@ -480,8 +482,8 @@ const OverviewTab = () => {
 										fontWeight: 600,
 									}}
 									formatter={(value, name, props) => [
-										`${value} bookings`, // value text
-										props.payload.status, // label text
+										`${value} bookings`,
+										props.payload.status,
 									]}
 								/>
 							</PieChart>

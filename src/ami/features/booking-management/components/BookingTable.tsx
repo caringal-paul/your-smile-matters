@@ -12,6 +12,8 @@ import { useBookingColumns } from "../utils/columns/booking.columns";
 import { BOOKING_STATUSES_FILTER_OPTIONS } from "@/ami/shared/constants/status.constants";
 import LoadingFallback from "@/core/components/custom/LoadingFallback";
 import { useCurrentAmiUser } from "@/ami/store/useCurrentAmiUser";
+import { formatToNormalTime } from "@/ami/shared/helpers/formatDate";
+import { format } from "path";
 
 const BookingTable = () => {
 	const { data: bookings = [], isLoading } = useGetAllBookingQuery();
@@ -34,7 +36,9 @@ const BookingTable = () => {
 		)
 		.map((booking) => ({
 			...booking,
-			booking_duration: `${booking.start_time} - ${booking.end_time}`,
+			booking_duration: `${formatToNormalTime(
+				booking.start_time
+			)} - ${formatToNormalTime(booking.end_time)}`,
 		}));
 
 	const {

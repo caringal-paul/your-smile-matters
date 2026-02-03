@@ -22,6 +22,7 @@ import { TabsContent } from "@/core/components/base/tabs";
 import { useGetStatusDistributionAnalyticsQuery } from "../queries/getStatusDistributionAnalytics.query";
 import { useGetPackagePerformanceAnalyticsQuery } from "../queries/getPackagePerformanceAnalytics.query";
 import { useGetCancellationAnalyticsQuery } from "../queries/getCancellationAnalytics.query";
+import { AnalyticsDateFilter } from "@/core/components/custom/AnalyticsDateFilter";
 
 const COLORS = ["#846e62", "#9c7c6a", "#bfa89b", "#846e62", "#d1b6a1"];
 
@@ -32,6 +33,8 @@ const BookingTab = () => {
 
 	return (
 		<TabsContent value="bookings" className="space-y-6">
+			<AnalyticsDateFilter />
+
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				<Card>
 					<CardHeader className="pb-0">
@@ -188,9 +191,8 @@ const BookingTab = () => {
 							<CartesianGrid strokeDasharray="3 3" />
 							<XAxis
 								dataKey="_id"
-								tick={{ fontSize: 12, fill: "#6b7280", fontWeight: 500 }}
+								tick={false} // Hide the X-axis labels
 							/>
-
 							<YAxis
 								tick={{ fontSize: 12, fill: "#6b7280", fontWeight: 500 }}
 							/>
@@ -209,11 +211,23 @@ const BookingTab = () => {
 								labelStyle={{
 									color: "#846e62",
 									fontWeight: 600,
+									marginBottom: "4px", // Optional: add spacing
 								}}
 							/>
+
 							<Bar
-								dataKey="Shows how many bookings were cancelled for this reason"
+								dataKey="count" // the key in your data that holds number of cancellations
 								fill="#584941"
+								name="Number of Cancellations" // This appears in tooltip & legend
+							/>
+							<Legend
+								verticalAlign="bottom"
+								height={36}
+								wrapperStyle={{
+									fontSize: 12,
+									fontWeight: 500,
+									color: "#6b7280",
+								}}
 							/>
 						</BarChart>
 					</ResponsiveContainer>

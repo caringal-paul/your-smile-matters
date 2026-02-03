@@ -15,176 +15,199 @@ import {
 	StatusDistributionAmiResponse,
 	TopServiceAmiResponse,
 } from "@/ami/features/analytics/utils/types/analytics-response.ami.types";
+import { AnalyticsDateFilter } from "@/ami/features/analytics/stores/useAnalyticsFilterStore";
 
 const ENDPOINT = "/admin/analytics";
 
+const buildQueryParams = (
+	filter: AnalyticsDateFilter,
+	additionalParams?: Record<string, any>
+) => {
+	const params: Record<string, any> = { ...additionalParams };
+
+	if (filter.year) params.year = filter.year;
+	if (filter.month) params.month = filter.month;
+	if (filter.startDate) params.startDate = filter.startDate;
+	if (filter.endDate) params.endDate = filter.endDate;
+
+	return params;
+};
+
 const amiAnalyticsApi = {
-	async getOverview(): Promise<BaseResponseDto<OverviewMetricsAmiResponse>> {
+	async getOverview(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<OverviewMetricsAmiResponse>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<OverviewMetricsAmiResponse>
-			>(`${ENDPOINT}/overview`);
-
+			>(`${ENDPOINT}/overview`, { params: buildQueryParams(filter) });
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getBookingTrends(): Promise<
-		BaseResponseDto<BookingTrendAmiResponse[]>
-	> {
+	async getBookingTrends(
+		filter: AnalyticsDateFilter = {},
+		period: "day" | "month" = "month",
+		months: number = 6
+	): Promise<BaseResponseDto<BookingTrendAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<BookingTrendAmiResponse[]>
-			>(`${ENDPOINT}/trends`);
-
+			>(`${ENDPOINT}/trends`, {
+				params: buildQueryParams(filter, { period, months }),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getStatusDistribution(): Promise<
-		BaseResponseDto<StatusDistributionAmiResponse[]>
-	> {
+	async getStatusDistribution(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<StatusDistributionAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<StatusDistributionAmiResponse[]>
-			>(`${ENDPOINT}/status-distribution`);
-
+			>(`${ENDPOINT}/status-distribution`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getTopServices(): Promise<BaseResponseDto<TopServiceAmiResponse[]>> {
+	async getTopServices(
+		filter: AnalyticsDateFilter = {},
+		limit: number = 5
+	): Promise<BaseResponseDto<TopServiceAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<TopServiceAmiResponse[]>
-			>(`${ENDPOINT}/top-services?limit=5`);
-
+			>(`${ENDPOINT}/top-services`, {
+				params: buildQueryParams(filter, { limit }),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getPhotographerPerformances(): Promise<
-		BaseResponseDto<PhotographerPerformanceAmiResponse[]>
-	> {
+	async getPhotographerPerformances(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<PhotographerPerformanceAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<PhotographerPerformanceAmiResponse[]>
-			>(`${ENDPOINT}/photographer-performance`);
-
+			>(`${ENDPOINT}/photographer-performance`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getCustomerInsights(): Promise<
-		BaseResponseDto<CustomerInsightsAmiResponse>
-	> {
+	async getCustomerInsights(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<CustomerInsightsAmiResponse>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<CustomerInsightsAmiResponse>
-			>(`${ENDPOINT}/customer-insights`);
-
+			>(`${ENDPOINT}/customer-insights`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getPackagePerformance(): Promise<
-		BaseResponseDto<PackagePerformanceAmiResponse>
-	> {
+	async getPackagePerformance(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<PackagePerformanceAmiResponse>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<PackagePerformanceAmiResponse>
-			>(`${ENDPOINT}/package-performance`);
-
+			>(`${ENDPOINT}/package-performance`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getBookingHeatmap(): Promise<
-		BaseResponseDto<HeatmapDataAmiResponse[]>
-	> {
+	async getBookingHeatmap(
+		filter: AnalyticsDateFilter = {},
+		months: number = 3
+	): Promise<BaseResponseDto<HeatmapDataAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<HeatmapDataAmiResponse[]>
-			>(`${ENDPOINT}/booking-heatmap`);
-
+			>(`${ENDPOINT}/booking-heatmap`, {
+				params: buildQueryParams(filter, { months }),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getPeakHours(): Promise<BaseResponseDto<PeakHourAmiResponse[]>> {
+	async getPeakHours(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<PeakHourAmiResponse[]>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<PeakHourAmiResponse[]>
-			>(`${ENDPOINT}/peak-hours`);
-
+			>(`${ENDPOINT}/peak-hours`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getCancellationAnalytics(): Promise<
-		BaseResponseDto<CancellationAnalyticsAmiResponse>
-	> {
+	async getCancellationAnalytics(
+		filter: AnalyticsDateFilter = {}
+	): Promise<BaseResponseDto<CancellationAnalyticsAmiResponse>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<CancellationAnalyticsAmiResponse>
-			>(`${ENDPOINT}/cancellations`);
-
+			>(`${ENDPOINT}/cancellations`, {
+				params: buildQueryParams(filter),
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},
 
-	async getRevenueForecast(): Promise<
-		BaseResponseDto<RevenueForecastAmiResponse>
-	> {
+	async getRevenueForecast(
+		historicalMonths: number = 6
+	): Promise<BaseResponseDto<RevenueForecastAmiResponse>> {
 		try {
 			const response = await adminApiClient.get<
 				BaseResponseDto<RevenueForecastAmiResponse>
-			>(`${ENDPOINT}/revenue-forecast`);
-
+			>(`${ENDPOINT}/revenue-forecast`, {
+				params: { historicalMonths },
+			});
 			return response;
 		} catch (error) {
 			const parsedError = handleError(error);
-
 			throw parsedError;
 		}
 	},

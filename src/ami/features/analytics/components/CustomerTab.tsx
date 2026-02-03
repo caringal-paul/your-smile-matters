@@ -1,14 +1,6 @@
-import React, { useState } from "react";
 import {
-	LineChart,
-	Line,
 	BarChart,
 	Bar,
-	PieChart,
-	Pie,
-	Cell,
-	AreaChart,
-	Area,
 	XAxis,
 	YAxis,
 	CartesianGrid,
@@ -18,15 +10,11 @@ import {
 } from "recharts";
 import {
 	TrendingUp,
-	TrendingDown,
 	Users,
 	DollarSign,
 	Calendar,
-	Package,
-	Star,
-	Award,
-	AlertCircle,
 	Clock,
+	CrownIcon,
 } from "lucide-react";
 import {
 	Card,
@@ -35,12 +23,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/core/components/base/card";
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from "@/core/components/base/tabs";
+import { TabsContent } from "@/core/components/base/tabs";
 import { useGetCustomerInsightAnalyticsQuery } from "../queries/getCustomerInsightAnalytics.query";
 import { formatToPeso } from "@/ami/shared/helpers/formatCurrency";
 import { useGetBookingHeatmapAnalyticsQuery } from "../queries/getBookingHeatmapAnalytics.query";
@@ -51,13 +34,28 @@ import {
 	AvatarImage,
 } from "@/core/components/base/avatar";
 import { getInitials } from "@/core/helpers/getInitials";
+import { useState } from "react";
+import { Label } from "@/core/components/base/label";
+import { Button } from "@/core/components/base/button";
+import { AnalyticsDateFilter } from "@/core/components/custom/AnalyticsDateFilter";
 
-const COLORS = ["#846e62", "#9c7c6a", "#bfa89b", "#6b5a4f", "#d1b6a1"];
+const CUSTOMERS_PER_PAGE = 5;
 
 const CustomerTab = () => {
 	const { data: customersInsights } = useGetCustomerInsightAnalyticsQuery();
 	const { data: bookingHeatmapData } = useGetBookingHeatmapAnalyticsQuery();
 	const { data: peakHoursData } = useGetPeakHoursAnalyticsQuery();
+
+	const [customersPage, setCustomersPage] = useState(1);
+
+	const totalCustomerPages = Math.ceil(
+		(customersInsights?.topCustomers?.length || 0) / CUSTOMERS_PER_PAGE
+	);
+
+	const paginatedCustomers = customersInsights?.topCustomers?.slice(
+		(customersPage - 1) * CUSTOMERS_PER_PAGE,
+		customersPage * CUSTOMERS_PER_PAGE
+	);
 
 	const totalBookings =
 		bookingHeatmapData?.reduce((sum, day) => sum + day.bookingCount, 0) || 0;
@@ -126,44 +124,7 @@ const CustomerTab = () => {
 
 	return (
 		<TabsContent value="customers" className="space-y-6">
-			{/* <Card>
-				<CardHeader>
-					<CardTitle>Customer Segments</CardTitle>
-					<CardDescription>Customers by booking frequency</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-						<Card className="bg-secondary border-secondary ">
-							<CardContent className="pt-6">
-								<div className="text-2xl font-bold text-secondary ">342</div>
-								<div className="text-sm text-secondary ">1 Booking</div>
-								<div className="text-xs text-gray-600 mt-1">₱947,340</div>
-							</CardContent>
-						</Card>
-						<Card className="bg-primary border-primary ">
-							<CardContent className="pt-6">
-								<div className="text-2xl font-bold text-primary ">189</div>
-								<div className="text-sm text-primary ">2-4 Bookings</div>
-								<div className="text-xs text-gray-600 mt-1">₱1,134,000</div>
-							</CardContent>
-						</Card>
-						<Card className="bg-[#a7a29c] border-[#a7a29c] ">
-							<CardContent className="pt-6">
-								<div className="text-2xl font-bold text-[#a7a29c] ">67</div>
-								<div className="text-sm text-[#a7a29c] ">5-9 Bookings</div>
-								<div className="text-xs text-gray-600 mt-1">₱804,500</div>
-							</CardContent>
-						</Card>
-						<Card className="bg-orange-50 border-orange-200">
-							<CardContent className="pt-6">
-								<div className="text-2xl font-bold text-orange-700">24</div>
-								<div className="text-sm text-orange-600">10+ Bookings</div>
-								<div className="text-xs text-gray-600 mt-1">₱512,931</div>
-							</CardContent>
-						</Card>
-					</div>
-				</CardContent>
-			</Card> */}
+			<AnalyticsDateFilter />
 
 			<Card>
 				<CardHeader className="pb-0">
@@ -171,55 +132,112 @@ const CustomerTab = () => {
 					<CardDescription>Highest spending customers</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="space-y-3">
-						{customersInsights?.topCustomers.map((customer, idx) => (
-							<div
-								key={idx}
-								className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-							>
-								<div className="flex items-center gap-3">
-									<Avatar className="ml-4">
-										<AvatarImage
-											src={customer.profileImage}
-											alt="@shadcn"
-											className="size-10 "
-										/>
-										<AvatarFallback>
-											{getInitials(customer.customerName)}
-										</AvatarFallback>
-									</Avatar>
+					<div className="space-y-4">
+						{paginatedCustomers?.map((customer, idx) => {
+							const rank = idx + 1 + (customersPage - 1) * CUSTOMERS_PER_PAGE;
 
-									<div>
-										<div className="font-semibold">{customer.customerName}</div>
-										<div className="text-sm text-gray-600">
-											{customer.email}
+							return (
+								<div
+									key={idx}
+									className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+								>
+									{" "}
+									<div className="flex items-center gap-3">
+										<div className="flex items-center justify-center p-3 py-2 rounded-full relative">
+											<Label className="text-2xs relative text-foreground">
+												{rank <= 3 && (
+													<CrownIcon
+														className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-10"
+														fill={
+															rank === 1
+																? "#FFD700"
+																: rank === 2
+																? "#C0C0C0"
+																: "#CD7F32"
+														}
+														strokeWidth={1}
+													/>
+												)}
+												<span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+													{rank}.
+												</span>
+											</Label>
+										</div>
+										<div className="flex items-center gap-3">
+											<Avatar className="ml-4">
+												<AvatarImage
+													src={customer.profileImage}
+													alt="@shadcn"
+													className="size-10 "
+												/>
+												<AvatarFallback>
+													{getInitials(customer.customerName)}
+												</AvatarFallback>
+											</Avatar>
+
+											<div>
+												<div className="font-semibold">
+													{customer.customerName}
+												</div>
+												<div className="text-sm text-gray-600">
+													{customer.email}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div className="flex justify-evenly items-center gap-6">
+										<div className="text-right">
+											<div className="text-sm text-gray-600">
+												Total no. of Bookings
+											</div>
+											<div className="font-semibold">
+												{customer.totalBookings}
+											</div>
+										</div>
+										<div className="text-right">
+											<div className="text-sm text-gray-600">Total Spent</div>
+											<div className="font-semibold">
+												{formatToPeso(String(customer.totalSpent ?? 0))}
+											</div>
+										</div>
+										<div className="text-right">
+											<div className="text-sm text-gray-600">Net Value</div>
+											<div className="font-semibold text-green-500 ">
+												{formatToPeso(String(customer.netSpent ?? 0))}
+											</div>
 										</div>
 									</div>
 								</div>
-								<div className="flex justify-evenly items-center gap-6">
-									<div className="text-right">
-										<div className="text-sm text-gray-600">
-											Total no. of Bookings
-										</div>
-										<div className="font-semibold">
-											{customer.totalBookings}
-										</div>
-									</div>
-									<div className="text-right">
-										<div className="text-sm text-gray-600">Total Spent</div>
-										<div className="font-semibold">
-											{formatToPeso(String(customer.totalSpent ?? 0))}
-										</div>
-									</div>
-									<div className="text-right">
-										<div className="text-sm text-gray-600">Net Value</div>
-										<div className="font-semibold text-green-500 ">
-											{formatToPeso(String(customer.netSpent ?? 0))}
-										</div>
-									</div>
-								</div>
+							);
+						})}
+
+						<div className="flex justify-between items-center pt-4">
+							<div className="text-sm text-muted-foreground">
+								Page {customersPage} of {totalCustomerPages}
 							</div>
-						))}
+
+							<div className="flex gap-2">
+								<Button
+									variant="outline"
+									size="sm"
+									disabled={customersPage === 1}
+									onClick={() => setCustomersPage((p) => Math.max(1, p - 1))}
+								>
+									Previous
+								</Button>
+
+								<Button
+									variant="outline"
+									size="sm"
+									disabled={customersPage === totalCustomerPages}
+									onClick={() =>
+										setCustomersPage((p) => Math.min(totalCustomerPages, p + 1))
+									}
+								>
+									Next
+								</Button>
+							</div>
+						</div>
 					</div>
 				</CardContent>
 			</Card>

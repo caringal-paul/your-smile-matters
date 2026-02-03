@@ -18,6 +18,7 @@ import {
 import { TabsContent } from "@/core/components/base/tabs";
 import { useGetOverviewMetricsAnalyticsQuery } from "../queries/getOverviewMetricsAnalytics.query";
 import { useGetBookingTrendsAnalyticsQuery } from "../queries/getBookingTrendsAnalytics.query";
+import { AnalyticsDateFilter } from "@/core/components/custom/AnalyticsDateFilter";
 
 const promoEffectiveness = [
 	{
@@ -64,6 +65,8 @@ const RevenueTab = () => {
 
 	return (
 		<TabsContent value="revenue" className="space-y-6">
+			<AnalyticsDateFilter />
+
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 				<Card>
 					<CardHeader>

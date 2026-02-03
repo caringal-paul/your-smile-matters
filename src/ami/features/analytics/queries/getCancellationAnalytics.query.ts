@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import amiAnalyticsApi from "@/core/api/analytics/ami/analytics.ami.api";
+import { useAnalyticsFilterStore } from "../stores/useAnalyticsFilterStore";
 
 export const useGetCancellationAnalyticsQuery = () => {
+	const dateFilter = useAnalyticsFilterStore((state) => state.dateFilter);
+
 	return useQuery({
-		queryKey: ["cancellation-analytics-ami"],
-		queryFn: () => amiAnalyticsApi.getCancellationAnalytics(),
+		queryKey: ["cancellation-analytics-ami", dateFilter],
+		queryFn: () => amiAnalyticsApi.getCancellationAnalytics(dateFilter),
 		select: (response) => {
 			return {
 				...response.data,
